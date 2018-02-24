@@ -52,6 +52,9 @@ public class ResSummaryFragment extends Fragment {
     private TextView tvDescription;
     private RecyclerView rcFoodOrder;
     private FoodProductAdapter foodProductAdapter;
+    private View containerEmpty;
+    private View containerServiceUnavailable;
+    private boolean isHasItem;
 
     public ResSummaryFragment() {
         super();
@@ -84,7 +87,7 @@ public class ResSummaryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_res_summary, container, false);
         initInstances(rootView, savedInstanceState);
-        setupView(rootView);
+        setupView();
         callService();
         return rootView;
     }
@@ -119,12 +122,17 @@ public class ResSummaryFragment extends Fragment {
 //                        .diskCacheStrategy(DiskCacheStrategy.ALL)) //เก็บลงแคช ทุกชนาด
 //                .into(ivImg);// โหลดเข้า imageView ตัวนี้
         rcFoodOrder = rootView.findViewById(R.id.rc_food_order);
+        containerEmpty = rootView.findViewById(R.id.container_empty);
+        containerServiceUnavailable = rootView.findViewById(R.id.container_service_unavailable);
     }
 
-    private void setupView(View rootView) {
-        rcFoodOrder.setLayoutManager(new StaggeredGridLayoutManager(2,VERTICAL));
+    private void setupView() {
+        rcFoodOrder.setLayoutManager(new StaggeredGridLayoutManager(2, VERTICAL));
         foodProductAdapter = new FoodProductAdapter();
         rcFoodOrder.setAdapter(foodProductAdapter);
+
+        containerEmpty.setVisibility(View.GONE);
+
 
 //        topRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -136,6 +144,7 @@ public class ResSummaryFragment extends Fragment {
         Call<FoodProductCollectionDao> call = HttpManager.getInstance()
                 .getService()
                 .getFoodById(dao.getRestaurantNameDao().getIDRestaurant());
+
         call.enqueue(new Callback<FoodProductCollectionDao>() {
             @Override
             public void onResponse(Call<FoodProductCollectionDao> call, Response<FoodProductCollectionDao> response) {
@@ -144,9 +153,29 @@ public class ResSummaryFragment extends Fragment {
                 if (response.isSuccessful()) {
                     FoodProductCollectionDao dao = response.body();//รับของ
 
+                    if (dao != null) {
+                        if (dao.getmData().getmRecommendedMenu().size() > 0) {
+                            isHasItem = true;
+                            Log.e("isHasitem", "getmRecommendedMenu != null");
+                        } else if (dao.getmData().getmNormalmenu().size() > 0) {
+                            isHasItem = true;
+                            Log.e("isHasitem", "getmNormalmenu != null");
+                        } else {
+                            isHasItem = false;
+                        }
+
+                        Log.e("isHasitem", "dao != null");
+                    } else {
+                        isHasItem = false;
+                        Log.e("isHasitem", "dao = null");
+                    }
                     //setup FoodOrder
                     setFoodProduct(dao);
+                    updateEmptyCartView();
+
+
                 } else {
+                    showServiceUnavailableView();
                     Log.e("MoreInfoFragment >>", "เซิฟเวอร์ตอบกลับมาว่า : " + response.errorBody().toString());
                 }
             }
@@ -154,6 +183,7 @@ public class ResSummaryFragment extends Fragment {
             @Override
             public void onFailure(Call<FoodProductCollectionDao> call, Throwable t) {
 //                swipeRefreshLayout.setRefreshing(false);//ซ่อนปุ่ม refresh
+                showServiceUnavailableView();
                 Log.e("MoreInfoFragment >>", "เซิฟเวอร์ตอบกลับมาว่า : " + t.toString());
             }
         });
@@ -167,11 +197,27 @@ public class ResSummaryFragment extends Fragment {
 
         List<BaseOrderFoodItem> orderFoodList = new ArrayList<>();
         orderFoodList.addAll(FoodProductConverter.createSectionandOrder(dao, recommendedMenu, normalMenuTitle, currency));
-        orderFoodList.add(FoodProductConverter.createEmpty());
 
         foodProductAdapter.setOrderFoodItemList(orderFoodList);
         foodProductAdapter.notifyDataSetChanged();
+    }
 
+    public void showServiceUnavailableView() {
+        rcFoodOrder.setVisibility(View.GONE);
+        containerEmpty.setVisibility(View.GONE);
+        containerServiceUnavailable.setVisibility(View.VISIBLE);
+    }
+
+    private void updateEmptyCartView() {
+        Log.e("isHasMenu", "isHasMenu: " + isHasItem);
+        containerServiceUnavailable.setVisibility(View.GONE);
+        if (isHasItem) {
+            rcFoodOrder.setVisibility(View.VISIBLE);
+            containerEmpty.setVisibility(View.GONE);
+        } else {
+            rcFoodOrder.setVisibility(View.GONE);
+            containerEmpty.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

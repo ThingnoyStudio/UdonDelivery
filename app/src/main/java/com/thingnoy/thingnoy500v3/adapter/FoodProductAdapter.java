@@ -1,6 +1,7 @@
 package com.thingnoy.thingnoy500v3.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,25 +32,25 @@ public class FoodProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         orderFoodItemList = new ArrayList<>();
     }
 
-    public void setOrderFoodItemList(List<BaseOrderFoodItem> orderFoodItemList){
+    public void setOrderFoodItemList(List<BaseOrderFoodItem> orderFoodItemList) {
         this.orderFoodItemList = orderFoodItemList;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == FoodProductType.TYPE_ORDER){
+        if (viewType == FoodProductType.TYPE_ORDER) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.holder_food_product, parent,false);
+                    .inflate(R.layout.holder_food_product, parent, false);
             return new FoodsProductHolder(view);
 
-        }else if (viewType== FoodProductType.TYPE_EMPTY){
+        } else if (viewType == FoodProductType.TYPE_EMPTY) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.holder_empty, parent,false);
+                    .inflate(R.layout.holder_empty, parent, false);
             return new EmptyHolder(view);
 
-        }else if (viewType == FoodProductType.TYPE_SECTION){
+        } else if (viewType == FoodProductType.TYPE_SECTION) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.holder_section, parent,false);
+                    .inflate(R.layout.holder_section, parent, false);
             return new SectionHolder(view);
 
         }
@@ -65,21 +66,49 @@ public class FoodProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         BaseOrderFoodItem orderFoodItem = orderFoodItemList.get(position);
-        if (holder instanceof FoodsProductHolder){
+        if (holder instanceof FoodsProductHolder) {
             FoodsProductHolder foodProductHolder = (FoodsProductHolder) holder;
             OrderItem orderItem = (OrderItem) orderFoodItem;
-            setupFoodProduct(foodProductHolder,orderItem);
+            setupFoodProduct(foodProductHolder, orderItem);
 
-        }else if (holder instanceof EmptyHolder){
+        } else if (holder instanceof EmptyHolder) {
+            StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+            layoutParams.setFullSpan(true);
+
             EmptyHolder emptyHolder = (EmptyHolder) holder;
             EmptyItem emptyItem = (EmptyItem) orderFoodItem;
-            setupEmpty(emptyHolder,emptyItem);
+            setupEmpty(emptyHolder, emptyItem);
 
-        }else if (holder instanceof SectionHolder){
+        } else if (holder instanceof SectionHolder) {
+
+            StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+            layoutParams.setFullSpan(true);
+
             SectionHolder sectionHolder = (SectionHolder) holder;
             SectionItem sectionItem = (SectionItem) orderFoodItem;
-            setupSection(sectionHolder,sectionItem);
+            setupSection(sectionHolder, sectionItem);
         }
+    }
+
+
+    @Override
+    public int getItemViewType(int position) {
+        return orderFoodItemList.get(position).getType();
+    }
+
+
+    @Override
+    public int getItemCount() {
+        if (orderFoodItemList == null) {
+            return 0;
+        }
+        if (orderFoodItemList.size() <= 0) {
+            return 0;
+        }
+
+
+        return orderFoodItemList.size();
+
     }
 
     private void setupSection(SectionHolder sectionHolder, SectionItem sectionItem) {
@@ -90,26 +119,10 @@ public class FoodProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private void setupFoodProduct(FoodsProductHolder foodProductHolder, OrderItem orderItem) {
-//        foodProductHolder.imgFood.set orderItem.getmFoodImg();
-//        foodProductHolder.imgUrl = orderItem.getmFoodImg();
         foodProductHolder.setImageUrl(orderItem.getmFoodImg());
-        Log.e("adapter","imgUrl: "+orderItem.getmFoodImg());
         foodProductHolder.tvFoodName.setText(orderItem.getmFoodName());
         foodProductHolder.tvFoodPrice.setText(orderItem.getmFoodPrice());
         foodProductHolder.tvTypeName.setText(orderItem.getmFoodTypeName());
         foodProductHolder.tvIDFood.setText(orderItem.getmIDFood());
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return orderFoodItemList.get(position).getType();
-    }
-
-    
-    @Override
-    public int getItemCount() {
-        if (orderFoodItemList == null)
-            return 0;
-        return orderFoodItemList.size();
     }
 }

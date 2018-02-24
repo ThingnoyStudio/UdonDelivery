@@ -23,6 +23,7 @@ public class FoodProductConverter {
                                                                 String currency) {
         List<BaseOrderFoodItem> baseOrderFoodItemList = new ArrayList<>();
         baseOrderFoodItemList.addAll(getRecommendedMenu(dao.getmData().getmRecommendedMenu(), recommendedMenuTitle, currency));
+        baseOrderFoodItemList.add(createEmpty());
         baseOrderFoodItemList.addAll(getNormalMenu(dao.getmData().getmNormalmenu(), normalMenuTitle, currency));
         return baseOrderFoodItemList;
     }

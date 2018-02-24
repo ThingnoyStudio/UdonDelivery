@@ -1,4 +1,4 @@
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,8 +12,34 @@
         <!--android:layout_height="wrap_content" />-->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rc_food_order"
+        android:padding="8dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <LinearLayout
+        android:id="@+id/container_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="@dimen/icon_background_size"
+            android:layout_height="@dimen/icon_background_size"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/default_padding_margin"
+            android:src="@drawable/ic_empty_cart_72dp"/>
+
+        <TextView
+            android:id="@+id/tv_empty"
+            style="@style/BeerTextView.DarkGray.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="รายการอาหารว่างเปล่า"/>
+    </LinearLayout>
+
+    <include layout="@layout/view_service_unavailable"/>
 
         <!--<LinearLayout-->
             <!--android:layout_width="match_parent"-->
@@ -93,4 +119,4 @@
 
         <!--</LinearLayout>-->
 
-</LinearLayout>
+</FrameLayout>

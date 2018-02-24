@@ -38,7 +38,6 @@ public class FoodsProductHolder extends RecyclerView.ViewHolder {
         btnAdded = itemView.findViewById(R.id.btn_added);
     }
     public void setImageUrl(String url) {
-        Log.e("holder","Holder: "+url);
         Glide.with(Contextor.getInstance().getContext())
                 .load(url)
                 .apply(new RequestOptions()
