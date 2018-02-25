@@ -23,10 +23,10 @@
                 android:clickable="false"
                 android:id="@+id/img_beer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="250dp"
                 android:minHeight="@dimen/beer_product_height"
                 android:maxHeight="150dp"
-                android:adjustViewBounds="true"
+                android:adjustViewBounds="false"
                 android:padding="8dp"
                 android:scaleType="fitCenter"
                 tools:src="@drawable/loading"/>
@@ -109,21 +109,24 @@
                 android:text="@string/added"/>
         </LinearLayout>
 
-        <com.like.LikeButton
-            android:id="@+id/chb_favorite_food"
-            android:layout_gravity="right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:icon_type="heart"
-            app:circle_start_color="@color/colorPrimary"
-            app:like_drawable="@drawable/ic_hear_active_48"
-            app:unlike_drawable="@drawable/ic_hear_inactive_48"
-            app:dots_primary_color="@color/colorAccent"
-            app:dots_secondary_color="@color/colorPrimary"
-            app:circle_end_color="@color/colorAccent"
-            app:icon_size="25dp"
-            app:anim_scale_factor="2"
-            />
+
+            <com.like.LikeButton
+                android:id="@+id/chb_favorite_food"
+                android:layout_gravity="right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon_type="heart"
+                app:circle_start_color="@color/colorPrimary"
+                app:like_drawable="@drawable/ic_favorite_2_512"
+                app:unlike_drawable="@drawable/ic_favorite_4_512"
+                app:dots_primary_color="@color/colorAccent"
+                app:dots_secondary_color="@color/colorPrimary"
+                app:circle_end_color="@color/colorAccent"
+                app:icon_size="27dp"
+                app:anim_scale_factor="2"
+                />
+
+
     </FrameLayout>
 
 

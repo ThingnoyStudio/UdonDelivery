@@ -5,6 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:openDrawer="right"
     tools:context="com.thingnoy.thingnoy500v3.activity.MainActivity">
 
     <!-- content -->
@@ -36,21 +37,5 @@
 
 
     <!-- Menu -->
-    <LinearLayout
-        android:layout_width="@dimen/drawer_menu_width"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="#ffffff"
-        android:orientation="vertical">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="233dp"
-            android:src="@color/colorPrimary" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Button" />
-    </LinearLayout>
+    <include layout="@layout/include_menu_drawer"/>
 </android.support.v4.widget.DrawerLayout>

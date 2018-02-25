@@ -191,8 +191,8 @@ public class ResSummaryFragment extends Fragment {
 
     private void setFoodProduct(FoodProductCollectionDao dao) {
 
-        String normalMenuTitle = "เมนูอร่อย";
-        String recommendedMenu = "เมนูแนะนำ";
+        String normalMenuTitle = " เมนูอร่อย ";
+        String recommendedMenu = " เมนูแนะนำ ";
         String currency = getString(R.string.baht);
 
         List<BaseOrderFoodItem> orderFoodList = new ArrayList<>();

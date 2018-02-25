@@ -5,18 +5,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 
 import com.bumptech.glide.Glide;
@@ -24,15 +18,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.PageAdapter;
-import com.thingnoy.thingnoy500v3.adapter.dao.FoodProductCollectionDao;
 import com.thingnoy.thingnoy500v3.dao.DataResProDao;
-import com.thingnoy.thingnoy500v3.dao.ResProCollectionDao;
-import com.thingnoy.thingnoy500v3.manager.http.HttpManager;
 import com.thingnoy.thingnoy500v3.view.SlidingTabLayout;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MoreInfoFragment extends Fragment {
 
@@ -93,6 +80,7 @@ public class MoreInfoFragment extends Fragment {
         // Init 'View' instance(s) with rootView.findViewById here
 
         collapsingToolbarLayout = rootView.findViewById(R.id.collapsing_toolbar);
+        //set title bar
         collapsingToolbarLayout.setTitle(dao.getRestaurantNameDao().getResName());
 
         toobar = rootView.findViewById(R.id.toolbar);
@@ -104,11 +92,11 @@ public class MoreInfoFragment extends Fragment {
         viewPager2 = rootView.findViewById(R.id.viewPager2);
         tabLayout = rootView.findViewById(R.id.tabLayout);
 
-        loadImage();
+        loadImageAppBar();
 
         tabLayout.setupWithViewPager(viewPager2);
         setUpViewPager(viewPager2);
-        setUpIconTab();
+        setUpTabIcon();
 
 //        loadFoodProduct();
 
@@ -191,12 +179,19 @@ public class MoreInfoFragment extends Fragment {
 //        });
 //    }
 
-    private void setUpIconTab() {
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_open);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_food);
+    private void setUpTabIcon() {
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_food);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_open);
     }
-
-    private void loadImage() {
+    private void setUpViewPager(ViewPager viewPager2) {
+        PageAdapter pagerAdapter = new PageAdapter(getActivity().getSupportFragmentManager(),2);
+        pagerAdapter.addFragmentPage(ResSummaryFragment.newInstance(dao),
+                "Foods");
+        pagerAdapter.addFragmentPage(ResInfoFragment.newInstance(dao),
+                "Restaurant");
+        viewPager2.setAdapter(pagerAdapter);
+    }
+    private void loadImageAppBar() {
         Glide.with(MoreInfoFragment.this)// โหลดรูป
                 .load(dao.getRestaurantNameDao().getResImg())// โหลดจาก url นี้
                 .apply(new RequestOptions()
@@ -205,14 +200,7 @@ public class MoreInfoFragment extends Fragment {
                 .into(image);// โหลดเข้า imageView ตัวนี้
     }
 
-    private void setUpViewPager(ViewPager viewPager2) {
-        PageAdapter pagerAdapter = new PageAdapter(getActivity().getSupportFragmentManager(),2);
-        pagerAdapter.addFragmentPage(ResSummaryFragment.newInstance(dao),
-                "Restaurant");
-        pagerAdapter.addFragmentPage(ResInfoFragment.newInstance(dao),
-                "Foods");
-        viewPager2.setAdapter(pagerAdapter);
-    }
+
 
     @Override
     public void onStart() {
