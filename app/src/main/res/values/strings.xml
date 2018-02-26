@@ -20,9 +20,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="title_activity_maps">Map</string>
     <string name="or">or</string>
     <string name="Amount">Amount</string>
@@ -37,10 +35,11 @@
     <string name="close">Close</string>
     <string name="order_history_detail">Order history detail</string>
     <string name="success_order">We will deliver the beer to you as soon as possible.</string>
-    <string name="try_again">Try again</string>
+    <string name="try_again">ลองใหม่อีกครั้ง</string>
     <string name="added">Added</string>
     <string name="at"> at </string>
     <string name="bottles_of_beer"> bottles of beer</string>
     <string name="beer">Beer</string>
     <string name="history">History</string>
+    <string name="sorry_someting_went_wrong">ขออภัยค่ะ!, มีบางอย่างผิดพลาด กรุณาลองใหม่อีกครั้ง!</string>
 </resources>

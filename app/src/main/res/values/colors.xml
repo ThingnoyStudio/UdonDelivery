@@ -8,7 +8,6 @@
     <color name="overlay_color">#80000000</color>
 
 
-
     <color name="primary_dark">#F7931E</color>
     <color name="primary">#FFBC00</color>
     <color name="primary_light">#FFCD5F</color>
@@ -25,6 +24,18 @@
 
 
     <color name="overlay_click_black">#42000000</color> <!--26% black-->
-    <color name="overlay_background_light">#8a000000</color> <!--54% black-->
+    <color name="overlay_background_light">#8a000000</color>
+
+    <!--color for rating dialog-->
+    <color name="background_light">#fafafa</color>
+    <color name="commentBackgroundColor">#e1dfdf</color>
+
+    <color name="commentTextColor">#454242</color> <!--54% black-->
+    <color name="hintTextColor">#9c9292</color>
+    <color name="contentTextColor">#ffff</color>
+    <color name="titleTextColor">#212121</color>
+    <color name="noteDescriptionTextColor">#fff</color>
+    <color name="starColor">#FFBC00</color>
+
 
 </resources>

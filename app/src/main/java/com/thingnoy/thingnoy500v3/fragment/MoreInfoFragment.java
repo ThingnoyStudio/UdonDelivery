@@ -107,7 +107,7 @@ public class MoreInfoFragment extends Fragment {
 //            public Fragment getItem(int position) {
 //                switch (position){
 //                    case 0:
-//                        return ResSummaryFragment.newInstance(dao);
+//                        return ResFoodMenuFragment.newInstance(dao);
 //                    case 1:
 //                        return ResInfoFragment.newInstance(dao);
 //                    default:
@@ -185,7 +185,7 @@ public class MoreInfoFragment extends Fragment {
     }
     private void setUpViewPager(ViewPager viewPager2) {
         PageAdapter pagerAdapter = new PageAdapter(getActivity().getSupportFragmentManager(),2);
-        pagerAdapter.addFragmentPage(ResSummaryFragment.newInstance(dao),
+        pagerAdapter.addFragmentPage(ResFoodMenuFragment.newInstance(dao),
                 "Foods");
         pagerAdapter.addFragmentPage(ResInfoFragment.newInstance(dao),
                 "Restaurant");

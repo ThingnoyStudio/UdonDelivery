@@ -1,16 +1,134 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
+    android:paddingTop="8dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
     tools:context="com.thingnoy.thingnoy500v3.fragment.ResInfoFragment">
 
-    <TextView
-        android:layout_marginTop="12dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="I'm ResInfoFragment"/>
 
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/container_head"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="180dp">
+
+            <ImageView
+                android:id="@+id/iv_restaurant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/loading" />
+
+            <TextView
+                android:id="@+id/tv_restaurant_name"
+                android:layout_above="@+id/container_ratingbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="21sp"
+                android:paddingLeft="8dp"
+                android:textStyle="bold"
+                android:textColor="#f4efef"
+                android:text="RestaurantName" />
+
+            <LinearLayout
+                android:id="@+id/container_ratingbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+
+                <RatingBar
+                    android:id="@+id/rb_total"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:stepSize="0.1" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/count_view_peple"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="8dp"
+                        android:text="799,999"
+                        android:textColor="#fff" />
+
+                    <TextView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@+id/count_view_peple"
+                        android:layout_weight="1"
+                        android:background="@drawable/ic_talk_48" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/container_time"
+            android:layout_below="@+id/container_head"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_open" />
+
+            <TextView
+                android:layout_marginLeft="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="08.00 น. - 17.00 น.  เว้นวันเสาร์ - อาทิตย์" />
+
+            <!--<RatingBar-->
+            <!--style="?android:attr/ratingBarStyleSmall"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:isIndicator="true"-->
+            <!--android:numStars="5"-->
+            <!--android:stepSize="0.1" />-->
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@+id/container_time"
+            android:id="@+id/rc_review_res"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_review"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_edit2_48"
+            android:layout_margin="12dp"
+            android:clickable="true"
+            app:fabSize="normal" />
+
+    </RelativeLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

@@ -30,7 +30,7 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/default_padding_margin_large"
                 android:gravity="center"
-                android:text="Sorry, something went wrong. Please try again."/>
+                android:text="@string/sorry_someting_went_wrong" />
 
             <Button
                 android:id="@+id/btn_try_again"

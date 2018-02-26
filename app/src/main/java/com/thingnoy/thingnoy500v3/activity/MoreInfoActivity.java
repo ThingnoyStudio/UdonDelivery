@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.stepstone.apprating.listener.RatingDialogListener;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.dao.DataResProDao;
 import com.thingnoy.thingnoy500v3.fragment.MoreInfoFragment;
@@ -21,7 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
-public class MoreInfoActivity extends AppCompatActivity {
+public class MoreInfoActivity extends AppCompatActivity implements RatingDialogListener {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -65,5 +66,20 @@ public class MoreInfoActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPositiveButtonClicked(int star, String comment) {
+        Toast.makeText(MoreInfoActivity.this, "Positive HANDLE: i = " + star + ", str = " + comment, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNegativeButtonClicked() {
+        Toast.makeText(MoreInfoActivity.this, "Negative HANDLE", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNeutralButtonClicked() {
+        Toast.makeText(MoreInfoActivity.this, "Neutral HANDLE", Toast.LENGTH_SHORT).show();
     }
 }

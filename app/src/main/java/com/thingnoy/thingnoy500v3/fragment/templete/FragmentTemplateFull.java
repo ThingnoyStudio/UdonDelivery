@@ -1,4 +1,4 @@
-package com.thingnoy.thingnoy500v3.fragment;
+package com.thingnoy.thingnoy500v3.fragment.templete;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

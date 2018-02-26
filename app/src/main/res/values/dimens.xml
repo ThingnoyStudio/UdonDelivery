@@ -47,4 +47,5 @@
     <dimen name="icon_background_size">72dp</dimen>
 
     <dimen name="empty_space_height">16dp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
 </resources>
