@@ -13,6 +13,9 @@ import com.stepstone.apprating.listener.RatingDialogListener;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.dao.DataResProDao;
 import com.thingnoy.thingnoy500v3.fragment.MoreInfoFragment;
+import com.thingnoy.thingnoy500v3.fragment.ResInfoFragment;
+import com.vansuita.pickimage.bundle.PickSetup;
+import com.vansuita.pickimage.dialog.PickImageDialog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -69,8 +72,8 @@ public class MoreInfoActivity extends AppCompatActivity implements RatingDialogL
     }
 
     @Override
-    public void onPositiveButtonClicked(int star, String comment) {
-        Toast.makeText(MoreInfoActivity.this, "Positive HANDLE: i = " + star + ", str = " + comment, Toast.LENGTH_SHORT).show();
+    public void onPositiveButtonClicked(int rating, String comment) {
+        Toast.makeText(MoreInfoActivity.this, "Positive HANDLE: i = " + rating + ", str = " + comment, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -81,5 +84,6 @@ public class MoreInfoActivity extends AppCompatActivity implements RatingDialogL
     @Override
     public void onNeutralButtonClicked() {
         Toast.makeText(MoreInfoActivity.this, "Neutral HANDLE", Toast.LENGTH_SHORT).show();
+        PickImageDialog.build(new PickSetup()).show(this);
     }
 }

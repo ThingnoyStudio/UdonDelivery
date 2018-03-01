@@ -1,14 +1,24 @@
 package com.thingnoy.thingnoy500v3.fragment;
 
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.icu.text.DateFormat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+
+import android.support.v4.content.ContextCompat;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -18,13 +28,31 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.stepstone.apprating.AppRatingDialog;
-import com.stepstone.apprating.listener.RatingDialogListener;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.dao.DataResProDao;
+import com.thingnoy.thingnoy500v3.dao.ResReviewBody;
+import com.thingnoy.thingnoy500v3.dao.ReturnReviewInsertDao;
+import com.thingnoy.thingnoy500v3.manager.http.HttpManager;
+import com.vansuita.pickimage.bean.PickResult;
+import com.vansuita.pickimage.bundle.PickSetup;
+import com.vansuita.pickimage.dialog.PickImageDialog;
+import com.vansuita.pickimage.listeners.IPickResult;
+import com.willy.ratingbar.RotationRatingBar;
 
+import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
-import static android.content.ContentValues.TAG;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -37,6 +65,12 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
     private RatingBar rbTotal;
     private FloatingActionButton fabReview;
     private TextView tvTitle;
+    private Button btnSelectImg, btnWriteReview, btnSendReview;
+    private EditText edtReview;
+    private RotationRatingBar srbRes;
+    private ImageView ivReview;
+    private Bitmap bitImgReview = null;
+    private boolean isChooseImage = false;
 
     public ResInfoFragment() {
         super();
@@ -47,7 +81,7 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
         ResInfoFragment fragment = new ResInfoFragment();
         Bundle args = new Bundle();
 
-        args.putParcelable("dao",dao);
+        args.putParcelable("dao", dao);
 
         fragment.setArguments(args);
         return fragment;
@@ -79,7 +113,7 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
                 .apply(new RequestOptions()
                         .placeholder(R.drawable.loading)// กรณี กำลังโหลด
                         .diskCacheStrategy(DiskCacheStrategy.ALL)) //เก็บลงแคช ทุกชนาด
-                .into(imgRes);// โหลดเข้า imageView ตัวนี้
+                .into(imgRes);// โหลดเข้า bitImgReview ตัวนี้
     }
 
     private void init(Bundle savedInstanceState) {
@@ -93,16 +127,34 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
         tvTitle = rootView.findViewById(R.id.tv_restaurant_name);
 //        rbTotal = rootView.findViewById(R.id.rb_total);
         fabReview = rootView.findViewById(R.id.fab_review);
+
+        btnSelectImg = rootView.findViewById(R.id.btn_select_img);
+        btnWriteReview = rootView.findViewById(R.id.btn_write_review);
+        btnSendReview = rootView.findViewById(R.id.btn_send_review);
+        edtReview = rootView.findViewById(R.id.edt_review);
+        srbRes = rootView.findViewById(R.id.srb_rate);
+        ivReview = rootView.findViewById(R.id.iv_review);
+
+
+        setupView();
+    }
+
+    private void setupView() {
         fabReview.setOnClickListener(this);
 
         tvTitle.setText(dao.getRestaurantNameDao().getResName());
+
+        btnSelectImg.setOnClickListener(this);
+        btnSendReview.setOnClickListener(this);
+        btnWriteReview.setOnClickListener(this);
+        ivReview.setOnClickListener(this);
     }
 
     private void showDialog() {
         new AppRatingDialog.Builder()
                 .setPositiveButtonText("ส่ง")
                 .setNegativeButtonText("ยกเลิก")
-//                .setNeutralButtonText("ภายหลัง")
+                .setNeutralButtonText("เลือกรูป")
                 .setNoteDescriptions(Arrays.asList("ไม่ดีเลย", "เฉยๆ", "พอใช้", "ดี", "ดีเยี่ยม !!!"))
                 .setDefaultRating(2)
                 .setTitle("ให้คะแนนร้านนี้")
@@ -119,6 +171,27 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
                 .setWindowAnimation(R.style.MyDialogFadeAnimation)
                 .create(getActivity())
                 .show();
+    }
+
+    private void callSendReview(ResReviewBody body) {
+        Call<ReturnReviewInsertDao> call = HttpManager.getInstance()
+                .getService()
+                .insertResreview(body);
+        call.enqueue(new Callback<ReturnReviewInsertDao>() {
+            @Override
+            public void onResponse(Call<ReturnReviewInsertDao> call, Response<ReturnReviewInsertDao> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), "SendReview: Success", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getContext(), "SendReview: Not Success", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ReturnReviewInsertDao> call, Throwable t) {
+                Toast.makeText(getContext(), "sendReview: " + t, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
@@ -148,11 +221,119 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
         // Restore Instance State here
     }
 
+    private String encodeImage(Bitmap bm) {
+        if (bm == null) {
+            return null;
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String encImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+        return encImage;
+    }
+
     @Override
     public void onClick(View v) {
         if (v == fabReview) {
             Toast.makeText(getContext(), "Fab click!", Toast.LENGTH_SHORT).show();
+//            showDialog();
+        }
+        if (v == btnSelectImg) {
+            chooseImage();
+        }
+        if (v == btnSendReview) {
+
+
+            sendReview();
+
+        }
+        if (v == btnWriteReview) {
+            Toast.makeText(getContext(), "write review click!", Toast.LENGTH_SHORT).show();
             showDialog();
         }
+        if (v == ivReview) {
+            chooseImage();
+        }
     }
+
+    private void sendReview() {
+        Calendar c = Calendar.getInstance();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDate = df.format(c.getTime());
+        Log.e("date >>", "date now: " + currentDate);
+
+        ResReviewBody body = new ResReviewBody();
+        body.setId_customer(2);
+        body.setDate(currentDate);
+        body.setId_restaurant(dao.getRestaurantNameDao().getIDRestaurant());
+        if (edtReview.getText().toString().trim().equals("")) {
+            showToast("กรุณาเขียนรีวิวด้วยค่ะ");
+            return;
+        } else {
+            body.setRes_comment(edtReview.getText().toString().trim());
+        }
+        body.setRes_score(srbRes.getRating());
+        body.setImgname("reviewimg");
+        if (isChooseImage) {
+            body.setImg(encodeImage(bitImgReview) == null ? "" : encodeImage(bitImgReview));
+        } else {
+            body.setImg(null);
+        }
+
+        showToast("" + dao.getRestaurantNameDao().getIDRestaurant());
+        callSendReview(body);
+
+        hideKeybord();
+        edtReview.setText("");
+        srbRes.setRating(3);
+        ivReview.setImageResource(R.drawable.image);
+        isChooseImage = false;
+    }
+
+    private void showToast(String massage) {
+        Toast.makeText(getContext(), massage, Toast.LENGTH_SHORT).show();
+    }
+
+    private void chooseImage() {
+        isChooseImage = true;
+        PickSetup setup = new PickSetup();
+        PickImageDialog.build(setup, new IPickResult() {
+            @Override
+            public void onPickResult(PickResult r) {
+                r.getBitmap();
+                r.getError();
+                r.getUri();
+
+
+                if (r.getError() == null) {
+                    //If you want the Uri.
+                    //Mandatory to refresh image from Uri.
+//            ivReview.setImageURI(null);
+
+                    //Setting the real returned image.
+//                        ivReview.setImageURI(r.getUri());
+
+                    //If you want the Bitmap.
+                    ivReview.setImageBitmap(r.getBitmap());
+                    bitImgReview = r.getBitmap();
+
+                    //r.getPath();
+                    Toast.makeText(getContext(), "Path: " + r.getPath(), Toast.LENGTH_LONG).show();
+                } else {
+                    //Handle possible errors
+                    //TODO: do what you have to do with r.getError();
+                    Toast.makeText(getContext(), "nnn :" + r.getError().getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }).show(getFragmentManager());
+    }
+
+    private void hideKeybord() {
+        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+//        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.hideSoftInputFromWindow(getActivity().getWindowToken(), 0);
+    }
+
 }

@@ -1,12 +1,12 @@
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
-    android:paddingTop="8dp"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
+    android:paddingTop="8dp"
     tools:context="com.thingnoy.thingnoy500v3.fragment.ResInfoFragment">
 
 
@@ -16,9 +16,9 @@
 
         <RelativeLayout
             android:id="@+id/container_head"
-            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
-            android:layout_height="180dp">
+            android:layout_height="180dp"
+            android:layout_alignParentTop="true">
 
             <ImageView
                 android:id="@+id/iv_restaurant"
@@ -30,14 +30,14 @@
 
             <TextView
                 android:id="@+id/tv_restaurant_name"
-                android:layout_above="@+id/container_ratingbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="21sp"
+                android:layout_above="@+id/container_ratingbar"
                 android:paddingLeft="8dp"
-                android:textStyle="bold"
+                android:text="RestaurantName"
                 android:textColor="#f4efef"
-                android:text="RestaurantName" />
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/container_ratingbar"
@@ -45,14 +45,37 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true">
 
-                <RatingBar
-                    android:id="@+id/rb_total"
-                    style="?android:attr/ratingBarStyleSmall"
+                <!--<RatingBar-->
+                <!--android:id="@+id/rb_total"-->
+                <!--style="?android:attr/ratingBarStyleSmall"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:isIndicator="true"-->
+                <!--android:numStars="5"-->
+                <!--android:stepSize="0.1" />-->
+                <!--<com.willy.ratingbar.RotationRatingBar-->
+                <!--android:id="@+id/rb_total"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="8dp"-->
+                <!--android:layout_marginRight="8dp"-->
+                <!--android:layout_marginTop="16dp"/>-->
+                <com.willy.ratingbar.RotationRatingBar
+                    android:id="@+id/srb_res_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:isIndicator="true"
-                    android:numStars="5"
-                    android:stepSize="0.1" />
+                    app:srb_clearRatingEnabled="false"
+                    app:srb_clickable="false"
+                    app:srb_drawableEmpty="@drawable/starempty"
+                    app:srb_drawableFilled="@drawable/starfilled"
+                    app:srb_isIndicator="false"
+                    app:srb_numStars="5"
+                    app:srb_rating="3"
+                    app:srb_scrollable="false"
+                    app:srb_starHeight="18dp"
+                    app:srb_starPadding="4dp"
+                    app:srb_starWidth="18dp"
+                    app:srb_stepSize="0.5" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -66,7 +89,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="8dp"
-                        android:text="799,999"
+                        android:layout_marginStart="8dp"
+                        android:text="999"
                         android:textColor="#fff" />
 
                     <TextView
@@ -84,12 +108,12 @@
 
         <LinearLayout
             android:id="@+id/container_time"
-            android:layout_below="@+id/container_head"
             android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:padding="8dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/container_head"
             android:gravity="center_vertical"
-            android:layout_height="wrap_content">
+            android:orientation="horizontal"
+            android:padding="8dp">
 
             <ImageView
                 android:layout_width="28dp"
@@ -97,35 +121,161 @@
                 android:src="@drawable/ic_open" />
 
             <TextView
-                android:layout_marginLeft="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:text="08.00 น. - 17.00 น.  เว้นวันเสาร์ - อาทิตย์" />
 
-            <!--<RatingBar-->
-            <!--style="?android:attr/ratingBarStyleSmall"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:isIndicator="true"-->
-            <!--android:numStars="5"-->
-            <!--android:stepSize="0.1" />-->
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/container_write_review"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/container_time"
+            android:background="@drawable/background_round"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:baselineAligned="false">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/iv_review"
+                    android:clickable="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/image"
+                    android:focusable="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <com.willy.ratingbar.RotationRatingBar
+                    android:id="@+id/srb_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srb_clearRatingEnabled="true"
+                    app:srb_clickable="true"
+                    app:srb_drawableEmpty="@drawable/starempty"
+                    app:srb_drawableFilled="@drawable/starfilled"
+                    app:srb_isIndicator="false"
+                    app:srb_numStars="5"
+                    app:srb_rating="3"
+                    app:srb_scrollable="true"
+                    app:srb_starHeight="18dp"
+                    app:srb_starPadding="4dp"
+                    app:srb_starWidth="18dp"
+                    app:srb_stepSize="0.5" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/edt_review"
+                        android:padding="4dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:textColorHint="#e9e6e6"
+                        android:textColor="#fff"
+                        android:hint="เขียนรีวิว..."
+                        android:layout_marginStart="8dp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_select_img"
+                        style="?attr/borderlessButtonStyle"
+                        android:textColor="#fff"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:minHeight="36dp"
+                        android:minWidth="66dp"
+                        android:padding="0dp"
+                        android:text="เลือกรูป" />
+
+                    <Button
+                        style="?attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:minHeight="36dp"
+                        android:minWidth="66dp"
+                        android:padding="0dp" />
+
+                    <Button
+                        android:id="@+id/btn_write_review"
+                        style="?attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#fff"
+                        android:layout_weight="1"
+                        android:minHeight="36dp"
+                        android:minWidth="66dp"
+                        android:padding="0dp"
+                        android:visibility="gone"
+                        android:text="เขียนรีวิว" />
+
+                    <Button
+                        android:id="@+id/btn_send_review"
+                        style="?attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#fff"
+                        android:layout_weight="1"
+                        android:minHeight="36dp"
+                        android:minWidth="66dp"
+                        android:padding="0dp"
+                        android:text="ส่งรีวิว" />
+                </LinearLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:layout_below="@+id/container_time"
             android:id="@+id/rc_review_res"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_below="@+id/container_write_review" />
+        <!--<FrameLayout-->
+        <!--android:layout_below="@+id/rc_review_res"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+        <!--<include layout="@layout/sdfsdf"/>-->
+        <!--</FrameLayout>-->
+
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_review"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_edit2_48"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:layout_margin="12dp"
             android:clickable="true"
+            android:src="@drawable/ic_edit2_48"
+            android:visibility="gone"
             app:fabSize="normal" />
 
     </RelativeLayout>

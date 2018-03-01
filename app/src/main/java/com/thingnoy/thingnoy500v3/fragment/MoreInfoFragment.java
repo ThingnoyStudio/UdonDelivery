@@ -228,5 +228,4 @@ public class MoreInfoFragment extends Fragment {
     private void onRestoreInstanceState(Bundle savedInstanceState) {
         // Restore Instance State here
     }
-
 }
