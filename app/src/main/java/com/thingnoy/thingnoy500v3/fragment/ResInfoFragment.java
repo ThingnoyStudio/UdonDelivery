@@ -6,11 +6,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.icu.text.DateFormat;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,9 +32,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.stepstone.apprating.AppRatingDialog;
 import com.thingnoy.thingnoy500v3.R;
+import com.thingnoy.thingnoy500v3.adapter.ReviewAdapter;
 import com.thingnoy.thingnoy500v3.dao.DataResProDao;
 import com.thingnoy.thingnoy500v3.dao.ResReviewBody;
 import com.thingnoy.thingnoy500v3.dao.ReturnReviewInsertDao;
+import com.thingnoy.thingnoy500v3.dao.ReviewCollectionDao;
 import com.thingnoy.thingnoy500v3.manager.http.HttpManager;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
@@ -71,6 +76,8 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
     private ImageView ivReview;
     private Bitmap bitImgReview = null;
     private boolean isChooseImage = false;
+    private ReviewAdapter reviewAdapter;
+    private RecyclerView rcReviewList;
 
     public ResInfoFragment() {
         super();
@@ -104,6 +111,7 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
         View rootView = inflater.inflate(R.layout.fragment_res_info, container, false);
         initInstances(rootView, savedInstanceState);
         loadImgRestaurant();
+        callReviewList(dao.getRestaurantNameDao().getIDRestaurant());
         return rootView;
     }
 
@@ -135,6 +143,8 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
         srbRes = rootView.findViewById(R.id.srb_rate);
         ivReview = rootView.findViewById(R.id.iv_review);
 
+        rcReviewList = rootView.findViewById(R.id.rc_review_res);
+
 
         setupView();
     }
@@ -148,6 +158,10 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
         btnSendReview.setOnClickListener(this);
         btnWriteReview.setOnClickListener(this);
         ivReview.setOnClickListener(this);
+
+        reviewAdapter = new ReviewAdapter();
+        rcReviewList.setLayoutManager(new LinearLayoutManager(getContext()));
+        rcReviewList.setAdapter(reviewAdapter);
     }
 
     private void showDialog() {
@@ -173,6 +187,29 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
                 .show();
     }
 
+    private void callReviewList(int id) {
+        Call<ReviewCollectionDao> call = HttpManager.getInstance()
+                .getService()
+                .loadReview(id);
+        call.enqueue(new Callback<ReviewCollectionDao>() {
+            @Override
+            public void onResponse(Call<ReviewCollectionDao> call, Response<ReviewCollectionDao> response) {
+                if (response.isSuccessful()) {
+                    ReviewCollectionDao dao = response.body();
+
+                    reviewAdapter.setDao(dao);
+                    reviewAdapter.notifyDataSetChanged();
+                } else {
+                    showToast("โหลดรายการรีวิวร้าน ไม่สำเร็จ!");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ReviewCollectionDao> call, Throwable t) {
+                showToast("ล้มเหลว: " + t);
+            }
+        });
+    }
     private void callSendReview(ResReviewBody body) {
         Call<ReturnReviewInsertDao> call = HttpManager.getInstance()
                 .getService()
@@ -181,15 +218,15 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onResponse(Call<ReturnReviewInsertDao> call, Response<ReturnReviewInsertDao> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(getContext(), "SendReview: Success", Toast.LENGTH_LONG).show();
+                    showToast("ส่งรีวิวร้าน เรียบร้อยแล้ว!");
                 } else {
-                    Toast.makeText(getContext(), "SendReview: Not Success", Toast.LENGTH_LONG).show();
+                    showToast("ส่งรีวิวร้าน ไม่สำเร็จ!");
                 }
             }
 
             @Override
-            public void onFailure(Call<ReturnReviewInsertDao> call, Throwable t) {
-                Toast.makeText(getContext(), "sendReview: " + t, Toast.LENGTH_LONG).show();
+            public void onFailure(Call<ReturnReviewInsertDao> call, @NonNull Throwable t) {
+                showToast("ล้มเหลว: " + t);
             }
         });
     }
@@ -236,21 +273,18 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v == fabReview) {
-            Toast.makeText(getContext(), "Fab click!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "Fab click!", Toast.LENGTH_SHORT).show();
 //            showDialog();
         }
         if (v == btnSelectImg) {
-            chooseImage();
+//            chooseImage();
         }
         if (v == btnSendReview) {
-
-
             sendReview();
-
         }
         if (v == btnWriteReview) {
-            Toast.makeText(getContext(), "write review click!", Toast.LENGTH_SHORT).show();
-            showDialog();
+//            Toast.makeText(getContext(), "write review click!", Toast.LENGTH_SHORT).show();
+//            showDialog();
         }
         if (v == ivReview) {
             chooseImage();

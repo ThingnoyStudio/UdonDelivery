@@ -5,6 +5,7 @@ import com.thingnoy.thingnoy500v3.dao.PhotoItemCollectionDao;
 import com.thingnoy.thingnoy500v3.dao.ResProCollectionDao;
 import com.thingnoy.thingnoy500v3.dao.ResReviewBody;
 import com.thingnoy.thingnoy500v3.dao.ReturnReviewInsertDao;
+import com.thingnoy.thingnoy500v3.dao.ReviewCollectionDao;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -28,6 +29,9 @@ public interface ApiService {
     @Headers("Content-Type: application/json")
     @POST("apigetreviewres/insertresreview")
     Call<ReturnReviewInsertDao> insertResreview(@Body ResReviewBody body);
+
+    @GET("apireviewres/listreviewres")
+    Call<ReviewCollectionDao> loadReview(@Query("id") int id);
 
     @GET("apitestfood2/listtestfood2")
     Call<FoodProductCollectionDao> getFoodById(@Query("id") int id);

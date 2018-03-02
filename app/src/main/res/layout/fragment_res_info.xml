@@ -257,7 +257,8 @@
             android:id="@+id/rc_review_res"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/container_write_review" />
+            android:layout_below="@+id/container_write_review"
+            tools:listitem="@layout/holder_review_list" />
         <!--<FrameLayout-->
         <!--android:layout_below="@+id/rc_review_res"-->
         <!--android:layout_width="match_parent"-->
