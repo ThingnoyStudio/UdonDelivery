@@ -200,7 +200,7 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
         }
         if (resMainlistManager.getProCount() == 0) {
             promoProgressbar.setVisibility(View.VISIBLE);
-            rcRestaurant.setVisibility(View.GONE);
+            rcPromotion.setVisibility(View.GONE);
             callGetResPro();
         }
     }
@@ -221,6 +221,7 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
                     promotionAdapter.setDao(resMainlistManager.getPromotionCollectionDao());
                     promotionAdapter.notifyDataSetChanged();
 
+                    rcPromotion.setVisibility(View.VISIBLE);
                     promoProgressbar.setVisibility(View.GONE);
                 } else {
                     showToast("ดาวน์โหลดรายการโปรโมชั่น ไม่สำเร็จ! " + Constant.FACESAD);
@@ -255,6 +256,7 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
                     restaurantAdapter.setDao(resMainlistManager.getRestaurantCollectionDao());
                     restaurantAdapter.notifyDataSetChanged();
 
+                    rcRestaurant.setVisibility(View.VISIBLE);
                     resProgressbar.setVisibility(View.GONE);
 
                 } else {
