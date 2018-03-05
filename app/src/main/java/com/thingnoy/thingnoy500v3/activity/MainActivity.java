@@ -2,7 +2,6 @@ package com.thingnoy.thingnoy500v3.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -10,22 +9,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.thingnoy.thingnoy500v3.R;
-import com.thingnoy.thingnoy500v3.dao.DataResProDao;
+import com.thingnoy.thingnoy500v3.dao.NameAndImageDao;
 import com.thingnoy.thingnoy500v3.dao.PhotoItemCollectionDao;
-import com.thingnoy.thingnoy500v3.fragment.MainFragment;
-import com.thingnoy.thingnoy500v3.manager.http.HttpManager;
-import com.thingnoy.thingnoy500v3.manager.http.bus.Contextor;
+import com.thingnoy.thingnoy500v3.fragment.ResMainListFragment;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.FragmentListener {
+public class MainActivity extends AppCompatActivity implements ResMainListFragment.FragmentListener
+//        implements MainFragment.FragmentListener
+{
 
     DrawerLayout drawerLayout;
 
@@ -41,9 +35,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Frag
         init();
 
         if (savedInstanceState == null){
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.contentContainer, MainFragment.newInstance())
+//                    .commit();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.contentContainer, MainFragment.newInstance())
+                    .add(R.id.contentContainer, ResMainListFragment.newInstance())
                     .commit();
+
         }
 
 
@@ -89,11 +87,19 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Frag
     }
 
     @Override
-    public void onPhotoItemClicked(DataResProDao dao) {
-// Mobile
+    public void onItemClicked(NameAndImageDao nameAndImageDao) {
         Intent intent = new Intent(MainActivity.this,
                 MoreInfoActivity.class);
-        intent.putExtra("dao",dao);
+        intent.putExtra("dao", nameAndImageDao);
         startActivity(intent);
     }
+
+//    @Override
+//    public void onPhotoItemClicked(DataResProDao dao) {
+//// Mobile
+//        Intent intent = new Intent(MainActivity.this,
+//                MoreInfoActivity.class);
+//        intent.putExtra("dao",dao);
+//        startActivity(intent);
+//    }
 }

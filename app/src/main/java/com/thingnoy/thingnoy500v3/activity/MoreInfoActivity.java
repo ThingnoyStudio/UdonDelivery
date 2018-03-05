@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.stepstone.apprating.listener.RatingDialogListener;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.dao.DataResProDao;
+import com.thingnoy.thingnoy500v3.dao.NameAndImageDao;
 import com.thingnoy.thingnoy500v3.fragment.MoreInfoFragment;
 import com.thingnoy.thingnoy500v3.fragment.ResInfoFragment;
 import com.vansuita.pickimage.bundle.PickSetup;
@@ -25,7 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
-public class MoreInfoActivity extends AppCompatActivity implements RatingDialogListener {
+public class MoreInfoActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -35,12 +36,9 @@ public class MoreInfoActivity extends AppCompatActivity implements RatingDialogL
 
         initInstance();
 
-        DataResProDao dao = getIntent().getParcelableExtra("dao");
+        NameAndImageDao dao = getIntent().getParcelableExtra("dao");
 
         if (savedInstanceState == null){
-
-
-
 
 //            Toast.makeText(MoreInfoActivity.this,"getResPromotionName : "+dao.getPromotionDao().get(0).getResPromotionName(),Toast.LENGTH_SHORT).show();
 //            try {
@@ -69,21 +67,5 @@ public class MoreInfoActivity extends AppCompatActivity implements RatingDialogL
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onPositiveButtonClicked(int rating, String comment) {
-        Toast.makeText(MoreInfoActivity.this, "Positive HANDLE: i = " + rating + ", str = " + comment, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onNegativeButtonClicked() {
-        Toast.makeText(MoreInfoActivity.this, "Negative HANDLE", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onNeutralButtonClicked() {
-        Toast.makeText(MoreInfoActivity.this, "Neutral HANDLE", Toast.LENGTH_SHORT).show();
-        PickImageDialog.build(new PickSetup()).show(this);
     }
 }

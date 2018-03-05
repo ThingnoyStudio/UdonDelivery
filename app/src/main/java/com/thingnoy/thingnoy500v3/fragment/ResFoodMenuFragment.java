@@ -20,7 +20,7 @@ import com.thingnoy.thingnoy500v3.adapter.FoodProductAdapter;
 import com.thingnoy.thingnoy500v3.adapter.FoodProductConverter;
 import com.thingnoy.thingnoy500v3.adapter.dao.FoodProductCollectionDao;
 import com.thingnoy.thingnoy500v3.adapter.item.BaseOrderFoodItem;
-import com.thingnoy.thingnoy500v3.dao.DataResProDao;
+import com.thingnoy.thingnoy500v3.dao.NameAndImageDao;
 import com.thingnoy.thingnoy500v3.manager.http.HttpManager;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ import static android.support.v7.widget.StaggeredGridLayoutManager.*;
 public class ResFoodMenuFragment extends Fragment {
 
 
-    private DataResProDao dao;
+    private NameAndImageDao dao;
     private ImageView ivImg;
     private TextView tvName;
     private TextView tvDescription;
@@ -55,7 +55,7 @@ public class ResFoodMenuFragment extends Fragment {
     }
 
     @SuppressWarnings("unused")
-    public static ResFoodMenuFragment newInstance(DataResProDao dao) {
+    public static ResFoodMenuFragment newInstance(NameAndImageDao dao) {
         ResFoodMenuFragment fragment = new ResFoodMenuFragment();
         Bundle args = new Bundle();
 
@@ -82,7 +82,7 @@ public class ResFoodMenuFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_res_food_menu, container, false);
         initInstances(rootView, savedInstanceState);
         setupView();
-        callService();
+        callGetMenuById();
         return rootView;
     }
 
@@ -136,10 +136,10 @@ public class ResFoodMenuFragment extends Fragment {
 //        snapHelperTop.attachToRecyclerView(rcFoodOrder);
     }
 
-    private void callService() {
+    private void callGetMenuById() {
         Call<FoodProductCollectionDao> call = HttpManager.getInstance()
                 .getService()
-                .getFoodById(dao.getRestaurantNameDao().getIDRestaurant());
+                .getFoodMenuById(dao.getResId());
 
         call.enqueue(new Callback<FoodProductCollectionDao>() {
             @Override

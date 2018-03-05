@@ -1,4 +1,4 @@
-package com.thingnoy.thingnoy500v3.dao;
+package com.thingnoy.thingnoy500v3.dao.review;
 
 /**
  * Created by HBO on 1/3/2561.

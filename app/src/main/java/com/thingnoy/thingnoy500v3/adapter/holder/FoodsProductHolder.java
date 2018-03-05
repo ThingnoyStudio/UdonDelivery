@@ -41,7 +41,7 @@ public class FoodsProductHolder extends RecyclerView.ViewHolder {
         Glide.with(Contextor.getInstance().getContext())
                 .load(url)
                 .apply(new RequestOptions()
-                        .placeholder(R.drawable.loading)
+                        .placeholder(R.drawable.ic_pic_loading)
                         .centerCrop()
                         .diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(imgFood);

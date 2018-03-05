@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.holder.review.ReviewHolder;
-import com.thingnoy.thingnoy500v3.dao.DataReview;
-import com.thingnoy.thingnoy500v3.dao.ReviewCollectionDao;
+import com.thingnoy.thingnoy500v3.dao.review.DataReview;
+import com.thingnoy.thingnoy500v3.dao.review.ReviewCollectionDao;
 
 /**
  * Created by HBO on 2/3/2561.
@@ -35,6 +35,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         DataReview dataReview = dao.getmData().get(position);
+
         ReviewHolder reviewHolder = (ReviewHolder) holder;
         String reviewer = dataReview.getmCustomerFName() + " " + dataReview.getmCustomerLName();
 

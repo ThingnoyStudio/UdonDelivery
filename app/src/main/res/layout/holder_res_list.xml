@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/product_entry"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5$"
+            android:layout_gravity="end"
+            android:textColor="#0a3142" />
+
+        <ImageView
+            android:id="@+id/iv_res_all"
+            android:layout_width="150dp"
+            android:layout_height="72dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_pic_loading"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/tv_res_name"
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="restaurantName"
+            android:layout_gravity="start"
+            android:textColor="#0a3142"
+            android:minWidth="48dp"
+            android:textStyle="bold" />
+        <!--<ImageButton-->
+        <!--android:id="@+id/favorite_button"-->
+        <!--style="?android:attr/actionButtonStyle"-->
+        <!--android:layout_width="48dp"-->
+        <!--android:layout_height="48dp"-->
+        <!--android:layout_gravity="end"-->
+        <!--android:minWidth="48dp"-->
+        <!--app:srcCompat="@drawable/ic_hear_inactive_48"/>-->
+    </LinearLayout>
+</android.support.v7.widget.CardView>

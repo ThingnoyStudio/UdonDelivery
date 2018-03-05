@@ -19,11 +19,12 @@ import com.bumptech.glide.request.RequestOptions;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.PageAdapter;
 import com.thingnoy.thingnoy500v3.dao.DataResProDao;
+import com.thingnoy.thingnoy500v3.dao.NameAndImageDao;
 import com.thingnoy.thingnoy500v3.view.SlidingTabLayout;
 
 public class MoreInfoFragment extends Fragment {
 
-    private DataResProDao dao;
+    private NameAndImageDao dao;
     private ViewPager viewPager;
     private SlidingTabLayout slidingTabLayout;
     private TabLayout tabLayout;
@@ -37,7 +38,7 @@ public class MoreInfoFragment extends Fragment {
     }
 
     @SuppressWarnings("unused")
-    public static MoreInfoFragment newInstance(DataResProDao dao) {//รับ dao
+    public static MoreInfoFragment newInstance(NameAndImageDao dao) {//รับ dao
         MoreInfoFragment fragment = new MoreInfoFragment();
         Bundle args = new Bundle();
 
@@ -80,8 +81,9 @@ public class MoreInfoFragment extends Fragment {
         // Init 'View' instance(s) with rootView.findViewById here
 
         collapsingToolbarLayout = rootView.findViewById(R.id.collapsing_toolbar);
+
         //set title bar
-        collapsingToolbarLayout.setTitle(dao.getRestaurantNameDao().getResName());
+        collapsingToolbarLayout.setTitle(dao.getResName());
 
         toobar = rootView.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toobar);
@@ -145,7 +147,7 @@ public class MoreInfoFragment extends Fragment {
 //    private void loadFoodProduct() {
 //        Call<FoodProductCollectionDao> call = HttpManager.getInstance()
 //                .getService()
-//                .getFoodById(dao.getRestaurantNameDao().getIDRestaurant());
+//                .getFoodMenuById(dao.getRestaurantNameDao().getIDRestaurant());
 //        call.enqueue(new Callback<FoodProductCollectionDao>() {
 //            @Override
 //            public void onResponse(Call<FoodProductCollectionDao> call, Response<FoodProductCollectionDao> response) {
@@ -193,9 +195,9 @@ public class MoreInfoFragment extends Fragment {
     }
     private void loadImageAppBar() {
         Glide.with(MoreInfoFragment.this)// โหลดรูป
-                .load(dao.getRestaurantNameDao().getResImg())// โหลดจาก url นี้
+                .load(dao.getResImage())// โหลดจาก url นี้
                 .apply(new RequestOptions()
-                        .placeholder(R.drawable.loading)// กรณี กำลังโหลด
+                        .placeholder(R.drawable.ic_pic_loading)// กรณี กำลังโหลด
                         .diskCacheStrategy(DiskCacheStrategy.ALL)) //เก็บลงแคช ทุกชนาด
                 .into(image);// โหลดเข้า imageView ตัวนี้
     }

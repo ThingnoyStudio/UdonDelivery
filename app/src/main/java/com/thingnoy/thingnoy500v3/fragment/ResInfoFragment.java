@@ -4,14 +4,12 @@ package com.thingnoy.thingnoy500v3.fragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.icu.text.DateFormat;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
@@ -34,9 +32,10 @@ import com.stepstone.apprating.AppRatingDialog;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.ReviewAdapter;
 import com.thingnoy.thingnoy500v3.dao.DataResProDao;
-import com.thingnoy.thingnoy500v3.dao.ResReviewBody;
-import com.thingnoy.thingnoy500v3.dao.ReturnReviewInsertDao;
-import com.thingnoy.thingnoy500v3.dao.ReviewCollectionDao;
+import com.thingnoy.thingnoy500v3.dao.NameAndImageDao;
+import com.thingnoy.thingnoy500v3.dao.review.ResReviewBody;
+import com.thingnoy.thingnoy500v3.dao.review.ReturnReviewInsertDao;
+import com.thingnoy.thingnoy500v3.dao.review.ReviewCollectionDao;
 import com.thingnoy.thingnoy500v3.manager.http.HttpManager;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
@@ -45,15 +44,9 @@ import com.vansuita.pickimage.listeners.IPickResult;
 import com.willy.ratingbar.RotationRatingBar;
 
 import java.io.ByteArrayOutputStream;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,7 +58,7 @@ import retrofit2.Response;
  */
 public class ResInfoFragment extends Fragment implements View.OnClickListener {
 
-    private DataResProDao dao;
+    private NameAndImageDao dao;
     private ImageView imgRes;
     private RatingBar rbTotal;
     private FloatingActionButton fabReview;
@@ -84,7 +77,7 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
     }
 
     @SuppressWarnings("unused")
-    public static ResInfoFragment newInstance(DataResProDao dao) {
+    public static ResInfoFragment newInstance(NameAndImageDao dao) {
         ResInfoFragment fragment = new ResInfoFragment();
         Bundle args = new Bundle();
 
@@ -111,15 +104,15 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
         View rootView = inflater.inflate(R.layout.fragment_res_info, container, false);
         initInstances(rootView, savedInstanceState);
         loadImgRestaurant();
-        callReviewList(dao.getRestaurantNameDao().getIDRestaurant());
+        callReviewList(dao.getResId());
         return rootView;
     }
 
     private void loadImgRestaurant() {
         Glide.with(ResInfoFragment.this)// โหลดรูป
-                .load(dao.getRestaurantNameDao().getResImg())// โหลดจาก url นี้
+                .load(dao.getResImage())// โหลดจาก url นี้
                 .apply(new RequestOptions()
-                        .placeholder(R.drawable.loading)// กรณี กำลังโหลด
+                        .placeholder(R.drawable.ic_pic_loading)// กรณี กำลังโหลด
                         .diskCacheStrategy(DiskCacheStrategy.ALL)) //เก็บลงแคช ทุกชนาด
                 .into(imgRes);// โหลดเข้า bitImgReview ตัวนี้
     }
@@ -151,8 +144,8 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
 
     private void setupView() {
         fabReview.setOnClickListener(this);
-
-        tvTitle.setText(dao.getRestaurantNameDao().getResName());
+        //set title (resName)
+        tvTitle.setText(dao.getResName());
 
         btnSelectImg.setOnClickListener(this);
         btnSendReview.setOnClickListener(this);
@@ -219,6 +212,7 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
             public void onResponse(Call<ReturnReviewInsertDao> call, Response<ReturnReviewInsertDao> response) {
                 if (response.isSuccessful()) {
                     showToast("ส่งรีวิวร้าน เรียบร้อยแล้ว!");
+                    callReviewList(dao.getResId());
                 } else {
                     showToast("ส่งรีวิวร้าน ไม่สำเร็จ!");
                 }
@@ -300,7 +294,7 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
         ResReviewBody body = new ResReviewBody();
         body.setId_customer(2);
         body.setDate(currentDate);
-        body.setId_restaurant(dao.getRestaurantNameDao().getIDRestaurant());
+        body.setId_restaurant(dao.getResId());
         if (edtReview.getText().toString().trim().equals("")) {
             showToast("กรุณาเขียนรีวิวด้วยค่ะ");
             return;
@@ -315,7 +309,7 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
             body.setImg(null);
         }
 
-        showToast("" + dao.getRestaurantNameDao().getIDRestaurant());
+        showToast("" + dao.getResId());
         callSendReview(body);
 
         hideKeybord();

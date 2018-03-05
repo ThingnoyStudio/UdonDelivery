@@ -310,8 +310,7 @@ public class MainFragment extends Fragment {
     @SuppressWarnings("UnusedParameters")
     private void onRestoreInstanceState(Bundle savedInstanceState) {
         // Restore Instance State here
-        resProManager.onRestoreInstanceState(
-                savedInstanceState.getBundle("resProManager"));
+        resProManager.onRestoreInstanceState(savedInstanceState.getBundle("resProManager"));
 
         lastPositionInteger.onRestoreInstanceState(
                 savedInstanceState.getBundle("lastPositionInteger"));
