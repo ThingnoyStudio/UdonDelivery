@@ -35,7 +35,7 @@ public class StringUtils {
     }
 
     @NonNull
-    public static String getCommaPriceWithBaht(Context context, int price) {
+    public static String getCommaPriceWithBaht(Context context, double price) {
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         return formatter.format(price) + getBahtString(context);
     }

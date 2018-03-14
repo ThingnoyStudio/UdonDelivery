@@ -7,22 +7,29 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.thekhaeng.slidingmenu.lib.SlidingMenu;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.PageAdapter;
 import com.thingnoy.thingnoy500v3.dao.DataResProDao;
 import com.thingnoy.thingnoy500v3.dao.NameAndImageDao;
 import com.thingnoy.thingnoy500v3.view.SlidingTabLayout;
 
-public class MoreInfoFragment extends Fragment {
+import static android.view.View.GONE;
+
+public class MoreInfoFragment extends Fragment implements View.OnClickListener {
 
     private NameAndImageDao dao;
     private ViewPager viewPager;
@@ -32,6 +39,12 @@ public class MoreInfoFragment extends Fragment {
     private android.support.v7.widget.Toolbar toobar;
     private ImageView image;
     private CollapsingToolbarLayout collapsingToolbarLayout;
+    private Button btnConfirmOrder;
+    private TextView tvTotalPrice;
+    private SlidingMenu menu;
+    private RecyclerView rvCart;
+    private View containerEmpty;
+    private ImageView tCart;
 
     public MoreInfoFragment() {
         super();
@@ -79,6 +92,17 @@ public class MoreInfoFragment extends Fragment {
     @SuppressWarnings("UnusedParameters")
     private void initInstances(View rootView, Bundle savedInstanceState) {
         // Init 'View' instance(s) with rootView.findViewById here
+        tCart = rootView.findViewById(R.id.toolbar_cart);
+        tCart.setOnClickListener(this);
+
+        menu = new SlidingMenu(getActivity());
+        menu.setMenu(R.layout.sliding_cart);
+        rvCart = menu.getRootView().findViewById(R.id.rv_cart);
+        containerEmpty = menu.findViewById(R.id.container_empty_cart);
+        tvTotalPrice = menu.findViewById(R.id.tv_total_price);
+        btnConfirmOrder = menu.findViewById(R.id.btn_confirm_order);
+
+        setupCart();
 
         collapsingToolbarLayout = rootView.findViewById(R.id.collapsing_toolbar);
 
@@ -229,5 +253,42 @@ public class MoreInfoFragment extends Fragment {
     @SuppressWarnings("UnusedParameters")
     private void onRestoreInstanceState(Bundle savedInstanceState) {
         // Restore Instance State here
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == tCart) {
+            Toast.makeText(getActivity(), "tCart clicked!", Toast.LENGTH_SHORT).show();
+            menu.toggle();
+        }
+    }
+
+    private void setupCart() {
+        menu.setMode(SlidingMenu.RIGHT);
+        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+        menu.setShadowWidthRes(R.dimen.elevation_sliding);
+//        menu.setShadowDrawable( R.drawable.shadow );
+        menu.setBehindOffsetRes(R.dimen.sliding_menu_offset);
+        menu.setFadeDegree(0.35f);
+        menu.attachToActivity(getActivity(), SlidingMenu.SLIDING_CONTENT);
+
+//        btnConfirmOrder.setOnClickListener( onClickConfirmOrder() );
+
+//        int itemSpace = (int) getResources().getDimension( R.dimen.default_padding_margin );
+//        rvCart.setLayoutManager( new LinearLayoutManager( this ) );
+//        rvCart.addItemDecoration( new LinearLayoutMargin( itemSpace ) );
+//        rvCart.setAdapter( cartAdapter );
+    }
+
+    private void showProductItemView() {
+        containerEmpty.setVisibility(GONE);
+        btnConfirmOrder.setEnabled(true);
+        btnConfirmOrder.setBackgroundResource(R.drawable.btn_active_selector);
+    }
+
+    private void hindProductItemView() {
+        containerEmpty.setVisibility(View.VISIBLE);
+        btnConfirmOrder.setEnabled(false);
+        btnConfirmOrder.setBackgroundResource(R.drawable.btn_inactive);
     }
 }

@@ -22,7 +22,7 @@
 
             <TextView
                 android:layout_weight="1"
-                android:id="@+id/tv_beer_name"
+                android:id="@+id/tv_food_name"
                 style="@style/BeerTextView.DarkGray.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_beer_price"
+            android:id="@+id/tv_food_price"
             style="@style/BeerTextView.Black.Body2"
             android:layout_marginBottom="@dimen/default_padding_margin"
             android:layout_width="wrap_content"

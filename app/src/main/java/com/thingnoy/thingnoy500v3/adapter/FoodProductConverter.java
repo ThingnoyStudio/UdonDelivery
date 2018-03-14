@@ -5,11 +5,10 @@ import com.thingnoy.thingnoy500v3.adapter.dao.Normalmenu;
 import com.thingnoy.thingnoy500v3.adapter.dao.RecommendedMenu;
 import com.thingnoy.thingnoy500v3.adapter.item.BaseOrderFoodItem;
 import com.thingnoy.thingnoy500v3.adapter.item.EmptyItem;
-import com.thingnoy.thingnoy500v3.adapter.item.OrderItem;
+import com.thingnoy.thingnoy500v3.adapter.item.FoodItem;
 import com.thingnoy.thingnoy500v3.adapter.item.SectionItem;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -19,24 +18,22 @@ import java.util.List;
 public class FoodProductConverter {
     public static List<BaseOrderFoodItem> createSectionandOrder(FoodProductCollectionDao dao,
                                                                 String recommendedMenuTitle,
-                                                                String normalMenuTitle,
-                                                                String currency) {
+                                                                String normalMenuTitle) {
         List<BaseOrderFoodItem> baseOrderFoodItemList = new ArrayList<>();
-        baseOrderFoodItemList.addAll(getRecommendedMenu(dao.getmData().getmRecommendedMenu(), recommendedMenuTitle, currency));
+        baseOrderFoodItemList.addAll(getRecommendedMenu(dao.getmData().getmRecommendedMenu(), recommendedMenuTitle));
         baseOrderFoodItemList.add(createEmpty());
-        baseOrderFoodItemList.addAll(getNormalMenu(dao.getmData().getmNormalmenu(), normalMenuTitle, currency));
+        baseOrderFoodItemList.addAll(getNormalMenu(dao.getmData().getmNormalmenu(), normalMenuTitle));
         return baseOrderFoodItemList;
     }
 
-    private static List<BaseOrderFoodItem> getNormalMenu(List<Normalmenu> normalmenus, String normalMenuTitle, String currency) {
+    private static List<BaseOrderFoodItem> getNormalMenu(List<Normalmenu> normalmenus, String normalMenuTitle) {
         List<BaseOrderFoodItem> normalMenuList = new ArrayList<>();
         if (normalmenus != null && normalmenus.size() > 0) {
             normalMenuList.add(createSection(normalMenuTitle));
-            for (Normalmenu nMenu :
-                    normalmenus) {
+            for (Normalmenu nMenu : normalmenus) {
                 String mFoodImg = nMenu.getmFoodImg();
                 String mFoodName = nMenu.getmFoodName();
-                String mFoodPrice = nMenu.getmFoodPrice() + currency;
+                double mFoodPrice = nMenu.getmFoodPrice();
                 String mFoodTypeName = nMenu.getmFoodTypeName();
                 String mIDFood = nMenu.getmIDFood() + "";
                 normalMenuList.add(createOrder(mFoodImg, mFoodName, mFoodPrice, mFoodTypeName, mIDFood));
@@ -45,15 +42,14 @@ public class FoodProductConverter {
         return normalMenuList;
     }
 
-    private static List<BaseOrderFoodItem> getRecommendedMenu(List<RecommendedMenu> recommendedMenus, String recommendedMenuTitle, String currency) {
+    private static List<BaseOrderFoodItem> getRecommendedMenu(List<RecommendedMenu> recommendedMenus, String recommendedMenuTitle) {
         List<BaseOrderFoodItem> recMenuList = new ArrayList<>();
         if (recommendedMenus != null && recommendedMenus.size() > 0) {
             recMenuList.add(createSection(recommendedMenuTitle));
-            for (RecommendedMenu rcMenu :
-                    recommendedMenus) {
+            for (RecommendedMenu rcMenu : recommendedMenus) {
                 String mFoodImg = rcMenu.getmFoodImg();
                 String mFoodName = rcMenu.getmFoodName();
-                String mFoodPrice = rcMenu.getmFoodPrice() + currency;
+                double mFoodPrice = rcMenu.getmFoodPrice();
                 String mFoodTypeName = rcMenu.getmFoodTypeName();
                 String mIDFood = rcMenu.getmIDFood() + "";
                 recMenuList.add(createOrder(mFoodImg, mFoodName, mFoodPrice, mFoodTypeName, mIDFood));
@@ -72,13 +68,13 @@ public class FoodProductConverter {
         return sectionItem;
     }
 
-    private static OrderItem createOrder(String mFoodImg, String mFoodName, String mFoodPrice, String mFoodTypeName, String mIDFood) {
-        OrderItem orderItems = new OrderItem();
-        orderItems.setmFoodImg(mFoodImg);
-        orderItems.setmFoodName(mFoodName);
-        orderItems.setmFoodPrice(mFoodPrice);
-        orderItems.setmFoodTypeName(mFoodTypeName);
-        orderItems.setmIDFood(mIDFood);
-        return orderItems;
+    private static FoodItem createOrder(String mFoodImg, String mFoodName, double mFoodPrice, String mFoodTypeName, String mIDFood) {
+        FoodItem foodItems = new FoodItem();
+        foodItems.setmFoodImg(mFoodImg);
+        foodItems.setmFoodName(mFoodName);
+        foodItems.setPrice(mFoodPrice);
+        foodItems.setmFoodTypeName(mFoodTypeName);
+        foodItems.setmIDFood(mIDFood);
+        return foodItems;
     }
 }

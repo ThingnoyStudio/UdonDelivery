@@ -3,13 +3,21 @@ package com.thingnoy.thingnoy500v3.activity;
 import android.os.Build;
 import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stepstone.apprating.listener.RatingDialogListener;
+import com.thekhaeng.slidingmenu.lib.SlidingMenu;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.dao.DataResProDao;
 import com.thingnoy.thingnoy500v3.dao.NameAndImageDao;
@@ -26,7 +34,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
-public class MoreInfoActivity extends AppCompatActivity {
+public class MoreInfoActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private SlidingMenu menu;
+    private RecyclerView rvCart;
+    private LinearLayout containerEmpty;
+    private TextView tvTotalPrice;
+    private Button btnConfirmOrder;
+    private Button btnTest;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -39,7 +54,6 @@ public class MoreInfoActivity extends AppCompatActivity {
         NameAndImageDao dao = getIntent().getParcelableExtra("dao");
 
         if (savedInstanceState == null){
-
 //            Toast.makeText(MoreInfoActivity.this,"getResPromotionName : "+dao.getPromotionDao().get(0).getResPromotionName(),Toast.LENGTH_SHORT).show();
 //            try {
 //                theDate = dateFormat.parse(dao.getPromotionDao().get(0).getResPromotionStart().toString());
@@ -59,6 +73,17 @@ public class MoreInfoActivity extends AppCompatActivity {
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    private void setupToolbar() {
+//        setSupportActionBar( toolbar );
+//        ActionBar actionbar = getSupportActionBar();
+//        if( actionbar != null ){
+//            actionbar.setDisplayHomeAsUpEnabled( false );
+//            actionbar.setDisplayShowTitleEnabled( false );
+//        }
+//
+//        icCart.setOnClickListener( onClickCart() );
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -67,5 +92,9 @@ public class MoreInfoActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
     }
 }

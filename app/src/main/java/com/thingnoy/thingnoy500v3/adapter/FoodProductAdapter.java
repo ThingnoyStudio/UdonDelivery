@@ -2,19 +2,17 @@ package com.thingnoy.thingnoy500v3.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.holder.EmptyHolder;
-import com.thingnoy.thingnoy500v3.adapter.holder.FoodProductHolder;
 import com.thingnoy.thingnoy500v3.adapter.holder.FoodsProductHolder;
 import com.thingnoy.thingnoy500v3.adapter.holder.SectionHolder;
 import com.thingnoy.thingnoy500v3.adapter.item.BaseOrderFoodItem;
 import com.thingnoy.thingnoy500v3.adapter.item.EmptyItem;
-import com.thingnoy.thingnoy500v3.adapter.item.OrderItem;
+import com.thingnoy.thingnoy500v3.adapter.item.FoodItem;
 import com.thingnoy.thingnoy500v3.adapter.item.SectionItem;
 import com.thingnoy.thingnoy500v3.util.FoodProductType;
 
@@ -27,6 +25,21 @@ import java.util.List;
 
 public class FoodProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<BaseOrderFoodItem> orderFoodItemList;
+
+    private OnClickFoodProductListener listener;
+
+
+    public interface OnClickFoodProductListener {
+        void onClickLike(FoodItem item, int position);
+
+        void onClickUnLike(FoodItem item, int position);
+
+        void onClickItem(FoodItem item, int position);
+
+        void onClickAddToCart(FoodItem item, int position);
+
+        void onClickAdded(FoodItem item, int position);
+    }
 
     public FoodProductAdapter() {
         orderFoodItemList = new ArrayList<>();
@@ -68,8 +81,8 @@ public class FoodProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         BaseOrderFoodItem orderFoodItem = orderFoodItemList.get(position);
         if (holder instanceof FoodsProductHolder) {
             FoodsProductHolder foodProductHolder = (FoodsProductHolder) holder;
-            OrderItem orderItem = (OrderItem) orderFoodItem;
-            setupFoodProduct(foodProductHolder, orderItem);
+            FoodItem foodItem = (FoodItem) orderFoodItem;
+            setupFoodProduct(foodProductHolder, foodItem);
 
         } else if (holder instanceof EmptyHolder) {
             StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
@@ -118,11 +131,61 @@ public class FoodProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void setupEmpty(EmptyHolder emptyHolder, EmptyItem emptyItem) {
     }
 
-    private void setupFoodProduct(FoodsProductHolder foodProductHolder, OrderItem orderItem) {
-        foodProductHolder.setImageUrl(orderItem.getmFoodImg());
-        foodProductHolder.tvFoodName.setText(orderItem.getmFoodName());
-        foodProductHolder.tvFoodPrice.setText(orderItem.getmFoodPrice());
-        foodProductHolder.tvTypeName.setText(orderItem.getmFoodTypeName());
-        foodProductHolder.tvIDFood.setText(orderItem.getmIDFood());
+    private void setupFoodProduct(FoodsProductHolder foodProductHolder, FoodItem foodItem) {
+//        foodProductHolder.setFoodImg(foodItem.getmFoodImg());
+//        foodProductHolder.tvFoodName.setText(foodItem.getmFoodName());
+//        foodProductHolder.tvFoodPrice.setText(foodItem.getmFoodPrice());
+//        foodProductHolder.tvTypeName.setText(foodItem.getmFoodTypeName());
+//        foodProductHolder.tvIDFood.setText(foodItem.getmIDFood());
+
+        foodProductHolder.onBind(foodItem);
+        foodProductHolder.setOnClickBeerListener(onClickFood(foodItem));
     }
+
+    public void setOnClickProductItem(OnClickFoodProductListener listener) {
+        this.listener = listener;
+    }
+
+    private FoodsProductHolder.OnClickFoodListener onClickFood(final FoodItem item) {
+        return new FoodsProductHolder.OnClickFoodListener() {
+            @Override
+            public void onClickItem(FoodsProductHolder beerProductHolder, int position) {
+                if (listener != null) {
+                    listener.onClickItem(item, position);
+                }
+            }
+
+            @Override
+            public void onClickLike(FoodsProductHolder view, int position) {
+                if (listener != null) {
+                    listener.onClickLike(item, position);
+                }
+            }
+
+            @Override
+            public void onClickUnLike(FoodsProductHolder view, int position) {
+                if (listener != null) {
+                    listener.onClickUnLike(item, position);
+                }
+            }
+
+            @Override
+            public void onClickAddToCart(FoodsProductHolder view, int position) {
+                item.setAdded(true);
+                if (listener != null) {
+                    listener.onClickAddToCart(item, position);
+                }
+            }
+
+            @Override
+            public void onClickAdded(FoodsProductHolder beerProductHolder, int position) {
+                item.setAdded(false);
+                if (listener != null) {
+                    listener.onClickAdded(item, position);
+                }
+            }
+        };
+    }
+
+
 }

@@ -31,6 +31,8 @@ import com.thingnoy.thingnoy500v3.manager.ResMainListManager;
 import com.thingnoy.thingnoy500v3.manager.http.HttpManager;
 import com.thingnoy.thingnoy500v3.util.Constant;
 
+import static android.view.View.GONE;
+
 public class ResMainListFragment extends Fragment implements ItemClickListener {
 
     private RecyclerView rcPromotion;

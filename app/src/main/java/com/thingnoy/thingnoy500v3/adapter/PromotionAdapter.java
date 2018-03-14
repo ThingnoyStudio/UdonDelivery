@@ -2,6 +2,7 @@ package com.thingnoy.thingnoy500v3.adapter;
 
 import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,9 @@ import com.thingnoy.thingnoy500v3.dao.DataResProDao;
 import com.thingnoy.thingnoy500v3.dao.promotion.PromotionCollectionDao;
 import com.thingnoy.thingnoy500v3.dao.promotion.PromotionDao;
 import com.thingnoy.thingnoy500v3.manager.ItemClickListener;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by HBO on 2/3/2561.
@@ -37,6 +41,9 @@ public class PromotionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Date currentTime = Calendar.getInstance().getTime();
+        Log.e("PromotionAdapter", "onCreateViewHolder |" + currentTime);
+
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.holder_res_promotion, parent, false);
         return new PromotionHolder(view);
@@ -45,6 +52,8 @@ public class PromotionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+        Date currentTime = Calendar.getInstance().getTime();
+        Log.e("PromotionAdapter", "onBindViewHolder | " + currentTime);
 
         PromotionDao dataResProDao = dao.getmData().get(position);
         PromotionHolder promotionHolder = (PromotionHolder) holder;
@@ -67,10 +76,18 @@ public class PromotionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemCount() {
-        if (dao.getmData() == null)
+        Date currentTime = Calendar.getInstance().getTime();
+        if (dao.getmData() == null) {
+            Log.e("PromotionAdapter", "getItemCount return null |" + currentTime);
             return 0;
-        if (dao.getmData().size() <= 0)
+        }
+        if (dao.getmData().size() <= 0) {
+            Log.e("PromotionAdapter", "getItemCount return 0 |" + currentTime);
             return 0;
+        }
+
+
+        Log.e("PromotionAdapter", "getItemCount return " + dao.getmData().size() + " |" + currentTime);
         return dao.getmData().size();
     }
 }

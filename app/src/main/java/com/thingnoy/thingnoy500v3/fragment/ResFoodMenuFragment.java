@@ -14,12 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.FoodProductAdapter;
 import com.thingnoy.thingnoy500v3.adapter.FoodProductConverter;
 import com.thingnoy.thingnoy500v3.adapter.dao.FoodProductCollectionDao;
 import com.thingnoy.thingnoy500v3.adapter.item.BaseOrderFoodItem;
+import com.thingnoy.thingnoy500v3.adapter.item.FoodItem;
 import com.thingnoy.thingnoy500v3.dao.NameAndImageDao;
 import com.thingnoy.thingnoy500v3.manager.http.HttpManager;
 
@@ -124,6 +126,8 @@ public class ResFoodMenuFragment extends Fragment {
     private void setupView() {
         rcFoodOrder.setLayoutManager(new StaggeredGridLayoutManager(2, VERTICAL));
         foodProductAdapter = new FoodProductAdapter();
+        foodProductAdapter.setOnClickProductItem(onClickProduct());
+
         rcFoodOrder.setAdapter(foodProductAdapter);
 
         containerEmpty.setVisibility(View.GONE);
@@ -134,6 +138,39 @@ public class ResFoodMenuFragment extends Fragment {
 
 //        SnapHelper snapHelperTop = new GravitySnapHelper(Gravity.TOP);
 //        snapHelperTop.attachToRecyclerView(rcFoodOrder);
+    }
+
+    private FoodProductAdapter.OnClickFoodProductListener onClickProduct() {
+        return new FoodProductAdapter.OnClickFoodProductListener() {
+            @Override
+            public void onClickLike(FoodItem item, int position) {
+                showToast("onClickLike: " + position);
+            }
+
+            @Override
+            public void onClickUnLike(FoodItem item, int position) {
+                showToast("onClickUnLike: " + position);
+            }
+
+            @Override
+            public void onClickItem(FoodItem item, int position) {
+                showToast("onClickItem: " + position);
+            }
+
+            @Override
+            public void onClickAddToCart(FoodItem item, int position) {
+                showToast("AddToCart: " + position);
+            }
+
+            @Override
+            public void onClickAdded(FoodItem item, int position) {
+                showToast("onClickAdded: " + position);
+            }
+        };
+    }
+
+    private void showToast(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
     private void callGetMenuById() {
@@ -191,10 +228,9 @@ public class ResFoodMenuFragment extends Fragment {
 
         String normalMenuTitle = " เมนูอร่อย ";
         String recommendedMenu = " เมนูแนะนำ ";
-        String currency = getString(R.string.baht);
 
         List<BaseOrderFoodItem> orderFoodList = new ArrayList<>();
-        orderFoodList.addAll(FoodProductConverter.createSectionandOrder(dao, recommendedMenu, normalMenuTitle, currency));
+        orderFoodList.addAll(FoodProductConverter.createSectionandOrder(dao, recommendedMenu, normalMenuTitle));
 
         foodProductAdapter.setOrderFoodItemList(orderFoodList);
         foodProductAdapter.notifyDataSetChanged();
