@@ -14,7 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 import com.thingnoy.thingnoy500v3.R;
-import com.thingnoy.thingnoy500v3.adapter.item.FoodItem;
+import com.thingnoy.thingnoy500v3.adapter.item.FoodProductItem;
 import com.thingnoy.thingnoy500v3.manager.http.bus.Contextor;
 import com.thingnoy.thingnoy500v3.util.StringUtils;
 
@@ -82,7 +82,7 @@ public class FoodsProductHolder extends RecyclerView.ViewHolder {
 //    }
 
     @SuppressLint("SetTextI18n")
-    public void onBind(FoodItem item) {
+    public void onBind(FoodProductItem item) {
         setFoodImg(item.getmFoodImg());
         tvFoodName.setText(item.getmFoodName());
         tvTypeName.setText(item.getmFoodTypeName());
@@ -108,7 +108,7 @@ public class FoodsProductHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void setOnClickBeerListener(OnClickFoodListener listener) {
+    public void setOnClickFoodListener(OnClickFoodListener listener) {
         this.listener = listener;
     }
 

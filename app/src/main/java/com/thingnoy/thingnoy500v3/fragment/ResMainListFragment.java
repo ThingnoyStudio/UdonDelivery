@@ -15,11 +15,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import android.support.v7.widget.SnapHelper;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.PromotionAdapter;
 import com.thingnoy.thingnoy500v3.adapter.RestaurantAdapter;
@@ -31,6 +35,7 @@ import com.thingnoy.thingnoy500v3.manager.ResMainListManager;
 import com.thingnoy.thingnoy500v3.manager.http.HttpManager;
 import com.thingnoy.thingnoy500v3.util.Constant;
 
+import static android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL;
 import static android.view.View.GONE;
 
 public class ResMainListFragment extends Fragment implements ItemClickListener {
@@ -126,12 +131,16 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
 
 
         rcRestaurant.setHasFixedSize(true);
-        rcRestaurant.setLayoutManager(new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false));
+        rcRestaurant.setLayoutManager(new StaggeredGridLayoutManager(2, VERTICAL));
+//        rcRestaurant.setLayoutManager(new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false));
 //        rcRestaurant.setLayoutManager(new LinearLayoutManager(getContext()));
         rcRestaurant.setAdapter(restaurantAdapter);
         rcRestaurant.setItemAnimator(new DefaultItemAnimator());
-        SnapHelper snapHelper2 = new LinearSnapHelper();
-        snapHelper2.attachToRecyclerView(rcRestaurant);
+
+        SnapHelper snapHelperStart = new GravitySnapHelper(Gravity.START);
+        snapHelperStart.attachToRecyclerView(rcRestaurant);
+//        SnapHelper snapHelper2 = new LinearSnapHelper();
+//        snapHelper2.attachToRecyclerView(rcRestaurant);
 
         //set onclick
         restaurantAdapter.setItemClickListener(this);
@@ -217,7 +226,7 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
                 if (response.isSuccessful()) {
 
                     PromotionCollectionDao dao = response.body();
-
+                    Log.e("val", "callGetResPro: " + dao.getmData());
                     resMainlistManager.setPromotionCollectionDao(dao);
 
                     promotionAdapter.setDao(resMainlistManager.getPromotionCollectionDao());

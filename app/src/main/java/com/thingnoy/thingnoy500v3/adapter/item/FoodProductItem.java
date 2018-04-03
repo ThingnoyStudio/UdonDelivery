@@ -9,7 +9,9 @@ import com.thingnoy.thingnoy500v3.util.FoodProductType;
  * Created by HBO on 23/2/2561.
  */
 
-public class FoodItem extends BaseOrderFoodItem implements Parcelable {
+public class FoodProductItem extends BaseItem implements Parcelable {
+
+    // region Variable
     private String mFoodImg;
     private String mFoodName;
     //    private String mFoodPrice;
@@ -27,53 +29,13 @@ public class FoodItem extends BaseOrderFoodItem implements Parcelable {
     //    private String volume;
     private int amount = 1;
     private boolean isAdded = false;
+    //endregion
 
-    public FoodItem() {
+    public FoodProductItem() {
         super(FoodProductType.TYPE_ORDER);
     }
 
-
-    protected FoodItem(Parcel in) {
-        super(in);
-        mFoodImg = in.readString();
-        mFoodName = in.readString();
-        mFoodTypeName = in.readString();
-        mIDFood = in.readString();
-        price = in.readInt();
-        amount = in.readInt();
-        isAdded = in.readByte() != 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mFoodImg);
-        dest.writeString(mFoodName);
-        dest.writeString(mFoodTypeName);
-        dest.writeString(mIDFood);
-        dest.writeDouble(price);
-        dest.writeInt(amount);
-        dest.writeByte((byte) (isAdded ? 1 : 0));
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<FoodItem> CREATOR = new Creator<FoodItem>() {
-        @Override
-        public FoodItem createFromParcel(Parcel in) {
-            return new FoodItem(in);
-        }
-
-        @Override
-        public FoodItem[] newArray(int size) {
-            return new FoodItem[size];
-        }
-    };
-
-
-
+    // region Getter & Setter
     public String getmFoodImg() {
         return mFoodImg;
     }
@@ -114,14 +76,15 @@ public class FoodItem extends BaseOrderFoodItem implements Parcelable {
         this.price = price;
     }
 
-//    public int getAmount() {
-//        return amount;
-//    }
-
     public void setAmount(int amount) {
         this.amount = amount;
     }
 
+    public int getAmount() {
+        return amount;
+    }
+
+    // cal...
     public boolean isAdded() {
         return isAdded;
     }
@@ -129,7 +92,6 @@ public class FoodItem extends BaseOrderFoodItem implements Parcelable {
     public void setAdded(boolean added) {
         isAdded = added;
     }
-
 
     public void increaseAmount() {
         amount++;
@@ -140,12 +102,51 @@ public class FoodItem extends BaseOrderFoodItem implements Parcelable {
         if (amount < 1) amount = 1;
     }
 
-    public int getAmount() {
-        return amount;
-    }
+
 
     public void clearAmount() {
         amount = 1;
     }
+    //endregion
 
+    //region Parcelable
+    protected FoodProductItem(Parcel in) {
+        super(in);
+        mFoodImg = in.readString();
+        mFoodName = in.readString();
+        mFoodTypeName = in.readString();
+        mIDFood = in.readString();
+        price = in.readInt();
+        amount = in.readInt();
+        isAdded = in.readByte() != 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mFoodImg);
+        dest.writeString(mFoodName);
+        dest.writeString(mFoodTypeName);
+        dest.writeString(mIDFood);
+        dest.writeDouble(price);
+        dest.writeInt(amount);
+        dest.writeByte((byte) (isAdded ? 1 : 0));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<FoodProductItem> CREATOR = new Creator<FoodProductItem>() {
+        @Override
+        public FoodProductItem createFromParcel(Parcel in) {
+            return new FoodProductItem(in);
+        }
+
+        @Override
+        public FoodProductItem[] newArray(int size) {
+            return new FoodProductItem[size];
+        }
+    };
+    //endregion
 }

@@ -232,7 +232,7 @@
                         style="?attr/borderlessButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#fff"
+                        android:textColor="#1a0e0e"
                         android:layout_weight="1"
                         android:minHeight="36dp"
                         android:minWidth="66dp"

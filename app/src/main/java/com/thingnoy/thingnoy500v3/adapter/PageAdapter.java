@@ -23,7 +23,7 @@ public class PageAdapter extends FragmentPagerAdapter {
 
     public void addFragmentPage(Fragment fragment,String title){
         fragments.add(fragment);
-        pageTittle.add(title);
+//        pageTittle.add(title);
     }
 
     @Override
@@ -31,10 +31,10 @@ public class PageAdapter extends FragmentPagerAdapter {
         return fragments.get(position);
     }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return pageTittle.get(position);
-    }
+//    @Override
+//    public CharSequence getPageTitle(int position) {
+//        return pageTittle.get(position);
+//    }
 
     @Override
     public int getCount() {

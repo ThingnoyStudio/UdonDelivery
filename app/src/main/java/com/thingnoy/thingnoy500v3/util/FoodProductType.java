@@ -9,4 +9,6 @@ public class FoodProductType {
     public static final int TYPE_ORDER = 1;
     public static final int TYPE_PROGRESSBAR = 2;
     public static final int TYPE_EMPTY = 3;
+    public static final int TYPE_HISTORY = 4;
+
 }

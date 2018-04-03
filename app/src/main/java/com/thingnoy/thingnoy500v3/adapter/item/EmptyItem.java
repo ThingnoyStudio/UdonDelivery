@@ -6,7 +6,7 @@ import com.thingnoy.thingnoy500v3.util.FoodProductType;
  * Created by HBO on 23/2/2561.
  */
 
-public class EmptyItem extends BaseOrderFoodItem {
+public class EmptyItem extends BaseItem {
     public EmptyItem() {
         super(FoodProductType.TYPE_EMPTY);
     }

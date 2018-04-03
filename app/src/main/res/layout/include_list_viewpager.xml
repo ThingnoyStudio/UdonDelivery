@@ -21,8 +21,8 @@
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap">
-
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            <!--app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"-->
             <ImageView
                 android:id="@+id/image"
                 android:layout_width="match_parent"
@@ -43,6 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:title=""
+                android:minHeight="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
@@ -52,6 +53,7 @@
                     android:layout_gravity="right"
                     android:layout_marginEnd="@dimen/default_padding_margin"
                     android:layout_marginRight="@dimen/default_padding_margin"
+                    android:visibility="gone"
                     android:padding="@dimen/default_padding_margin">
 
                     <ImageView
@@ -73,38 +75,69 @@
                         tools:text="10"
                         tools:visibility="visible" />
                 </FrameLayout>
+
             </android.support.v7.widget.Toolbar>
+
 
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
+
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="44dp"
             android:background="?attr/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:tabGravity="fill"
             app:tabMode="fixed">
 
-            <android.support.design.widget.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_open"
-                android:text="restaurant" />
+            <!--<android.support.design.widget.TabItem-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:icon="@drawable/ic_open" -->
+            <!--/>-->
 
-            <android.support.design.widget.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_food"
-                android:text="food" />
+            <!--<android.support.design.widget.TabItem-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:icon="@drawable/ic_food"-->
+            <!--/>-->
 
         </android.support.design.widget.TabLayout>
+
     </android.support.design.widget.AppBarLayout>
+
+    <com.andremion.counterfab.CounterFab
+        android:id="@+id/counter_fab"
+        app:backgroundTint="#C51350"
+        android:background="#fff"
+        android:tint="#fff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/tabLayout"
+        android:clickable="true"
+        android:focusable="true"
+        app:fabSize="mini"
+        app:layout_anchorGravity="top|right|end"
+        android:src="@drawable/ic_cart_new" />
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+    <!--android:id="@+id/fab"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_margin="6dp"-->
+    <!--app:fabSize="mini"-->
+    <!--android:clickable="true"-->
+    <!--android:src="@drawable/cart_empty2"-->
+    <!--app:layout_anchor="@id/image"-->
+    <!--app:layout_anchorGravity="bottom|right|end"-->
+    <!--android:focusable="true" />-->
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
 </android.support.design.widget.CoordinatorLayout>

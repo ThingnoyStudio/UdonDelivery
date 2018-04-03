@@ -7,14 +7,14 @@ import android.os.Parcelable;
  * Created by HBO on 23/2/2561.
  */
 
-public class BaseOrderFoodItem implements Parcelable {
+public class BaseItem implements Parcelable {
     private int type;
 
-    public BaseOrderFoodItem(int type) {
+    public BaseItem(int type) {
         this.type = type;
     }
 
-    protected BaseOrderFoodItem(Parcel in) {
+    protected BaseItem(Parcel in) {
         type = in.readInt();
     }
 
@@ -28,15 +28,15 @@ public class BaseOrderFoodItem implements Parcelable {
         return 0;
     }
 
-    public static final Creator<BaseOrderFoodItem> CREATOR = new Creator<BaseOrderFoodItem>() {
+    public static final Creator<BaseItem> CREATOR = new Creator<BaseItem>() {
         @Override
-        public BaseOrderFoodItem createFromParcel(Parcel in) {
-            return new BaseOrderFoodItem(in);
+        public BaseItem createFromParcel(Parcel in) {
+            return new BaseItem(in);
         }
 
         @Override
-        public BaseOrderFoodItem[] newArray(int size) {
-            return new BaseOrderFoodItem[size];
+        public BaseItem[] newArray(int size) {
+            return new BaseItem[size];
         }
     };
 
