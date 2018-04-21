@@ -1,5 +1,5 @@
 
-package com.thingnoy.thingnoy500v3.dao.restaurant;
+package com.thingnoy.thingnoy500v3.api.result.restaurant;
 
 import android.os.Parcel;
 import android.os.Parcelable;

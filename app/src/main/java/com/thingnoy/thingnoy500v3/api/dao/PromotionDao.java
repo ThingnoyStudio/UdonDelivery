@@ -1,11 +1,9 @@
-package com.thingnoy.thingnoy500v3.dao;
+package com.thingnoy.thingnoy500v3.api.dao;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
-
-import java.util.Date;
 
 /**
  * Created by HBO on 12/2/2561.

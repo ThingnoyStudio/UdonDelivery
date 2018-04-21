@@ -7,17 +7,17 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 
-public class FoodMenuResultGroup implements Parcelable {
+public class FoodMenuResultGroupO implements Parcelable {
 
     @SerializedName("data")
     private Data mData;
     @SerializedName("success")
     private Boolean mSuccess;
 
-    public FoodMenuResultGroup() {
+    public FoodMenuResultGroupO() {
     }
 
-    protected FoodMenuResultGroup(Parcel in) {
+    protected FoodMenuResultGroupO(Parcel in) {
         byte tmpMSuccess = in.readByte();
         mSuccess = tmpMSuccess == 0 ? null : tmpMSuccess == 1;
     }
@@ -32,15 +32,15 @@ public class FoodMenuResultGroup implements Parcelable {
         return 0;
     }
 
-    public static final Creator<FoodMenuResultGroup> CREATOR = new Creator<FoodMenuResultGroup>() {
+    public static final Creator<FoodMenuResultGroupO> CREATOR = new Creator<FoodMenuResultGroupO>() {
         @Override
-        public FoodMenuResultGroup createFromParcel(Parcel in) {
-            return new FoodMenuResultGroup(in);
+        public FoodMenuResultGroupO createFromParcel(Parcel in) {
+            return new FoodMenuResultGroupO(in);
         }
 
         @Override
-        public FoodMenuResultGroup[] newArray(int size) {
-            return new FoodMenuResultGroup[size];
+        public FoodMenuResultGroupO[] newArray(int size) {
+            return new FoodMenuResultGroupO[size];
         }
     };
 

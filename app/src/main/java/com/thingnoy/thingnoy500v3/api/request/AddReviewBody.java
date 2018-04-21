@@ -1,10 +1,10 @@
-package com.thingnoy.thingnoy500v3.dao.review;
+package com.thingnoy.thingnoy500v3.api.request;
 
 /**
  * Created by HBO on 1/3/2561.
  */
 
-public class ResReviewBody {
+public class AddReviewBody {
     private int id_restaurant;
     private int id_customer;
     private String res_comment;
@@ -13,7 +13,7 @@ public class ResReviewBody {
     private String imgname;
     private String img;
 
-    public ResReviewBody() {
+    public AddReviewBody() {
     }
 
     public int getId_restaurant() {

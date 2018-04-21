@@ -1,5 +1,5 @@
 
-package com.thingnoy.thingnoy500v3.dao.promotion;
+package com.thingnoy.thingnoy500v3.api.result.promotion;
 
 import android.os.Parcel;
 import android.os.Parcelable;

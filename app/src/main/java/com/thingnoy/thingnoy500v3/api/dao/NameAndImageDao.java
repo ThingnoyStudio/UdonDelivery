@@ -1,4 +1,4 @@
-package com.thingnoy.thingnoy500v3.dao;
+package com.thingnoy.thingnoy500v3.api.dao;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,10 +7,11 @@ import android.os.Parcelable;
  * Created by HBO on 5/3/2561.
  */
 
-public class NameAndImageDao implements Parcelable {
+public class NameAndImageDao implements Parcelable  {
     private int resId;
     private String resName;
     private String resImage;
+    private boolean deliveryFee;
 
     public NameAndImageDao() {
     }
@@ -19,6 +20,7 @@ public class NameAndImageDao implements Parcelable {
         resId = in.readInt();
         resName = in.readString();
         resImage = in.readString();
+        deliveryFee = in.readByte() != 0;
     }
 
     @Override
@@ -26,6 +28,7 @@ public class NameAndImageDao implements Parcelable {
         dest.writeInt(resId);
         dest.writeString(resName);
         dest.writeString(resImage);
+        dest.writeByte((byte) (deliveryFee ? 1 : 0));
     }
 
     @Override
@@ -67,5 +70,23 @@ public class NameAndImageDao implements Parcelable {
 
     public void setResImage(String resImage) {
         this.resImage = resImage;
+    }
+
+    public boolean isDeliveryFee() {
+        return deliveryFee;
+    }
+
+    public void setDeliveryFee(boolean deliveryFee) {
+        this.deliveryFee = deliveryFee;
+    }
+
+    @Override
+    public String toString() {
+        return "NameAndImageDao{" +
+                "resId=" + resId +
+                ", resName='" + resName + '\'' +
+                ", resImage='" + resImage + '\'' +
+                ", deliveryFee=" + deliveryFee +
+                '}';
     }
 }

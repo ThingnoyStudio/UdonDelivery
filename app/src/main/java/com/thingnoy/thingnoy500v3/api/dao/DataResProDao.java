@@ -1,4 +1,4 @@
-package com.thingnoy.thingnoy500v3.dao;
+package com.thingnoy.thingnoy500v3.api.dao;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -20,9 +20,9 @@ public class DataResProDao implements Parcelable {
     }
 
     protected DataResProDao(Parcel in) {
-        RestaurantNameDao = in.readParcelable(com.thingnoy.thingnoy500v3.dao.RestaurantNameDao.class.getClassLoader());
-        MenuFoodDao = in.createTypedArrayList(com.thingnoy.thingnoy500v3.dao.MenuFoodDao.CREATOR);
-        PromotionDao = in.createTypedArrayList(com.thingnoy.thingnoy500v3.dao.PromotionDao.CREATOR);
+        RestaurantNameDao = in.readParcelable(com.thingnoy.thingnoy500v3.api.dao.RestaurantNameDao.class.getClassLoader());
+        MenuFoodDao = in.createTypedArrayList(com.thingnoy.thingnoy500v3.api.dao.MenuFoodDao.CREATOR);
+        PromotionDao = in.createTypedArrayList(com.thingnoy.thingnoy500v3.api.dao.PromotionDao.CREATOR);
     }
 
     @Override
@@ -49,27 +49,27 @@ public class DataResProDao implements Parcelable {
         }
     };
 
-    public com.thingnoy.thingnoy500v3.dao.RestaurantNameDao getRestaurantNameDao() {
+    public com.thingnoy.thingnoy500v3.api.dao.RestaurantNameDao getRestaurantNameDao() {
         return RestaurantNameDao;
     }
 
-    public void setRestaurantNameDao(com.thingnoy.thingnoy500v3.dao.RestaurantNameDao restaurantNameDao) {
+    public void setRestaurantNameDao(com.thingnoy.thingnoy500v3.api.dao.RestaurantNameDao restaurantNameDao) {
         RestaurantNameDao = restaurantNameDao;
     }
 
-    public List<com.thingnoy.thingnoy500v3.dao.MenuFoodDao> getMenuFoodDao() {
+    public List<com.thingnoy.thingnoy500v3.api.dao.MenuFoodDao> getMenuFoodDao() {
         return MenuFoodDao;
     }
 
-    public void setMenuFoodDao(List<com.thingnoy.thingnoy500v3.dao.MenuFoodDao> menuFoodDao) {
+    public void setMenuFoodDao(List<com.thingnoy.thingnoy500v3.api.dao.MenuFoodDao> menuFoodDao) {
         MenuFoodDao = menuFoodDao;
     }
 
-    public List<com.thingnoy.thingnoy500v3.dao.PromotionDao> getPromotionDao() {
+    public List<com.thingnoy.thingnoy500v3.api.dao.PromotionDao> getPromotionDao() {
         return PromotionDao;
     }
 
-    public void setPromotionDao(List<com.thingnoy.thingnoy500v3.dao.PromotionDao> promotionDao) {
+    public void setPromotionDao(List<com.thingnoy.thingnoy500v3.api.dao.PromotionDao> promotionDao) {
         PromotionDao = promotionDao;
     }
 }

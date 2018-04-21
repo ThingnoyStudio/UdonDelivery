@@ -1,5 +1,5 @@
 
-package com.thingnoy.thingnoy500v3.adapter.dao;
+package com.thingnoy.thingnoy500v3.api.result.foodMenu;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,4 +1,4 @@
-package com.thingnoy.thingnoy500v3.datatype;
+package com.thingnoy.thingnoy500v3.util.datatype;
 
 import android.os.Bundle;
 

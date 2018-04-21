@@ -1,5 +1,5 @@
 
-package com.thingnoy.thingnoy500v3.dao.restaurant;
+package com.thingnoy.thingnoy500v3.api.result.restaurant;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -8,17 +8,17 @@ import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
-public class RestaurantCollectionDao implements Parcelable {
+public class RestaurantResultGroup implements Parcelable {
 
     @SerializedName("data")
     private List<ResDataDao> mData;
     @SerializedName("success")
     private Boolean mSuccess;
 
-    public RestaurantCollectionDao() {
+    public RestaurantResultGroup() {
     }
 
-    protected RestaurantCollectionDao(Parcel in) {
+    protected RestaurantResultGroup(Parcel in) {
         mData = in.createTypedArrayList(ResDataDao.CREATOR);
         byte tmpMSuccess = in.readByte();
         mSuccess = tmpMSuccess == 0 ? null : tmpMSuccess == 1;
@@ -35,15 +35,15 @@ public class RestaurantCollectionDao implements Parcelable {
         return 0;
     }
 
-    public static final Creator<RestaurantCollectionDao> CREATOR = new Creator<RestaurantCollectionDao>() {
+    public static final Creator<RestaurantResultGroup> CREATOR = new Creator<RestaurantResultGroup>() {
         @Override
-        public RestaurantCollectionDao createFromParcel(Parcel in) {
-            return new RestaurantCollectionDao(in);
+        public RestaurantResultGroup createFromParcel(Parcel in) {
+            return new RestaurantResultGroup(in);
         }
 
         @Override
-        public RestaurantCollectionDao[] newArray(int size) {
-            return new RestaurantCollectionDao[size];
+        public RestaurantResultGroup[] newArray(int size) {
+            return new RestaurantResultGroup[size];
         }
     };
 
