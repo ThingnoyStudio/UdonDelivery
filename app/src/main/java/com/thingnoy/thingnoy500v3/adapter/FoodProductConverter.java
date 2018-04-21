@@ -1,8 +1,8 @@
 package com.thingnoy.thingnoy500v3.adapter;
 
-import com.thingnoy.thingnoy500v3.adapter.dao.FoodProductCollectionDao;
-import com.thingnoy.thingnoy500v3.adapter.dao.Normalmenu;
-import com.thingnoy.thingnoy500v3.adapter.dao.RecommendedMenu;
+import com.thingnoy.thingnoy500v3.api.result.foodMenu.FoodMenuResultGroupO;
+import com.thingnoy.thingnoy500v3.api.result.foodMenu.Normalmenu;
+import com.thingnoy.thingnoy500v3.api.result.foodMenu.RecommendedMenu;
 import com.thingnoy.thingnoy500v3.adapter.item.BaseItem;
 import com.thingnoy.thingnoy500v3.adapter.item.EmptyItem;
 import com.thingnoy.thingnoy500v3.adapter.item.FoodProductItem;
@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 public class FoodProductConverter {
-    public static List<BaseItem> createSectionandOrder(FoodProductCollectionDao dao,
+    public static List<BaseItem> createSectionandOrder(FoodMenuResultGroupO dao,
                                                        String recommendedMenuTitle,
                                                        String normalMenuTitle) {
         List<BaseItem> baseItemList = new ArrayList<>();

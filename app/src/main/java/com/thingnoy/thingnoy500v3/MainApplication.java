@@ -2,6 +2,7 @@ package com.thingnoy.thingnoy500v3;
 
 import android.app.Application;
 
+import com.orhanobut.hawk.Hawk;
 import com.thingnoy.thingnoy500v3.manager.http.bus.Contextor;
 
 /**
@@ -16,6 +17,7 @@ public class MainApplication extends Application {
 
 //        Initialize thing(s) here
         Contextor.getInstance().init(getApplicationContext());//โยน applicationContext()ไปเก็บไว้ที่ Contextor
+        Hawk.init(getApplicationContext()).build();
 
     }
 

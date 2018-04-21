@@ -13,7 +13,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.view.state.BundleSavedState;
-import com.thingnoy.thingnoy500v3.view.templete.BaseCustomViewGroup;
+import com.thingnoy.thingnoy500v3.template.BaseCustomViewGroup;
 
 public class PhotoListItem extends BaseCustomViewGroup {
 

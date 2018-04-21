@@ -7,7 +7,7 @@
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
     android:paddingTop="8dp"
-    tools:context="com.thingnoy.thingnoy500v3.fragment.ResInfoFragment">
+    tools:context="com.thingnoy.thingnoy500v3.ui.fragment.ResInfoFragment">
 
 
     <RelativeLayout
@@ -266,7 +266,7 @@
             android:layout_alignParentRight="true"
             android:layout_margin="12dp"
             android:clickable="true"
-            android:src="@drawable/ic_edit2_48"
+            android:src="@drawable/ic_pancil_white_48"
             android:visibility="gone"
             app:fabSize="normal" />
 

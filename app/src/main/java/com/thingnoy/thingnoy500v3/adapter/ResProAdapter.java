@@ -8,12 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
 
 import com.thingnoy.thingnoy500v3.R;
-import com.thingnoy.thingnoy500v3.dao.DataResProDao;
-import com.thingnoy.thingnoy500v3.dao.PhotoItemCollectionDao;
-import com.thingnoy.thingnoy500v3.dao.PhotoItemDao;
-import com.thingnoy.thingnoy500v3.dao.PromotionDao;
-import com.thingnoy.thingnoy500v3.dao.ResProCollectionDao;
-import com.thingnoy.thingnoy500v3.datatype.MutableInteger;
+import com.thingnoy.thingnoy500v3.api.dao.DataResProDao;
+import com.thingnoy.thingnoy500v3.api.dao.ResProCollectionDao;
+import com.thingnoy.thingnoy500v3.util.datatype.MutableInteger;
 import com.thingnoy.thingnoy500v3.util.Constant;
 import com.thingnoy.thingnoy500v3.view.PhotoListItem;
 

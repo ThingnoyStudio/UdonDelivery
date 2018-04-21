@@ -7,9 +7,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 
 import com.thingnoy.thingnoy500v3.R;
-import com.thingnoy.thingnoy500v3.dao.PhotoItemCollectionDao;
-import com.thingnoy.thingnoy500v3.dao.PhotoItemDao;
-import com.thingnoy.thingnoy500v3.manager.PhotoListManager;
+import com.thingnoy.thingnoy500v3.api.dao.PhotoItemCollectionDao;
+import com.thingnoy.thingnoy500v3.api.dao.PhotoItemDao;
 import com.thingnoy.thingnoy500v3.view.PhotoListItem;
 
 /**

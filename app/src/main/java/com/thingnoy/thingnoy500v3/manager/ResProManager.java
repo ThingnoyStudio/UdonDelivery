@@ -5,11 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.gson.Gson;
-import com.thingnoy.thingnoy500v3.dao.PhotoItemCollectionDao;
-import com.thingnoy.thingnoy500v3.dao.ResProCollectionDao;
+import com.thingnoy.thingnoy500v3.api.dao.ResProCollectionDao;
 import com.thingnoy.thingnoy500v3.manager.http.bus.Contextor;
-
-import java.util.ArrayList;
 
 public class ResProManager {
 

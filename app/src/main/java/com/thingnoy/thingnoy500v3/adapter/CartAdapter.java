@@ -1,16 +1,25 @@
 package com.thingnoy.thingnoy500v3.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.holder.FoodsProductHolder;
 import com.thingnoy.thingnoy500v3.adapter.holder.cart.CartHolder;
 import com.thingnoy.thingnoy500v3.adapter.item.BaseItem;
+import com.thingnoy.thingnoy500v3.adapter.item.DetailFoodItem;
 import com.thingnoy.thingnoy500v3.adapter.item.FoodProductItem;
 import com.thingnoy.thingnoy500v3.util.FoodProductType;
+import com.thingnoy.thingnoy500v3.util.GetPrettyPrintJson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +31,7 @@ import static com.thingnoy.thingnoy500v3.util.FoodProductType.TYPE_ORDER;
  */
 
 public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
+    private final static String TAG = CartAdapter.class.getSimpleName();
     private List<BaseItem> orderFoodItemList;
     private OnClickCartItemListener listener;
 
@@ -30,32 +39,25 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         orderFoodItemList = new ArrayList<>();
     }
 
-    public interface OnClickCartItemListener {
-        void onClickIncrease(FoodProductItem item, int position);
-
-        void onClickDecrease(FoodProductItem item, int position);
-
-        void onClickDelete(FoodProductItem item, int position);
-    }
-
-    public void setOnClickCartItem(OnClickCartItemListener listener) {
-        this.listener = listener;
-    }
-
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.holder_cart, parent, false);
-        return new CartHolder(view);
+        return new CartHolder(view, parent.getContext(), new TextChangeListener());
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Log.e(TAG, "onBindViewHolder");
         BaseItem i = getItem(position);
         if (getItemViewType(position) == TYPE_ORDER) {
             final FoodProductItem item = (FoodProductItem) i;
+            Log.e(TAG, "onBindViewHolder>> Bind: " + item.getmFoodName() + " >>" + new GetPrettyPrintJson().getJson(item));
             CartHolder cartHolder = (CartHolder) holder;
-            cartHolder.onBind(item);
+
+            cartHolder.textChangeListener.updatePosition(item, cartHolder.getAdapterPosition());
+            cartHolder.onBind(item, cartHolder.getAdapterPosition());
             cartHolder.setOnClickCartHolderListener(onClickCartHolder(item));
         }
     }
@@ -78,6 +80,10 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
 
+    public void setOnClickCartItem(OnClickCartItemListener listener) {
+        this.listener = listener;
+    }
+
     public int getTotalPrice() {
         return calTotalPrice();
     }
@@ -86,16 +92,26 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         mRemoveItem(item);
     }
 
-    private void increaseItemAmountAt(FoodProductItem beerItem) {
-        beerItem.increaseAmount();
+    private void increaseItemAmountAt(FoodProductItem foodItem) {
+        foodItem.increaseAmount();
         notifyDataSetChanged();
     }
 
-    private void decreaseItemAmountAt(FoodProductItem beerItem) {
-        beerItem.decreaseAmount();
+    private void decreaseItemAmountAt(FoodProductItem foodItem) {
+        foodItem.decreaseAmount();
         notifyDataSetChanged();
     }
 
+    private void setAddOnSelectIndex(FoodProductItem foodItem, DetailFoodItem detailFoodItem) {
+        foodItem.setAddOn(detailFoodItem);
+//        notifyDataSetChanged();
+        Log.e(TAG, "setAddOn : " + new GetPrettyPrintJson().getJson(foodItem));
+    }
+
+    private void addReason(FoodProductItem foodItem, String reason) {
+        foodItem.setReason(reason);
+//        Log.e(TAG, "AddReason : " + new GetPrettyPrintJson().getJson(foodItem));
+    }
 
     public void addItem(BaseItem item) {
         mAddItem(item);
@@ -118,21 +134,26 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return getItemCount() > 0;
     }
 
-
     public void removeAllItems() {
         getPrivateItems().clear();
         notifyDataSetChanged();
     }
 
-    /**********
+    /*********************
      * Function
      **********/
     private int calTotalPrice() {
         int price = 0;
         for (BaseItem baseItem : getItems()) {
             if (baseItem instanceof FoodProductItem) {
-                FoodProductItem beerItem = (FoodProductItem) baseItem;
-                price += beerItem.getPrice() * beerItem.getAmount();
+                FoodProductItem foodItem = (FoodProductItem) baseItem;
+                // (price * amount) + addOn
+                if (foodItem.getAddOn()!= null){
+                    price += (foodItem.getPrice() * foodItem.getAmount()) + foodItem.getAddOn().getFoodDetailsPrice();
+                }else {
+                    price += (foodItem.getPrice() * foodItem.getAmount());
+                }
+
             }
         }
         return price;
@@ -150,18 +171,32 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void remove(int index) {
         getPrivateItems().remove(index);
+        Log.e(TAG, "remove Item: " + new GetPrettyPrintJson().getJson(orderFoodItemList));
         notifyItemRemoved(index);
     }
 
     private void mAddItem(BaseItem item) {
         getPrivateItems().add(item);
+        Log.e(TAG, "Added Item: " + new GetPrettyPrintJson().getJson(orderFoodItemList));
         notifyItemInserted(getItemCount() - 1);
     }
-
 
     private List<BaseItem> getPrivateItems() {
         if (orderFoodItemList == null) return new ArrayList<>();
         return orderFoodItemList;
+    }
+
+    /*********************
+     * Listener
+     **********/
+    public interface OnClickCartItemListener {
+        void onClickIncrease(FoodProductItem item, int position);
+
+        void onClickDecrease(FoodProductItem item, int position);
+
+        void onClickDelete(FoodProductItem item, int position);
+
+        void onAddOnSelected(FoodProductItem item, int position);
     }
 
     private CartHolder.OnClickCartHolderListener onClickCartHolder(final FoodProductItem item) {
@@ -188,6 +223,39 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     listener.onClickDelete(item, position);
                 }
             }
+
+            @Override
+            public void onSelectedAddOn(CartHolder view, int position, DetailFoodItem detailFoodItem) {
+                setAddOnSelectIndex(item, detailFoodItem);
+                if (listener != null) {
+                    listener.onAddOnSelected(item, position);
+                }
+            }
         };
+    }
+
+    public class TextChangeListener implements TextWatcher {
+        private int position;
+        private FoodProductItem item;
+
+        void updatePosition(FoodProductItem item, int position) {
+            this.position = position;
+            this.item = item;
+            this.position = position;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            addReason(item, s.toString());
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
     }
 }

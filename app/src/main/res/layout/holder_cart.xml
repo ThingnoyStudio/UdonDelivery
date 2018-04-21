@@ -1,70 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardPreventCornerOverlap="false"
     app:cardBackgroundColor="@color/background_light"
+    app:cardPreventCornerOverlap="false"
+    android:layout_marginLeft="4dp"
+    android:layout_marginRight="4dp"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
-        android:padding="@dimen/default_padding_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/default_padding_margin">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginBottom="@dimen/default_padding_margin_small"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_padding_margin_small"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_weight="1"
                 android:id="@+id/tv_food_name"
                 style="@style/BeerTextView.DarkGray.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Arrogant Bastard Ale"/>
+                android:layout_weight="1"
+                android:text="Arrogant Bastard Ale" />
 
             <ImageView
-                android:src="@drawable/ic_delete_selector"
                 android:id="@+id/btn_delete_item"
                 android:layout_width="@dimen/default_icon_size_small"
-                android:layout_height="@dimen/default_icon_size_small"/>
+                android:layout_height="@dimen/default_icon_size_small"
+                android:src="@drawable/ic_delete_selector" />
 
         </LinearLayout>
 
         <TextView
             android:id="@+id/tv_food_price"
             style="@style/BeerTextView.Black.Body2"
-            android:layout_marginBottom="@dimen/default_padding_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/zero_baht"/>
+            android:layout_marginBottom="@dimen/default_padding_margin"
+            android:text="@string/zero_baht" />
+
+        <FrameLayout
+            android:background="#a7f1e7e7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Spinner
+                android:id="@+id/spn_add_on"
+                android:prompt="@string/add_on"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                android:popupBackground="@color/grey_20"
+                tools:listitem="@layout/list_spin_add_on"/>
+        </FrameLayout>
+
+
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#a7f1e7e7"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp"
+            android:minHeight="38dp"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@android:color/transparent"
+                android:padding="4dp"
+                android:visibility="gone"
+                android:tint="@color/grey_40"
+                app:srcCompat="@drawable/ic_insert_drive" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="1"
+                android:text="หมายเหตุ"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#807171"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/bt_toggle_description"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="11dp"
+                android:background="@android:color/transparent"
+                android:tint="#bfb1b1"
+                app:srcCompat="@drawable/ic_arrow_drop" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lyt_expand_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_middle"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="2dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginStart="2dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:padding="@dimen/default_padding_margin">
+
+                <EditText
+                    android:id="@+id/edt_reason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/grey_5"
+                    android:hint="แจ้งข้อมูลเพิ่มเติมเกี่ยวกับอาหารที่ท่านสั่ง..."
+                    android:padding="@dimen/spacing_middle"
+                    android:textColor="@color/grey_80"
+                    android:textColorHint="@color/grey_40"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="@dimen/default_padding_margin"
-            android:orientation="horizontal">
+            android:layout_marginTop="@dimen/default_padding_margin"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:padding="@dimen/default_padding_margin">
 
             <ImageView
                 android:id="@+id/btn_decrease"
                 android:layout_width="@dimen/default_icon_size_large"
                 android:layout_height="@dimen/default_icon_size_large"
-                android:layout_marginEnd="@dimen/default_padding_margin_large"
                 android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/default_padding_margin_large"
+                android:layout_marginRight="@dimen/default_padding_margin_large"
                 android:clickable="true"
-                android:src="@drawable/ic_decrease_selector"
-                android:layout_marginRight="@dimen/default_padding_margin_large" />
+                android:src="@drawable/ic_decrease_selector" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <TextView
@@ -74,14 +172,14 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center|bottom"
-                    android:text="1"/>
+                    android:text="1" />
 
                 <TextView
                     style="@style/BeerTextView.Black.Body3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:text="@string/Amount"/>
+                    android:text="@string/Amount" />
 
             </LinearLayout>
 
@@ -89,11 +187,11 @@
                 android:id="@+id/btn_increase"
                 android:layout_width="@dimen/default_icon_size_large"
                 android:layout_height="@dimen/default_icon_size_large"
-                android:layout_marginStart="@dimen/default_padding_margin_large"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/default_padding_margin_large"
+                android:layout_marginStart="@dimen/default_padding_margin_large"
                 android:clickable="true"
-                android:src="@drawable/ic_increase_selector"
-                android:layout_marginLeft="@dimen/default_padding_margin_large" />
+                android:src="@drawable/ic_increase_selector" />
 
         </LinearLayout>
 

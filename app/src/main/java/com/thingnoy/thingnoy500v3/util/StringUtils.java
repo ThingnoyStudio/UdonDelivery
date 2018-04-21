@@ -39,4 +39,10 @@ public class StringUtils {
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         return formatter.format(price) + getBahtString(context);
     }
+    @NonNull
+    public static String getCommaPrice(Context context, double price) {
+        DecimalFormat formatter = new DecimalFormat("#,###,###");
+        return formatter.format(price);
+    }
+
 }

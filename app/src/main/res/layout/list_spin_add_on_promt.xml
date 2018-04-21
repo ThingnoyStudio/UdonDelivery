@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/default_padding_margin">
+
+    <TextView
+        android:id="@+id/tv_add_on_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#807171"
+        android:text="@string/add_on"
+        android:textSize="@dimen/text_add_on_very_small" />
+
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <!--<TextView-->
+        <!--style="@style/BeerTextView.Red.VerySmall"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="+" />-->
+
+    <!--<TextView-->
+        <!--style="@style/BeerTextView.Red.VerySmall"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="35.0" />-->
+
+    <!--<TextView-->
+        <!--style="@style/BeerTextView.Red.VerySmall"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="฿" />-->
+
+    <!--<android.support.v7.widget.AppCompatImageButton-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:tint="@color/grey_40"-->
+        <!--app:srcCompat="@drawable/ic_arrow_drop" />-->
+
+</LinearLayout>

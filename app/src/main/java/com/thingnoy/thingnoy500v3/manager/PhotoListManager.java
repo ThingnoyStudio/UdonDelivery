@@ -2,7 +2,7 @@ package com.thingnoy.thingnoy500v3.manager;
 
 import android.content.Context;
 
-import com.thingnoy.thingnoy500v3.dao.PhotoItemCollectionDao;
+import com.thingnoy.thingnoy500v3.api.dao.PhotoItemCollectionDao;
 import com.thingnoy.thingnoy500v3.manager.http.bus.Contextor;
 
 public class PhotoListManager {

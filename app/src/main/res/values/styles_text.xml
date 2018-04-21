@@ -176,6 +176,18 @@
         <item name="android:textSize">@dimen/text_headline_2</item>
     </style>
 
+    <style name="BeerTextView.Red.Small">
+        <item name="android:textSize">@dimen/text_add_on</item>
+    </style>
+
+    <style name="BeerTextView.Red.VerySmall">
+        <item name="android:textSize">@dimen/text_add_on_very_small</item>
+    </style>
+
+    <style name="BeerTextView.Black.Small">
+        <item name="android:textSize">@dimen/text_add_on</item>
+    </style>
+
     <style name="BeerTextView.Red.Title">
         <item name="android:textSize">@dimen/text_title</item>
     </style>
@@ -192,4 +204,6 @@
         <item name="android:textSize">@dimen/text_body_3</item>
     </style>
 
+    <dimen name="text_add_on">18sp</dimen>
+    <dimen name="text_add_on_very_small">14sp</dimen>
 </resources>

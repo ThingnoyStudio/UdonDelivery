@@ -15,6 +15,7 @@ import com.thingnoy.thingnoy500v3.adapter.item.EmptyItem;
 import com.thingnoy.thingnoy500v3.adapter.item.FoodProductItem;
 import com.thingnoy.thingnoy500v3.adapter.item.SectionItem;
 import com.thingnoy.thingnoy500v3.util.FoodProductType;
+import com.thingnoy.thingnoy500v3.util.ItemAnimation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +26,8 @@ import java.util.List;
 
 public class FoodProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<BaseItem> orderFoodItemList;
-
     private OnClickFoodProductListener listener;
-
+    private int animation_type = 0;
 
     public interface OnClickFoodProductListener {
         void onClickLike(FoodProductItem item, int position);
@@ -45,8 +45,9 @@ public class FoodProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         orderFoodItemList = new ArrayList<>();
     }
 
-    public void setItems(List<BaseItem> orderFoodItemList) {
+    public void setItems(List<BaseItem> orderFoodItemList, int animation_type) {
         this.orderFoodItemList = orderFoodItemList;
+        this.animation_type = animation_type;
         notifyDataSetChanged();
     }
 
@@ -85,6 +86,8 @@ public class FoodProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             FoodProductItem foodProductItem = (FoodProductItem) orderFoodItem;
             setupFoodProduct(foodProductHolder, foodProductItem);
 
+//            setAnimation(foodProductHolder.itemView, position);
+
         } else if (holder instanceof EmptyHolder) {
             StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
             layoutParams.setFullSpan(true);
@@ -92,6 +95,8 @@ public class FoodProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             EmptyHolder emptyHolder = (EmptyHolder) holder;
             EmptyItem emptyItem = (EmptyItem) orderFoodItem;
             setupEmpty(emptyHolder, emptyItem);
+
+//            setAnimation(emptyHolder.itemView, position);
 
         } else if (holder instanceof SectionHolder) {
 
@@ -101,6 +106,8 @@ public class FoodProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             SectionHolder sectionHolder = (SectionHolder) holder;
             SectionItem sectionItem = (SectionItem) orderFoodItem;
             setupSection(sectionHolder, sectionItem);
+
+//            setAnimation(sectionHolder.itemView, position);
         }
     }
 
@@ -192,7 +199,7 @@ public class FoodProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private FoodsProductHolder.OnClickFoodListener onClickFood(final FoodProductItem item) {
         return new FoodsProductHolder.OnClickFoodListener() {
             @Override
-            public void onClickItem(FoodsProductHolder beerProductHolder, int position) {
+            public void onClickItem(FoodsProductHolder foodsProductHolder, int position) {
                 if (listener != null) {
                     listener.onClickItem(item, position);
                 }
@@ -228,6 +235,17 @@ public class FoodProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 }
             }
         };
+    }
+
+
+    private int lastPosition = -1;
+    private boolean on_attach = true;
+
+    private void setAnimation(View view, int position) {
+        if (position > lastPosition) {
+            ItemAnimation.animate(view, on_attach ? position : -1, animation_type);
+            lastPosition = position;
+        }
     }
 
 

@@ -26,8 +26,8 @@
     <string name="Amount">จำนวน</string>
     <string name="cart_is_empty">Cart is empty.</string>
     <string name="add_to_order">เพิ่มลงตะกร้า</string>
-    <string name="order_beer">Order</string>
-    <string name="total">ราคา</string>
+    <string name="order_food">สั่งซื้อ</string>
+    <string name="total">ยอดรวมสุทธิ:</string>
     <string name="zero_baht">0฿</string>
     <string name="baht">฿</string>
     <string name="confirm_order">ยืนยันการสั่งอาหาร</string>
@@ -47,4 +47,8 @@
     <string name="menu_history">ประวัติการสั่่งซื้อ</string>
     <string name="menu_me">ฉัน</string>
     <string name="menu_nearby">ร้านใกล้เคียง</string>
+    <string name="yes">ตกลง</string>
+    <string name="no">ยกเลิก</string>
+    <string name="delivery_fee">ค่าจัดส่ง</string>
+    <string name="add_on">เพิ่มเติม</string>
 </resources>

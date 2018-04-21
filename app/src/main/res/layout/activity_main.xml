@@ -5,7 +5,7 @@
     android:id="@+id/main_activity_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.thingnoy.thingnoy500v3.activity.MainActivity">
+    tools:context="com.thingnoy.thingnoy500v3.ui.activity.MainActivity">
 
     <!-- content -->
     <LinearLayout
@@ -21,12 +21,78 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" >
         <!-- สูงตาม Actionbar -->
         <!-- ให้สีเดียวกับ ActionBar ปกติ-->
         <!-- ฟ้อนต์สีเดียวกับที่เคยใช้ใน Actionbar -->
         <!-- กำหนดสีให้ popup Menu -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start|left"
+                android:visibility="visible"
+                android:padding="@dimen/default_padding_margin"
+                tools:ignore="RtlHardcoded">
+                <LinearLayout
+                    android:layout_gravity="start"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
+                    <ImageView
+                        android:id="@+id/iv_logo"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="0"
+                        android:layout_gravity="center_vertical"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitCenter"
+                        android:clickable="true"
+                        android:src="@drawable/ic_cart_new" />
+                    <TextView
+                        android:layout_marginLeft="@dimen/default_padding_margin"
+                        android:id="@+id/tv_title"
+                        android:textSize="21sp"
+                        android:gravity="center_vertical"
+                        android:text="Udon Food Delivery"
+                        android:layout_width="0dp"
+                        android:layout_weight="7"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+
+
+
+
+            </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="@dimen/default_icon_size_extra_large"
+            android:layout_height="@dimen/default_icon_size_extra_large"
+            android:layout_gravity="right"
+            android:layout_marginEnd="@dimen/default_padding_margin"
+            android:layout_marginRight="@dimen/default_padding_margin"
+            android:visibility="gone"
+            android:padding="@dimen/default_padding_margin">
+
+            <ImageView
+                android:id="@+id/toolbar_cart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:src="@drawable/ic_cart_new" />
+
+            <TextView
+                android:id="@+id/tv_product_count"
+                style="@style/BeerTextView.White.Body3"
+                android:layout_width="@dimen/default_icon_size_small"
+                android:layout_height="@dimen/default_icon_size_small"
+                android:layout_gravity="bottom|end"
+                android:background="@drawable/background_red_oval"
+                android:gravity="center"
+                android:visibility="gone"
+                tools:text="10"
+                tools:visibility="visible" />
+        </FrameLayout>
+        </android.support.v7.widget.Toolbar>
         <!-- Content -->
         <FrameLayout
             android:id="@+id/contentContainer"
@@ -43,7 +109,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
-        app:itemIconTint="@color/colorPrimaryDark"
         app:itemTextColor="@color/colorAccent"
         app:menu="@menu/menu_bottom" />
     <!-- Menu -->

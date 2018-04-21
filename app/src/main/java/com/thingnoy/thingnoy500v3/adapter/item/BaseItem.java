@@ -14,6 +14,18 @@ public class BaseItem implements Parcelable {
         this.type = type;
     }
 
+    public BaseItem() {
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public BaseItem clone() throws CloneNotSupportedException{
+        return (BaseItem) super.clone();
+    }
+
+    //region Parcelable
     protected BaseItem(Parcel in) {
         type = in.readInt();
     }
@@ -39,10 +51,9 @@ public class BaseItem implements Parcelable {
             return new BaseItem[size];
         }
     };
+    //endregion
 
-    public int getType() {
-        return type;
-    }
+
 
 
 }

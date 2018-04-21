@@ -7,31 +7,33 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.thingnoy.thingnoy500v3.R;
-import com.thingnoy.thingnoy500v3.adapter.holder.promotion.PromotionHolder;
 import com.thingnoy.thingnoy500v3.adapter.holder.restaurant.RestaurantHolder;
-import com.thingnoy.thingnoy500v3.dao.restaurant.ResDataDao;
-import com.thingnoy.thingnoy500v3.dao.restaurant.RestaurantCollectionDao;
+import com.thingnoy.thingnoy500v3.api.result.restaurant.ResDataDao;
+import com.thingnoy.thingnoy500v3.api.result.restaurant.RestaurantResultGroup;
 import com.thingnoy.thingnoy500v3.manager.ItemClickListener;
-import com.thingnoy.thingnoy500v3.util.Constant;
+import com.thingnoy.thingnoy500v3.util.ItemAnimation;
 
 /**
  * Created by HBO on 4/3/2561.
  */
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private RestaurantCollectionDao dao;
+    private RestaurantResultGroup dao;
     private ItemClickListener itemClickListener;
+    private int animation_type = 0;
 
     public void setItemClickListener(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
     public RestaurantAdapter() {
-        this.dao = new RestaurantCollectionDao();
+        this.dao = new RestaurantResultGroup();
     }
 
-    public void setDao(RestaurantCollectionDao dao) {
+    public void setItems(RestaurantResultGroup dao, int animation_type) {
         this.dao = dao;
+        this.animation_type = animation_type;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -58,6 +60,8 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     itemClickListener.onClick(v, position, false);
             }
         });
+
+        setAnimation(restaurantHolder.itemView, position);
     }
 
     @Override
@@ -67,6 +71,16 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (dao.getmData().size() <= 0)
             return 0;
         return dao.getmData().size();
+    }
+
+    private int lastPosition = -1;
+    private boolean on_attach = true;
+
+    private void setAnimation(View view, int position) {
+        if (position > lastPosition) {
+            ItemAnimation.animate(view, on_attach ? position : -1, animation_type);
+            lastPosition = position;
+        }
     }
 //    public interface OnItemClickListener {
 //        void onPositiveButtonClick();

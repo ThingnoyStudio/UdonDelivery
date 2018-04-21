@@ -2,47 +2,44 @@ package com.thingnoy.thingnoy500v3.adapter;
 
 import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.holder.promotion.PromotionHolder;
-import com.thingnoy.thingnoy500v3.adapter.holder.review.ReviewHolder;
-import com.thingnoy.thingnoy500v3.dao.DataResProDao;
-import com.thingnoy.thingnoy500v3.dao.promotion.PromotionCollectionDao;
-import com.thingnoy.thingnoy500v3.dao.promotion.PromotionDao;
+import com.thingnoy.thingnoy500v3.api.result.promotion.PromotionResultGroup;
+import com.thingnoy.thingnoy500v3.api.result.promotion.PromotionDao;
 import com.thingnoy.thingnoy500v3.manager.ItemClickListener;
-
-import java.util.Calendar;
-import java.util.Date;
+import com.thingnoy.thingnoy500v3.util.ItemAnimation;
 
 /**
  * Created by HBO on 2/3/2561.
  */
 
 public class PromotionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private PromotionCollectionDao dao;
+    private PromotionResultGroup dao;
     private ItemClickListener itemClickListener;
+    private int animation_type = 0;
 
     public void setItemClickListener(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
     public PromotionAdapter() {
-        this.dao = new PromotionCollectionDao();
+        this.dao = new PromotionResultGroup();
     }
 
-    public void setDao(PromotionCollectionDao dao) {
+    public void setItems(PromotionResultGroup dao, int animation_type) {
         this.dao = dao;
+        this.animation_type = animation_type;
+        notifyDataSetChanged();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Date currentTime = Calendar.getInstance().getTime();
-        Log.e("PromotionAdapter", "onCreateViewHolder |" + currentTime);
+//        Date currentTime = Calendar.getInstance().getTime();
+//        Log.e("PromotionAdapter", "onCreateViewHolder |" + currentTime);
 
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.holder_res_promotion, parent, false);
@@ -52,8 +49,8 @@ public class PromotionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-        Date currentTime = Calendar.getInstance().getTime();
-        Log.e("PromotionAdapter", "onBindViewHolder | " + currentTime);
+//        Date currentTime = Calendar.getInstance().getTime();
+//        Log.e("PromotionAdapter", "onBindViewHolder | " + currentTime);
 
         PromotionDao dataResProDao = dao.getmData().get(position);
         PromotionHolder promotionHolder = (PromotionHolder) holder;
@@ -72,22 +69,34 @@ public class PromotionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
         });
 
+        setAnimation(promotionHolder.itemView, position);
+
     }
 
     @Override
     public int getItemCount() {
-        Date currentTime = Calendar.getInstance().getTime();
+//        Date currentTime = Calendar.getInstance().getTime();
         if (dao.getmData() == null) {
-            Log.e("PromotionAdapter", "getItemCount return null |" + currentTime);
+//            Log.e("PromotionAdapter", "getItemCount return null |" + currentTime);
             return 0;
         }
         if (dao.getmData().size() <= 0) {
-            Log.e("PromotionAdapter", "getItemCount return 0 |" + currentTime);
+//            Log.e("PromotionAdapter", "getItemCount return 0 |" + currentTime);
             return 0;
         }
 
 
-        Log.e("PromotionAdapter", "getItemCount return " + dao.getmData().size() + " |" + currentTime);
+//        Log.e("PromotionAdapter", "getItemCount return " + dao.getmData().size() + " |" + currentTime);
         return dao.getmData().size();
+    }
+
+    private int lastPosition = -1;
+    private boolean on_attach = true;
+
+    private void setAnimation(View view, int position) {
+        if (position > lastPosition) {
+            ItemAnimation.animate(view, on_attach ? position : -1, animation_type);
+            lastPosition = position;
+        }
     }
 }
