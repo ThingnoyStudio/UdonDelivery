@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import com.thingnoy.thingnoy500v3.R;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 
 public class StringUtils {
 
@@ -20,8 +22,8 @@ public class StringUtils {
     }
 
     @NonNull
-    public static String getBottleOfBeerString(Context context) {
-        return " " + context.getResources().getString(R.string.bottles_of_beer);
+    public static String getListOfFoodString(Context context) {
+        return " " + context.getResources().getString(R.string.List_of_beer);
     }
 
     @NonNull
@@ -39,10 +41,21 @@ public class StringUtils {
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         return formatter.format(price) + getBahtString(context);
     }
+
     @NonNull
     public static String getCommaPrice(Context context, double price) {
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         return formatter.format(price);
+    }
+
+    public static Double getDoubleFromComma(Context context, String strNumber) {
+        Double dd = 0.0;
+        try {
+            dd = Double.valueOf(strNumber.replace(",", ""));
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+        return dd;
     }
 
 }

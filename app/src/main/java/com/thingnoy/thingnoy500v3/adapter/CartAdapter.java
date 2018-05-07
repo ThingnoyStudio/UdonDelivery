@@ -186,9 +186,9 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return orderFoodItemList;
     }
 
-    /*********************
+    /*
      * Listener
-     **********/
+     */
     public interface OnClickCartItemListener {
         void onClickIncrease(FoodProductItem item, int position);
 

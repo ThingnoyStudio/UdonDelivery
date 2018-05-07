@@ -2,6 +2,7 @@ package com.thingnoy.thingnoy500v3.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,28 +29,37 @@ import com.andremion.counterfab.CounterFab;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.gson.Gson;
+import com.cazaea.sweetalert.SweetAlertDialog;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
-import com.orhanobut.hawk.Hawk;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.thekhaeng.slidingmenu.lib.SlidingMenu;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.CartAdapter;
-import com.thingnoy.thingnoy500v3.adapter.PageAdapter;
+import com.thingnoy.thingnoy500v3.adapter.PagerAdapter;
+import com.thingnoy.thingnoy500v3.adapter.PagerNoTitleAdapter;
 import com.thingnoy.thingnoy500v3.adapter.item.BaseItem;
 import com.thingnoy.thingnoy500v3.adapter.item.FoodProductItem;
 import com.thingnoy.thingnoy500v3.api.UdonFoodServiceManager;
 import com.thingnoy.thingnoy500v3.api.dao.NameAndImageDao;
+import com.thingnoy.thingnoy500v3.api.result.deliverypro.DataDeliveryPro;
+import com.thingnoy.thingnoy500v3.api.result.deliverypro.DeliveryProResultGroup;
+import com.thingnoy.thingnoy500v3.api.result.login.LoginResultGroup;
+import com.thingnoy.thingnoy500v3.api.result.new_restaurant.NewRestaurantResultGroup;
 import com.thingnoy.thingnoy500v3.event.AddFoodToCartEvent;
 import com.thingnoy.thingnoy500v3.event.ClearAddedButtonStateAllEvent;
 import com.thingnoy.thingnoy500v3.event.ClearAddedButtonStateEvent;
 import com.thingnoy.thingnoy500v3.event.GoToOrderDetailActivityEvent;
 import com.thingnoy.thingnoy500v3.event.RemoveFoodFromCartEvent;
+import com.thingnoy.thingnoy500v3.manager.CacheManager;
 import com.thingnoy.thingnoy500v3.manager.http.bus.Contextor;
-import com.thingnoy.thingnoy500v3.ui.activity.MapsActivity;
+import com.thingnoy.thingnoy500v3.ui.activity.MoreInfoActivity;
+import com.thingnoy.thingnoy500v3.ui.activity.OrderingActivity;
+import com.thingnoy.thingnoy500v3.ui.login.LoginActivity;
 import com.thingnoy.thingnoy500v3.util.GetPrettyPrintJson;
+import com.thingnoy.thingnoy500v3.util.ItemAnimation;
 import com.thingnoy.thingnoy500v3.util.StringUtils;
 
 import java.util.ArrayList;
@@ -56,14 +67,18 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
+import static com.thingnoy.thingnoy500v3.util.Constant.RESTAURANT;
+import static com.thingnoy.thingnoy500v3.util.Constant.USERINFO;
 
 public class MoreInfoFragment extends Fragment {
     private final static String TAG = MoreInfoFragment.class.getSimpleName();
-    private static final String EXTRA_PRODUCT_LIST_TEST = "extra_product_list_test";
+
     public static final int REQ_ORDER = 1000;
 
-    public static final String KEY_FOOD_ITEM_IN_CART = "key_food_item_in_cart";
-    public static final String EXTRA_PRODUCT_LIST = "extra_product_list";
+    private static final String EXTRA_NAME_AND_IMAGE_DAO = "extra_name_and_image_dao";
+    private static final String KEY_FOOD_ITEM_IN_CART = "key_food_item_in_cart";
+    private static final String EXTRA_PRODUCT_LIST = "extra_product_list";
+    private static final String EXTRA_TOTAL_PRICE = "extra_total_price";
     private final UdonFoodServiceManager serviceManager;
     private NameAndImageDao dao;
     private TabLayout tabLayout;
@@ -81,10 +96,16 @@ public class MoreInfoFragment extends Fragment {
     private CartAdapter cartAdapter;
 
 
-
     private CounterFab fabCouter;
     private static Bundle mBundleRecyclerViewState;
     private TextView tvDeliveryFee;
+    private double mTotalPrice;
+    private List<DataDeliveryPro> datadeliveryProList;
+    private ArrayList<String> listDeliveryPro;
+    private ArrayAdapter<String> deliveryProAdapter;
+    private MaterialSpinner spnDeliveryPro;
+    private TextView tvPoint;
+    private SweetAlertDialog mDialog;
 
 
     public MoreInfoFragment() {
@@ -111,7 +132,7 @@ public class MoreInfoFragment extends Fragment {
 
         assert getArguments() != null;
         dao = getArguments().getParcelable("dao");
-        Logger.t(TAG).d(dao);
+        Log.e(TAG, "NameAndImageDao: " + new GetPrettyPrintJson().getJson(dao));
 //        Toast.makeText(getActivity(),dao.getPromotionDao().get(0).getResPromotionEnd().toString(),Toast.LENGTH_SHORT).show();
 
         if (savedInstanceState != null)
@@ -147,6 +168,7 @@ public class MoreInfoFragment extends Fragment {
         viewPager2 = rootView.findViewById(R.id.viewPager2);
         tabLayout = rootView.findViewById(R.id.tabLayout);
 
+        // ******* Menu ***********
         menu = new SlidingMenu(Contextor.getInstance().getContext());
         menu.setMenu(R.layout.sliding_cart);
         rcCart = menu.getRootView().findViewById(R.id.rv_cart);
@@ -154,7 +176,8 @@ public class MoreInfoFragment extends Fragment {
         tvTotalPrice = menu.findViewById(R.id.tv_total_price);
         tvDeliveryFee = menu.findViewById(R.id.tv_delivery_fee);
         btnConfirmOrder = menu.findViewById(R.id.btn_confirm_order);
-
+        spnDeliveryPro = menu.findViewById(R.id.spn_delivery_pro);
+        tvPoint = menu.findViewById(R.id.tv_point);
 
     }
 
@@ -207,15 +230,15 @@ public class MoreInfoFragment extends Fragment {
     }
 
     private void setUpViewPager(ViewPager vp) {
-        PageAdapter pagerAdapter = new PageAdapter(getActivity()
+        PagerNoTitleAdapter pagerAdapter = new PagerNoTitleAdapter(getActivity()
                 .getSupportFragmentManager(), 2);
-        pagerAdapter.addFragmentPage(FoodMenuFragment.newInstance(dao),
-                "Foods");
-        pagerAdapter.addFragmentPage(ResInfoFragment.newInstance(dao),
-                "Restaurant");
+        pagerAdapter.addFragmentPage(FoodMenuFragment.newInstance(dao));
+        pagerAdapter.addFragmentPage(ResInfoFragment.newInstance(dao));
+
         vp.setAdapter(pagerAdapter);
     }
 
+    @SuppressLint("SetTextI18n")
     private void setupCart() {
         menu.setMode(SlidingMenu.RIGHT);
         menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
@@ -226,6 +249,15 @@ public class MoreInfoFragment extends Fragment {
         menu.attachToActivity(getActivity(), SlidingMenu.SLIDING_CONTENT);
 
         btnConfirmOrder.setOnClickListener(onClickConfirmOrder());
+        spnDeliveryPro.setOnItemSelectedListener(onDeliveryProSelectedListener());
+
+        LoginResultGroup userInfo = new CacheManager<LoginResultGroup>().loadCache(LoginResultGroup.class, USERINFO);
+        if (userInfo != null && userInfo.getData() != null) {
+            tvPoint.setText("" + userInfo.getData().get(0).getName().getCustomerPoint());
+        } else {
+            tvPoint.setText("0");
+        }
+
 
 //        int itemSpace = (int) getResources().getDimension( R.dimen.default_padding_margin );
         rcCart.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -334,16 +366,25 @@ public class MoreInfoFragment extends Fragment {
     }
 
     public void goToOrderDetailActivity(GoToOrderDetailActivityEvent event) {
-//        Intent i = new Intent( this, OrderDetailActivity.class );
+//        Intent i = new Intent( this, HistoryDetailActivity.class );
 //        i.putExtra( EXTRA_HISTORY_ITEM, event.getItem() );
 //        startActivity( i );
     }
 
-    public void goToMapActivity(List<BaseItem> items) {
-        Intent i = new Intent( getContext(), MapsActivity.class );
-        i.putParcelableArrayListExtra( EXTRA_PRODUCT_LIST, (ArrayList<? extends Parcelable>) items );
-        i.putExtra(EXTRA_PRODUCT_LIST_TEST,new Gson().toJson(items));
-        startActivityForResult( i, REQ_ORDER );
+    public void goToOrdering(List<BaseItem> items) {
+//        Intent i = new Intent( getContext(), MapsActivity.class );
+//        i.putParcelableArrayListExtra( EXTRA_PRODUCT_LIST, (ArrayList<? extends Parcelable>) items );
+//        i.putExtra(EXTRA_PRODUCT_LIST_TEST,new Gson().toJson(items));
+//        startActivityForResult( i, REQ_ORDER );
+
+        Log.e(TAG, "goToOrdering>> items: " + new GetPrettyPrintJson().getJson(items));
+        Intent i = new Intent(getContext(), OrderingActivity.class);
+        i.putParcelableArrayListExtra(EXTRA_PRODUCT_LIST, (ArrayList<? extends Parcelable>) items);
+        i.putExtra(EXTRA_NAME_AND_IMAGE_DAO, dao);
+        i.putExtra(EXTRA_TOTAL_PRICE, mTotalPrice);
+        startActivityForResult(i, REQ_ORDER);
+
+
     }
 
     public void onAddFoodToCartEvent(FoodProductItem item) {
@@ -384,12 +425,14 @@ public class MoreInfoFragment extends Fragment {
     }
 
     private void showProductItemView() {
+        spnDeliveryPro.setVisibility(View.VISIBLE);
         containerEmpty.setVisibility(GONE);
         btnConfirmOrder.setEnabled(true);
         btnConfirmOrder.setBackgroundResource(R.drawable.btn_active_selector);
     }
 
     private void hindProductItemView() {
+        spnDeliveryPro.setVisibility(View.INVISIBLE);
         containerEmpty.setVisibility(View.VISIBLE);
         btnConfirmOrder.setEnabled(false);
         btnConfirmOrder.setBackgroundResource(R.drawable.btn_inactive);
@@ -397,15 +440,102 @@ public class MoreInfoFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void updateTotalPrice() {
-        tvDeliveryFee.setText(StringUtils.getCommaPrice(getActivity(),
-                dao.isDeliveryFee() ? 50.0 : 0.00));
-        tvTotalPrice.setText(StringUtils.getCommaPriceWithBaht(getActivity(),
-                cartAdapter.getTotalPrice() + Double.valueOf(tvDeliveryFee.getText().toString())));
+        updateDeliveryFee(spnDeliveryPro.getSelectedIndex());
+//        tvDeliveryFee.setText(StringUtils.getCommaPrice(getActivity(),
+//                dao.isDeliveryFee() ? 50.0 : 0.00));
+        mTotalPrice = cartAdapter.getTotalPrice() + Double.valueOf(tvDeliveryFee.getText().toString());
+        tvTotalPrice.setText(StringUtils.getCommaPriceWithBaht(getActivity(), mTotalPrice));
     }
 
-    /****************
+    private void requestDeliveryPro() {
+        serviceManager.requestDeliveryPro(new UdonFoodServiceManager.UdonFoodManagerCallback<DeliveryProResultGroup>() {
+            @Override
+            public void onSuccess(DeliveryProResultGroup result) {
+                datadeliveryProList = result.getData();
+                setupDataToSpinner(datadeliveryProList);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+    }
+
+    private void setupDataToSpinner(List<DataDeliveryPro> datadeliveryProList) {
+        if (datadeliveryProList != null && datadeliveryProList.size() > 0) {
+            listDeliveryPro = new ArrayList<>();
+            listDeliveryPro.add("เลือกโปรโมชั่น..");
+
+            for (int i = 0; i < datadeliveryProList.size(); i++) {
+                int mPoint = Integer.parseInt(tvPoint.getText().toString());
+                int point = Integer.parseInt(datadeliveryProList.get(i).getDeliveryProPiont());
+                if (point <= mPoint) {
+                    listDeliveryPro.add(datadeliveryProList.get(i).getDeliveryProName());
+                }
+
+            }
+
+            if (listDeliveryPro.size() == 2) {
+                listDeliveryPro = new ArrayList<>();
+                listDeliveryPro.add("แต้มสะสมไม่เพียงพอ");
+                listDeliveryPro.add(" - - - ");
+            }
+
+            deliveryProAdapter = new ArrayAdapter<>(
+                    Contextor.getInstance().getContext(),
+                    android.R.layout.simple_spinner_item,
+                    listDeliveryPro);
+
+            deliveryProAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            spnDeliveryPro.setAdapter(deliveryProAdapter);
+        }
+    }
+
+    private void showErrorDialog(String content) {
+        mDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE);
+        mDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        mDialog.setTitleText("กรุณาทำการเข้าสู่ระบบ");
+        mDialog.setContentText("" + content);
+        mDialog.setConfirmText("ไปยังหน้า Login");
+        mDialog.setCancelText("ยกเลิก");
+        mDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                mDialog.dismissWithAnimation();
+                startActivity(new Intent(getContext(), LoginActivity.class));
+            }
+        });
+//        mDialog.setCancelable(false);
+
+        mDialog.show();
+    }
+
+    /*
      * Event Click
-     ***************/
+     */
+
+    private MaterialSpinner.OnItemSelectedListener onDeliveryProSelectedListener() {
+        return new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                updateTotalPrice();
+            }
+        };
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void updateDeliveryFee(int position) {
+        if (position != 0) {
+            tvDeliveryFee.setText("" + datadeliveryProList.get(position - 1).getDeliveryProPrice());
+            dao.setPromotionId(Integer.parseInt(""+datadeliveryProList.get(position - 1).getIDDeliveryPro()));
+        } else {
+            tvDeliveryFee.setText(dao.isDeliveryFee() ? "50.0" : "0.0");
+            dao.setPromotionId(4);
+        }
+    }
+
     private CartAdapter.OnClickCartItemListener onClickCartItem() {
         return new CartAdapter.OnClickCartItemListener() {
             @Override
@@ -437,7 +567,13 @@ public class MoreInfoFragment extends Fragment {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToMapActivity(cartAdapter.getItems());
+                LoginResultGroup userInfo = new CacheManager<LoginResultGroup>().loadCache(LoginResultGroup.class, USERINFO);
+                if (userInfo != null && userInfo.getData() != null) {
+                    goToOrdering(cartAdapter.getItems());
+                } else {
+                    showErrorDialog("คุณยังไม่ได้เข้าสู่ระบบ");
+                }
+
             }
         };
     }
@@ -452,14 +588,13 @@ public class MoreInfoFragment extends Fragment {
     }
 
 
-    /******************
+    /*
      * Presenter
-     ****************/
+     */
 
-//    public void goToMapActivityP(List<BaseItem> items) {
-//        goToMapActivity(items);
+    //    public void goToMapActivityP(List<BaseItem> items) {
+//        goToOrdering(items);
 //    }
-
     public void clearAddedButtonStateEventP(FoodProductItem item) {
         Log.e(TAG, "clearAddedButtonStateEventP>> post!!");
         RxBus.get().post(new ClearAddedButtonStateEvent(item));
@@ -492,6 +627,7 @@ public class MoreInfoFragment extends Fragment {
     public void updateEmptyCartView() {
         if (hasItems()) {
             showProductItemView();
+            requestDeliveryPro();
         } else {
             hindProductItemView();
         }

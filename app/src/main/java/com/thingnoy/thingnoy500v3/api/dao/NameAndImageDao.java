@@ -11,6 +11,7 @@ public class NameAndImageDao implements Parcelable  {
     private int resId;
     private String resName;
     private String resImage;
+    private int promotionId = 4;
     private boolean deliveryFee;
 
     public NameAndImageDao() {
@@ -20,6 +21,7 @@ public class NameAndImageDao implements Parcelable  {
         resId = in.readInt();
         resName = in.readString();
         resImage = in.readString();
+        promotionId = in.readInt();
         deliveryFee = in.readByte() != 0;
     }
 
@@ -28,6 +30,7 @@ public class NameAndImageDao implements Parcelable  {
         dest.writeInt(resId);
         dest.writeString(resName);
         dest.writeString(resImage);
+        dest.writeInt(promotionId);
         dest.writeByte((byte) (deliveryFee ? 1 : 0));
     }
 
@@ -72,6 +75,14 @@ public class NameAndImageDao implements Parcelable  {
         this.resImage = resImage;
     }
 
+    public int getPromotionId() {
+        return promotionId;
+    }
+
+    public void setPromotionId(int promotionId) {
+        this.promotionId = promotionId;
+    }
+
     public boolean isDeliveryFee() {
         return deliveryFee;
     }
@@ -86,6 +97,7 @@ public class NameAndImageDao implements Parcelable  {
                 "resId=" + resId +
                 ", resName='" + resName + '\'' +
                 ", resImage='" + resImage + '\'' +
+                ", promotionId=" + promotionId +
                 ", deliveryFee=" + deliveryFee +
                 '}';
     }

@@ -1,5 +1,6 @@
 package com.thingnoy.thingnoy500v3.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -51,8 +52,9 @@ public class FoodProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyDataSetChanged();
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == FoodProductType.TYPE_ORDER) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.holder_food_product, parent, false);

@@ -10,5 +10,8 @@ public class FoodProductType {
     public static final int TYPE_PROGRESSBAR = 2;
     public static final int TYPE_EMPTY = 3;
     public static final int TYPE_HISTORY = 4;
+    public static final int TYPE_FOOD_ORDER_DETAIL = 5;
+    public static final int TYPE_ADDRESS = 6;
+
 
 }

@@ -18,27 +18,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.orhanobut.hawk.Hawk;
+import com.hwangjr.rxbus.RxBus;
+import com.hwangjr.rxbus.annotation.Subscribe;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.CartAdapter;
-import com.thingnoy.thingnoy500v3.adapter.item.BaseItem;
 import com.thingnoy.thingnoy500v3.api.dao.NameAndImageDao;
 import com.thingnoy.thingnoy500v3.api.dao.PhotoItemCollectionDao;
+import com.thingnoy.thingnoy500v3.event.GoToOrderDetailActivityEvent;
 import com.thingnoy.thingnoy500v3.ui.fragment.ResMainListFragment;
+import com.thingnoy.thingnoy500v3.ui.history.HistoryFragment;
+import com.thingnoy.thingnoy500v3.ui.history.historydetail.HistoryDetailActivity;
+import com.thingnoy.thingnoy500v3.ui.profile.ProfileFragment;
 import com.thingnoy.thingnoy500v3.util.BottomNavigationBehavior;
 
-import java.util.List;
-
 import retrofit2.Call;
-
-import static com.thingnoy.thingnoy500v3.R.drawable.ic_cart_new;
 
 public class MainActivity extends AppCompatActivity implements ResMainListFragment.FragmentListener
 //        implements MainFragment.FragmentListener
 {
     public static final String KEY_FOOD_ITEM_IN_CART = "key_food_item_in_cart";
+    public static final String EXTRA_HISTORY_ITEM = "extra_item";
     DrawerLayout drawerLayout;
 
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -49,20 +49,43 @@ public class MainActivity extends AppCompatActivity implements ResMainListFragme
     private CartAdapter cartAdapter;
     private TextView tvTitle;
     private ImageView ivLogo;
+    private ResMainListFragment resMainListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        RxBus.get().register(this);
 
         bindView();
         setupView();
         setupToolbar();
         setupBottomNav();
 
+//        if (savedInstanceState == null) {
+//            loadFragment(ResMainListFragment.newInstance());
+//        }
+
         if (savedInstanceState == null) {
-            loadFragment(ResMainListFragment.newInstance());
+            // Add the fragment on initial activity setup
+            resMainListFragment = ResMainListFragment.newInstance();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.contentContainer, resMainListFragment)
+                    .commit();
         }
+//        else {
+//            // Or set the fragment from restored state info
+//            resMainListFragment = (ResMainListFragment) getSupportFragmentManager()
+//                    .findFragmentById(R.id.contentContainer);
+//        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RxBus.get().unregister(this);
 
     }
 
@@ -103,35 +126,37 @@ public class MainActivity extends AppCompatActivity implements ResMainListFragme
 
                     case R.id.item_nearby:
                         // do this event
-                        tvTitle.setText("nearby");
+                        tvTitle.setText(R.string.menu_nearby);
                         ivLogo.setImageResource(R.drawable.ic_nearby);
-                        Toast.makeText(MainActivity.this, "nearby selected", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(MainActivity.this, "nearby selected", Toast.LENGTH_SHORT).show();
                         return true;
 
                     case R.id.item_history:
                         // do this event
-                        tvTitle.setText("History");
+                        tvTitle.setText(R.string.history);
                         ivLogo.setImageResource(R.drawable.ic_history_thick);
-                        Toast.makeText(MainActivity.this, "history selected", Toast.LENGTH_SHORT).show();
+                        loadFragment(HistoryFragment.newInstance());
+//                        Toast.makeText(MainActivity.this, "history selected", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.item_home:
                         // do this event
-                        tvTitle.setText("Udon Food Delivery");
+                        tvTitle.setText(R.string.app_name2);
                         ivLogo.setImageResource(R.drawable.ic_home);
                         loadFragment(ResMainListFragment.newInstance());
 //                        Toast.makeText(MainActivity.this, "home selected", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.item_favorite:
                         // do this event
-                        tvTitle.setText("Favorite");
+                        tvTitle.setText(R.string.menu_favorite);
                         ivLogo.setImageResource(R.drawable.ic_like);
-                        Toast.makeText(MainActivity.this, "favorite selected", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(MainActivity.this, "favorite selected", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.item_me:
                         // do this event
-                        tvTitle.setText("Me");
+                        tvTitle.setText("ข้อมูลโปรไฟล์");
                         ivLogo.setImageResource(R.drawable.ic_user);
-                        Toast.makeText(MainActivity.this, "me selected", Toast.LENGTH_SHORT).show();
+                        loadFragment(ProfileFragment.newInstance());
+//                        Toast.makeText(MainActivity.this, "me selected", Toast.LENGTH_SHORT).show();
                         return true;
 
                 }
@@ -154,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements ResMainListFragme
         // load fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.contentContainer, fragment);
-        transaction.addToBackStack(null);
+//        transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -192,10 +217,18 @@ public class MainActivity extends AppCompatActivity implements ResMainListFragme
 //        updateTotalPrice();
 //        updateEmptyCartView();
     }
+
     private void updateBeerAmountIntoCartView() {
         int amount = cartAdapter.getItemCount();
         tvFoodAmount.setVisibility(amount == 0 ? View.GONE : View.VISIBLE);
         tvFoodAmount.setText(String.valueOf(amount));
 //        fabCouter.setCount(amount);
+    }
+
+    @Subscribe
+    public void goToOrderDetailActivity(GoToOrderDetailActivityEvent event) {
+        Intent i = new Intent(this, HistoryDetailActivity.class);
+        i.putExtra(EXTRA_HISTORY_ITEM, event.getItem());
+        startActivity(i);
     }
 }

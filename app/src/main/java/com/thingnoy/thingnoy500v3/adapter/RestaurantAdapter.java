@@ -1,6 +1,7 @@
 package com.thingnoy.thingnoy500v3.adapter;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.holder.restaurant.RestaurantHolder;
+import com.thingnoy.thingnoy500v3.api.result.new_restaurant.DataRestaurant;
+import com.thingnoy.thingnoy500v3.api.result.new_restaurant.NewRestaurantResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.restaurant.ResDataDao;
 import com.thingnoy.thingnoy500v3.api.result.restaurant.RestaurantResultGroup;
 import com.thingnoy.thingnoy500v3.manager.ItemClickListener;
@@ -18,7 +21,7 @@ import com.thingnoy.thingnoy500v3.util.ItemAnimation;
  */
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private RestaurantResultGroup dao;
+    private NewRestaurantResultGroup dao;
     private ItemClickListener itemClickListener;
     private int animation_type = 0;
 
@@ -27,17 +30,18 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public RestaurantAdapter() {
-        this.dao = new RestaurantResultGroup();
+        this.dao = new NewRestaurantResultGroup();
     }
 
-    public void setItems(RestaurantResultGroup dao, int animation_type) {
+    public void setItems(NewRestaurantResultGroup dao, int animation_type) {
         this.dao = dao;
         this.animation_type = animation_type;
         notifyDataSetChanged();
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.holder_res_list, parent, false);
         return new RestaurantHolder(view);
@@ -46,12 +50,12 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-        ResDataDao resDataDao = dao.getmData().get(position);
+        DataRestaurant resDataDao = dao.getData().get(position);
         RestaurantHolder restaurantHolder = (RestaurantHolder) holder;
 
-        restaurantHolder.setImageUrl(resDataDao.getmResImg());
-        restaurantHolder.tvLowPrice.setText("ราคาขั้นต่ำ " + resDataDao.getmResLowPrice() + "฿");
-        restaurantHolder.tvResName.setText(resDataDao.getmResName());
+        restaurantHolder.setImageUrl(resDataDao.getRes().getResImg());
+        restaurantHolder.tvLowPrice.setText("ราคาขั้นต่ำ " + resDataDao.getRes().getResLowPrice() + "฿");
+        restaurantHolder.tvResName.setText(resDataDao.getRes().getResName());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,11 +70,11 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        if (dao.getmData() == null)
+        if (dao.getData() == null)
             return 0;
-        if (dao.getmData().size() <= 0)
+        if (dao.getData().size() <= 0)
             return 0;
-        return dao.getmData().size();
+        return dao.getData().size();
     }
 
     private int lastPosition = -1;

@@ -11,19 +11,19 @@ import java.util.List;
  * Created by HBO on 20/2/2561.
  */
 
-public class PageAdapter extends FragmentPagerAdapter {
+public class PagerAdapter extends FragmentPagerAdapter {
     private List<Fragment> fragments = new ArrayList<>();
     private List<String> pageTittle = new ArrayList<>();
     private int myNumberOfPage;
 
-    public PageAdapter(FragmentManager fm,int numberOfPage) {
+    public PagerAdapter(FragmentManager fm, int numberOfPage) {
         super(fm);
         this.myNumberOfPage = numberOfPage;
     }
 
     public void addFragmentPage(Fragment fragment,String title){
         fragments.add(fragment);
-//        pageTittle.add(title);
+        pageTittle.add(title);
     }
 
     @Override
@@ -31,10 +31,10 @@ public class PageAdapter extends FragmentPagerAdapter {
         return fragments.get(position);
     }
 
-//    @Override
-//    public CharSequence getPageTitle(int position) {
-//        return pageTittle.get(position);
-//    }
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return pageTittle.get(position);
+    }
 
     @Override
     public int getCount() {

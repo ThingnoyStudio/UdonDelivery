@@ -22,7 +22,7 @@ public class FoodProductItem extends BaseItem implements Parcelable {
     private String mIDFood;
     private List<DetailFoodItem> detailFoods;
     private String reason;
-    private DetailFoodItem addOn;
+    private DetailFoodItem addOn ;
 
     private double price;
     private int amount = 1;
@@ -177,4 +177,19 @@ public class FoodProductItem extends BaseItem implements Parcelable {
     //endregion
 
 
+    @Override
+    public String toString() {
+        return "FoodProductItem{" +
+                "mFoodImg='" + mFoodImg + '\'' +
+                ", mFoodName='" + mFoodName + '\'' +
+                ", mFoodTypeName='" + mFoodTypeName + '\'' +
+                ", mIDFood='" + mIDFood + '\'' +
+                ", detailFoods=" + detailFoods +
+                ", reason='" + reason + '\'' +
+                ", addOn=" + addOn +
+                ", price=" + price +
+                ", amount=" + amount +
+                ", isAdded=" + isAdded +
+                '}';
+    }
 }

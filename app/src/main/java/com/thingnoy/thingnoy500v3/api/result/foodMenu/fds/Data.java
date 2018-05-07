@@ -42,7 +42,7 @@ public class Data {
 
     @Override
     public String toString() {
-        return "Data{" +
+        return "Name{" +
                 "mNormalmenu=" + mNormalmenu +
                 ", mRecommendedMenu=" + mRecommendedMenu +
                 ", mRestaurant=" + mRestaurant +

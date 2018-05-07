@@ -1,6 +1,7 @@
 package com.thingnoy.thingnoy500v3.ui.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,23 +12,20 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.util.JsonReader;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
-import com.google.android.gms.maps.model.Polygon;
-import com.google.android.gms.maps.model.PolygonOptions;
+import com.hwangjr.rxbus.RxBus;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -37,7 +35,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.item.FoodProductItem;
 import com.thingnoy.thingnoy500v3.api.UdonFoodServiceManager;
-import com.thingnoy.thingnoy500v3.util.CustomPolygonOptionData;
+import com.thingnoy.thingnoy500v3.event_ordering.SelectLocateAddressEvent;
 
 
 import java.util.List;
@@ -45,7 +43,6 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     private final static String TAG = MapsActivity.class.getSimpleName();
     public static final String EXTRA_PRODUCT_LIST = "extra_product_list";
-    private static final String EXTRA_PRODUCT_LIST_TEST = "extra_product_list_test";
 
     public static final int DEFAULT_ZOOM = 16;
     private GoogleMap mMap;
@@ -55,7 +52,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private CardView cardLoading;
     private List<FoodProductItem> items;
     private UdonFoodServiceManager serviceManager;
-    private Button btnAddAddr,btnSelectAddr;
+    private Button btnAddAddr, btnSelectAddr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,27 +70,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         btnBack.setOnClickListener(onClickBlack());
         btnOrder.setOnClickListener(onClickOrder());
-        btnAddAddr.setOnClickListener(onClickAddAddr());
-        btnSelectAddr.setOnClickListener(onClickSelectAddr());
 
-    }
 
-    private View.OnClickListener onClickSelectAddr() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        };
-    }
-
-    private View.OnClickListener onClickAddAddr() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        };
     }
 
     private void bindView() {
@@ -101,8 +79,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnOrder = findViewById(R.id.btn_order);
         cardLoading = findViewById(R.id.card_loading);
 
-        btnSelectAddr = findViewById(R.id.btn_select_address);
-        btnAddAddr = findViewById(R.id.btn_add_address);
+//        btnSelectAddr = findViewById(R.id.btn_select_address);
+//        btnAddAddr = findViewById(R.id.btn_add_address);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -110,10 +88,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void setupInstance() {
-         items = getIntent().getParcelableArrayListExtra(EXTRA_PRODUCT_LIST);
-        if (items == null) {
-            throw new NullPointerException("You must send FoodProductItems to this activity.");
-        }
+//        items = getIntent().getParcelableArrayListExtra(EXTRA_PRODUCT_LIST);
+//        if (items == null) {
+//            throw new NullPointerException("You must send FoodProductItems to this activity.");
+//        }
         checkMapPermissionAndStartMap();
     }
 
@@ -166,15 +144,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        UiSettings ui = mMap.getUiSettings();
+        ui.setCompassEnabled(false);
 
         if (isLocationEnable()) {
             Location location = getLastKnownLocation();
             if (location != null) {
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
-                LatLng current = new LatLng(latitude,longitude);
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, DEFAULT_ZOOM));
 
+                LatLng current = new LatLng(latitude, longitude);
+
+
+                CameraPosition cameraPosition = CameraPosition.builder()
+                        .target(current)
+                        .zoom(DEFAULT_ZOOM)
+                        .bearing(30)//ยิดแผนที่ตามทิศทาง
+                        .tilt(40)//มุมมองจากด้านบน
+                        .build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+//                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, DEFAULT_ZOOM));
 //                mMap.addPolygon(new CustomPolygonOptionData().getPolygonOptions());
 //                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current,DEFAULT_ZOOM));
             }
@@ -182,9 +171,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setupMap();
 
         // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
+//        Address sydney = new Address(-34, 151);
 //        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        RxBus.get().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        RxBus.get().unregister(this);
     }
 
     @Override
@@ -267,8 +268,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 showButtonLoadingState();
                 LatLng latLng = getCenterLatLngPosition();
-                Log.e(TAG, "LatLng: " + latLng);
-//                getPresenter().requestAddNewOrder( latlng.latitude, latlng.longitude, items );
+                RxBus.get().post(new SelectLocateAddressEvent(latLng));
+
+
+                Intent i = new Intent();
+//                startActivity( i );
+                setResult(Activity.RESULT_OK, i);
+                finish();
 
             }
         };
@@ -292,7 +298,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    public void requestAddNewOrder( double latitude, double longitude, List<FoodProductItem> items){
+    public void requestAddNewOrder(double latitude, double longitude, List<FoodProductItem> items) {
 //        serviceManager.( latitude, longitude, items, new NongBeerServiceManager.NongBeerManagerCallback<AddNewOrderResult>(){
 //            @Override
 //            public void onSuccess( AddNewOrderResult result ){
@@ -305,10 +311,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //            }
 //        } );
     }
-    public void showFailMessage(){
+
+    public void showFailMessage() {
         clearButtonLoadingState();
-        Toast.makeText( this, "Cannot order beer.", Toast.LENGTH_SHORT ).show();
+        Toast.makeText(this, "Cannot order beer.", Toast.LENGTH_SHORT).show();
     }
+
     public void cancelRequest() {
         clearButtonLoadingState();
 //        manager.cancelAddNewOrder();

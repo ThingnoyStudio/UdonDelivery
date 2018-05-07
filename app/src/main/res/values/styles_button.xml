@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="LoginButton">
         <!--<item name="android:stateListAnimator">@null</item>-->
         <item name="android:textSize">@dimen/text_body_2</item>
@@ -33,4 +34,24 @@
         <item name="android:paddingStart">@dimen/default_padding_margin_large</item>
         <item name="android:textColor">@drawable/btn_inactive_text_color_selector</item>
     </style>
+
+    <style name="Button.White.Primary" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@android:color/white</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Button.White.TextNormal" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@android:color/white</item>
+        <item name="android:textColor">@color/text_normal</item>
+    </style>
+
+    <style name="Button.White.TextPrimary" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@android:color/white</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+<style name="Button.White.TextSecondary" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@android:color/white</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
 </resources>

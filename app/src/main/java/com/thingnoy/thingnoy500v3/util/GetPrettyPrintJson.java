@@ -7,8 +7,10 @@ import com.google.gson.JsonParser;
 public class GetPrettyPrintJson {
 
     public String getJson(Object object){
-        String strItem = new Gson().toJson(object);
+        String strItem = new Gson()
+                .toJson(object);
         return new GsonBuilder()
+                .serializeNulls()
                 .setPrettyPrinting()
                 .create()
                 .toJson(new JsonParser().parse(strItem));

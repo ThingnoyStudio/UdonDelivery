@@ -3,7 +3,9 @@ package com.thingnoy.thingnoy500v3.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,6 +30,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.cazaea.sweetalert.SweetAlertDialog;
 import com.stepstone.apprating.AppRatingDialog;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.ReviewAdapter;
@@ -35,8 +38,11 @@ import com.thingnoy.thingnoy500v3.api.dao.NameAndImageDao;
 import com.thingnoy.thingnoy500v3.api.interceptor.CustomHttpLogging;
 import com.thingnoy.thingnoy500v3.api.request.AddReviewBody;
 import com.thingnoy.thingnoy500v3.api.HttpManager;
+import com.thingnoy.thingnoy500v3.api.result.login.LoginResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.review.AddReviewResult;
 import com.thingnoy.thingnoy500v3.api.result.review.ReviewResultGroup;
+import com.thingnoy.thingnoy500v3.manager.CacheManager;
+import com.thingnoy.thingnoy500v3.ui.login.LoginActivity;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
@@ -51,6 +57,8 @@ import java.util.Calendar;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.thingnoy.thingnoy500v3.util.Constant.USERINFO;
 
 
 /**
@@ -71,6 +79,7 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
     private boolean isChooseImage = false;
     private ReviewAdapter reviewAdapter;
     private RecyclerView rcReviewList;
+    private SweetAlertDialog mDialog;
 
     public ResInfoFragment() {
         super();
@@ -92,7 +101,10 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         init(savedInstanceState);
 
-        dao = getArguments().getParcelable("dao");
+        if (getArguments() != null){
+            dao = getArguments().getParcelable("dao");
+        }
+
 
         if (savedInstanceState != null)
             onRestoreInstanceState(savedInstanceState);
@@ -274,7 +286,14 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
 //            chooseImage();
         }
         if (v == btnSendReview) {
-            sendReview();
+
+            LoginResultGroup userInfo = new CacheManager<LoginResultGroup>().loadCache(LoginResultGroup.class, USERINFO);
+            if (userInfo != null && userInfo.getData() != null) {
+                sendReview();
+            }else {
+                showErrorDialog("คุณยังไม่ได้เข้าสู่ระบบ");
+            }
+
         }
         if (v == btnWriteReview) {
 //            Toast.makeText(getContext(), "write review click!", Toast.LENGTH_SHORT).show();
@@ -317,6 +336,25 @@ public class ResInfoFragment extends Fragment implements View.OnClickListener {
         srbRes.setRating(3);
         ivReview.setImageResource(R.drawable.image);
         isChooseImage = false;
+    }
+
+    private void showErrorDialog(String content) {
+        mDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE);
+        mDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        mDialog.setTitleText("กรุณาทำการเข้าสู่ระบบ");
+        mDialog.setContentText(""+content);
+        mDialog.setConfirmText("ไปยังหน้า Login");
+        mDialog.setCancelText("ยกเลิก");
+        mDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                mDialog.dismissWithAnimation();
+                startActivity(new Intent(getContext(),LoginActivity.class));
+            }
+        });
+//        mDialog.setCancelable(false);
+
+        mDialog.show();
     }
 
     private void showToast(String massage) {

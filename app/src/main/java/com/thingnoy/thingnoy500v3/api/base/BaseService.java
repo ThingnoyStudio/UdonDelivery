@@ -55,9 +55,11 @@ public abstract class BaseService<T> {
     }
 
     private Converter.Factory addConverter() {
-        return GsonConverterFactory.create(new GsonBuilder()
-                .setPrettyPrinting()
-                .create());
+        return GsonConverterFactory.create(
+                new GsonBuilder()
+                        .serializeNulls()
+                        .setPrettyPrinting()
+                        .create());
 //        return GsonConverterFactory.create(
 //                new GsonBuilder()
 //                        .setPrettyPrinting()

@@ -24,13 +24,19 @@ import com.thingnoy.thingnoy500v3.adapter.PromotionAdapter;
 import com.thingnoy.thingnoy500v3.adapter.RestaurantAdapter;
 import com.thingnoy.thingnoy500v3.api.UdonFoodServiceManager;
 import com.thingnoy.thingnoy500v3.api.dao.NameAndImageDao;
+import com.thingnoy.thingnoy500v3.api.result.new_restaurant.NewRestaurantResultGroup;
+import com.thingnoy.thingnoy500v3.api.result.profile.ProfileResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.promotion.PromotionResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.restaurant.RestaurantResultGroup;
+import com.thingnoy.thingnoy500v3.manager.CacheManager;
 import com.thingnoy.thingnoy500v3.manager.ItemClickListener;
 import com.thingnoy.thingnoy500v3.manager.ResMainListManager;
 import com.thingnoy.thingnoy500v3.util.ItemAnimation;
 
 import static android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL;
+import static com.thingnoy.thingnoy500v3.util.Constant.PROMOTION;
+import static com.thingnoy.thingnoy500v3.util.Constant.RESTAURANT;
+import static com.thingnoy.thingnoy500v3.util.Constant.USERINFO;
 
 public class ResMainListFragment extends Fragment implements ItemClickListener {
     private final static String TAG = ResMainListFragment.class.getSimpleName();
@@ -44,6 +50,8 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
     private View resProgressbar, promoProgressbar;
     private ResMainListManager resMainlistManager;
     private NameAndImageDao nameAndImg;
+    private NewRestaurantResultGroup restaurantGroup;
+    private PromotionResultGroup promotionGroup;
 
 
     public interface FragmentListener {
@@ -87,7 +95,7 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
     @SuppressWarnings("UnusedParameters")
     private void initInstances(View rootView, Bundle savedInstanceState) {
         // Init 'View' instance(s) with rootView.findViewById here
-        Log.e(TAG,"initInstances");
+        Log.e(TAG, "initInstances");
         rcPromotion = rootView.findViewById(R.id.rc_promotion_list);
         rcRestaurant = rootView.findViewById(R.id.rc_restaurant_list);
         containerServiceUnavailable = rootView.findViewById(R.id.container_service_unavailable);
@@ -109,13 +117,13 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupView() {
-        resMainlistManager = new ResMainListManager();
+//        resMainlistManager = new ResMainListManager();
 
         promotionAdapter = new PromotionAdapter();
         restaurantAdapter = new RestaurantAdapter();
 
-        promotionAdapter.setItems(resMainlistManager.getPromotionResultGroup(),ItemAnimation.RIGHT_LEFT);
-        restaurantAdapter.setItems(resMainlistManager.getRestaurantResultGroup(), ItemAnimation.FADE_IN);
+        promotionAdapter.setItems(promotionGroup, ItemAnimation.RIGHT_LEFT);
+        restaurantAdapter.setItems(restaurantGroup, ItemAnimation.FADE_IN);
 
         rcPromotion.setLayoutManager(new LinearLayoutManager(getContext(),
                 LinearLayoutManager.HORIZONTAL, false));
@@ -158,9 +166,6 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
         super.onStop();
     }
 
-    /*
-     * Save Instance State Here
-     */
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -168,9 +173,6 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
 //        outState.putBundle("resManager", resMainlistManager.onSaveInstanceState());
     }
 
-    /*
-     * Restore Instance State Here
-     */
     @SuppressWarnings("UnusedParameters")
     private void onRestoreInstanceState(Bundle savedInstanceState) {
         // Restore Instance State here
@@ -183,10 +185,11 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
 //            showToast("proClick: " + position);
 
             nameAndImg = new NameAndImageDao();
-            nameAndImg.setResId(Integer.parseInt(resMainlistManager.getPromotionResultGroup().getmData().get(position).getmIDRestaurant()));
-            nameAndImg.setResName(resMainlistManager.getPromotionResultGroup().getmData().get(position).getmResName());
-            nameAndImg.setResImage(resMainlistManager.getPromotionResultGroup().getmData().get(position).getmResImg());
+            nameAndImg.setResId(Integer.parseInt(promotionGroup.getmData().get(position).getmIDRestaurant()));
+            nameAndImg.setResName(promotionGroup.getmData().get(position).getmResName());
+            nameAndImg.setResImage(promotionGroup.getmData().get(position).getmResImg());
             nameAndImg.setDeliveryFee(false);
+            nameAndImg.setPromotionId(Integer.parseInt(promotionGroup.getmData().get(position).getmIDResPromotion()));//todo: set id pro
 
             FragmentListener listener = (FragmentListener) getActivity();//ส่งสัญญาณไปให้ Activity ทำงาน
             assert listener != null;
@@ -195,16 +198,25 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
 //            showToast("resClick: " + position);
 
             nameAndImg = new NameAndImageDao();
-            nameAndImg.setResId(Integer.parseInt(resMainlistManager.getRestaurantResultGroup().getmData().get(position).getmIDRestaurant()));
-            nameAndImg.setResName(resMainlistManager.getRestaurantResultGroup().getmData().get(position).getmResName());
-            nameAndImg.setResImage(resMainlistManager.getRestaurantResultGroup().getmData().get(position).getmResImg());
+            nameAndImg.setResId(Integer.parseInt(restaurantGroup.getData().get(position).getRes().getIDRestaurant()));
+            nameAndImg.setResName(restaurantGroup.getData().get(position).getRes().getResName());
+            nameAndImg.setResImage(restaurantGroup.getData().get(position).getRes().getResImg());
+
+            if (restaurantGroup.getData().get(position).getPro() != null){
+                nameAndImg.setDeliveryFee(false);
+                nameAndImg.setPromotionId(Integer.parseInt(restaurantGroup.getData().get(position).getPro().getIDResPromotion()));
+            }else {
+                nameAndImg.setDeliveryFee(true);
+            }
+
+
             FragmentListener listener = (FragmentListener) getActivity();//ส่งสัญญาณไปให้ Activity ทำงาน
             assert listener != null;
             listener.onItemClicked(nameAndImg);
         }
     }
 
-    private void loadData(){
+    private void loadData() {
         resProgressbar.setVisibility(View.VISIBLE);
         rcRestaurant.setVisibility(View.GONE);
 //            callGetResAll();
@@ -215,6 +227,7 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
 //            callGetResPro();
         requestPromotion();
     }
+
     private void refreshData() {
         if (resMainlistManager.getResCount() == 0) {
             resProgressbar.setVisibility(View.VISIBLE);
@@ -230,13 +243,19 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
         }
     }
 
-    private void requestPromotion(){
+    private void requestPromotion() {
         serviceManager.requestPromotion(new UdonFoodServiceManager.UdonFoodManagerCallback<PromotionResultGroup>() {
             @Override
             public void onSuccess(PromotionResultGroup result) {
-                resMainlistManager.setPromotionResultGroup(result);
+//                resMainlistManager.setPromotionResultGroup(result);
 
-                promotionAdapter.setItems(resMainlistManager.getPromotionResultGroup(),ItemAnimation.RIGHT_LEFT);
+                //save to Cache
+                new CacheManager<PromotionResultGroup>().saveCache(result, PromotionResultGroup.class, PROMOTION);
+
+                // load obj from Cache
+                promotionGroup = new CacheManager<PromotionResultGroup>().loadCache(PromotionResultGroup.class, PROMOTION);
+
+                promotionAdapter.setItems(promotionGroup, ItemAnimation.RIGHT_LEFT);
 
                 rcPromotion.setVisibility(View.VISIBLE);
                 promoProgressbar.setVisibility(View.GONE);
@@ -251,13 +270,19 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
         });
     }
 
-    private void requestRestaurant(){
-        serviceManager.requestRestaurant(new UdonFoodServiceManager.UdonFoodManagerCallback<RestaurantResultGroup>() {
+    private void requestRestaurant() {
+        serviceManager.requestRestaurant(new UdonFoodServiceManager.UdonFoodManagerCallback<NewRestaurantResultGroup>() {
             @Override
-            public void onSuccess(RestaurantResultGroup result) {
-                resMainlistManager.setRestaurantResultGroup(result);
+            public void onSuccess(NewRestaurantResultGroup result) {
+//                resMainlistManager.setRestaurantResultGroup(result);/
 
-                restaurantAdapter.setItems(resMainlistManager.getRestaurantResultGroup(),ItemAnimation.FADE_IN);
+                //save to Cache
+                new CacheManager<NewRestaurantResultGroup>().saveCache(result, NewRestaurantResultGroup.class, RESTAURANT);
+
+                // load obj from Cache
+                restaurantGroup = new CacheManager<NewRestaurantResultGroup>().loadCache(NewRestaurantResultGroup.class, RESTAURANT);
+
+                restaurantAdapter.setItems(restaurantGroup, ItemAnimation.FADE_IN);
 
                 rcRestaurant.setVisibility(View.VISIBLE);
                 resProgressbar.setVisibility(View.GONE);
@@ -265,7 +290,7 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
 
             @Override
             public void onFailure(Throwable t) {
-                showToast("ดาวน์โหลดรายการร้านอาหาร ล้มเหลว! : " + t);
+                showToast("ดาวน์โหลดรายการร้านอาหาร ล้มเหลว! : " + t.getMessage());
                 resProgressbar.setVisibility(View.GONE);
 //                containerServiceUnavailable.setVisibility(View.VISIBLE);
 //                showServiceUnavailableView();
@@ -284,7 +309,6 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
         promoProgressbar.setVisibility(View.GONE);
         containerServiceUnavailable.setVisibility(View.VISIBLE);
     }
-
 
 
 }

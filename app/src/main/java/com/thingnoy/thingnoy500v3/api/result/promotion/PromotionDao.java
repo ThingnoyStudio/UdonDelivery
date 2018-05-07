@@ -23,6 +23,8 @@ public class PromotionDao implements Parcelable {
     private String mResPromotionName;
     @SerializedName("ResPromotionStart")
     private String mResPromotionStart;
+    @SerializedName("IDResPromotion")
+    private String mIDResPromotion;
 
     public PromotionDao() {
     }
@@ -35,6 +37,7 @@ public class PromotionDao implements Parcelable {
         mResPromotionEnd = in.readString();
         mResPromotionName = in.readString();
         mResPromotionStart = in.readString();
+        mIDResPromotion = in.readString();
     }
 
     @Override
@@ -46,6 +49,7 @@ public class PromotionDao implements Parcelable {
         dest.writeString(mResPromotionEnd);
         dest.writeString(mResPromotionName);
         dest.writeString(mResPromotionStart);
+        dest.writeString(mIDResPromotion);
     }
 
     @Override
@@ -65,59 +69,67 @@ public class PromotionDao implements Parcelable {
         }
     };
 
-    public String getmIDRestaurant() {
-        return mIDRestaurant;
-    }
-
     public void setmIDRestaurant(String mIDRestaurant) {
         this.mIDRestaurant = mIDRestaurant;
-    }
-
-    public String getmResImg() {
-        return mResImg;
     }
 
     public void setmResImg(String mResImg) {
         this.mResImg = mResImg;
     }
 
-    public String getmResLowPrice() {
-        return mResLowPrice;
-    }
-
     public void setmResLowPrice(String mResLowPrice) {
         this.mResLowPrice = mResLowPrice;
-    }
-
-    public String getmResName() {
-        return mResName;
     }
 
     public void setmResName(String mResName) {
         this.mResName = mResName;
     }
 
-    public String getmResPromotionEnd() {
-        return mResPromotionEnd;
-    }
-
     public void setmResPromotionEnd(String mResPromotionEnd) {
         this.mResPromotionEnd = mResPromotionEnd;
-    }
-
-    public String getmResPromotionName() {
-        return mResPromotionName;
     }
 
     public void setmResPromotionName(String mResPromotionName) {
         this.mResPromotionName = mResPromotionName;
     }
 
+    public void setmResPromotionStart(String mResPromotionStart) {
+        this.mResPromotionStart = mResPromotionStart;
+    }
+
+    public void setmIDResPromotion(String mIDResPromotion) {
+        this.mIDResPromotion = mIDResPromotion;
+    }
+
+    public String getmIDRestaurant() {
+        return mIDRestaurant;
+    }
+
+    public String getmResImg() {
+        return mResImg;
+    }
+
+    public String getmResLowPrice() {
+        return mResLowPrice;
+    }
+
+    public String getmResName() {
+        return mResName;
+    }
+
+    public String getmResPromotionEnd() {
+        return mResPromotionEnd;
+    }
+
+    public String getmResPromotionName() {
+        return mResPromotionName;
+    }
+
     public String getmResPromotionStart() {
         return mResPromotionStart;
     }
 
-    public void setmResPromotionStart(String mResPromotionStart) {
-        this.mResPromotionStart = mResPromotionStart;
+    public String getmIDResPromotion() {
+        return mIDResPromotion;
     }
 }

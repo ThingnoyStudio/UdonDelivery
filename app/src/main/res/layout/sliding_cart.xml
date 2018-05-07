@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/grey_5"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@color/grey_5">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_cart"
@@ -32,7 +33,7 @@
                 android:layout_height="@dimen/icon_background_size"
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/default_padding_margin"
-                android:src="@drawable/ic_empty_cart_72dp"/>
+                android:src="@drawable/ic_empty_cart_72dp" />
 
             <TextView
                 android:id="@+id/tv_empty_cart"
@@ -54,7 +55,7 @@
         <ImageButton
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@drawable/shadow_top"/>
+            android:background="@drawable/shadow_top" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -73,29 +74,74 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="21sp"
+                    android:layout_marginEnd="@dimen/default_padding_margin"
+                    android:text="@string/point"
+                    android:textSize="@dimen/text_body_1" />
+
+                <!--<Space-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"/>-->
+
+
+                <TextView
+                    android:id="@+id/tv_point"
+                    style="@style/BeerTextView.Red.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_body_1"
+                    android:text="22" />
+
+                <TextView
+                    style="@style/BeerTextView.Red.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_body_1"
+                    android:text="แต้ม" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/default_padding_margin_large"
+                android:layout_marginStart="@dimen/default_padding_margin_large"
+                android:layout_marginTop="@dimen/default_padding_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/default_padding_margin"
                     android:text="@string/delivery_fee"
-                    android:layout_marginRight="@dimen/default_padding_margin" />
+                    android:textSize="21sp" />
 
-                <Space
+                <!--<Space-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"/>-->
+
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/spn_delivery_pro"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:layout_marginEnd="@dimen/default_padding_margin"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    app:ms_background_color="@color/orange_50" />
 
                 <TextView
                     android:id="@+id/tv_delivery_fee"
                     style="@style/BeerTextView.Red.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0.00"/>
+                    android:text="0.00" />
+
                 <TextView
                     style="@style/BeerTextView.Red.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/baht"/>
+                    android:text="@string/baht" />
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -110,20 +156,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/default_padding_margin"
-                    android:text="@string/total"
-                    android:layout_marginRight="@dimen/default_padding_margin" />
+                    android:layout_marginRight="@dimen/default_padding_margin"
+                    android:text="@string/total" />
 
                 <Space
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
                 <TextView
                     android:id="@+id/tv_total_price"
                     style="@style/BeerTextView.Red.Header1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/zero_baht"/>
+                    android:text="@string/zero_baht" />
             </LinearLayout>
 
             <Button
@@ -133,7 +179,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/default_padding_margin"
                 android:stateListAnimator="@null"
-                android:text="@string/confirm_order"/>
+                android:text="@string/confirm_order" />
 
         </LinearLayout>
     </LinearLayout>

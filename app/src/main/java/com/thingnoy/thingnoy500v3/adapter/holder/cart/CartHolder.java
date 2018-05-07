@@ -146,9 +146,9 @@ public class CartHolder extends RecyclerView.ViewHolder {
 //
 //    }
 
-    /***************
+    /*
      *Event Handle
-     ***************/
+     */
     @NonNull
     private View.OnClickListener onClickDecrease() {
         return new View.OnClickListener() {

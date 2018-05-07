@@ -1,6 +1,6 @@
 package com.thingnoy.thingnoy500v3.event;
 
-import com.thingnoy.thingnoy500v3.adapter.item.HistoryItem;
+import com.thingnoy.thingnoy500v3.ui.history.adapter.item.HistoryItem;
 
 
 public class GoToOrderDetailActivityEvent {

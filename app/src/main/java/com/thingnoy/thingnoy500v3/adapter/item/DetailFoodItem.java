@@ -88,4 +88,14 @@ public class DetailFoodItem extends BaseItem implements Parcelable {
         mIDFoodDetails = IDFoodDetails;
     }
 
+
+    @Override
+    public String toString() {
+        return "DetailFoodItem{" +
+                "mFoodDetailName='" + mFoodDetailName + '\'' +
+                ", mFoodDetailsPrice=" + mFoodDetailsPrice +
+                ", mIDFoodDetails='" + mIDFoodDetails + '\'' +
+                ", selectedIndex=" + selectedIndex +
+                '}';
+    }
 }

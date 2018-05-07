@@ -27,26 +27,25 @@ import com.thingnoy.thingnoy500v3.adapter.item.BaseItem;
 import com.thingnoy.thingnoy500v3.adapter.item.FoodProductItem;
 import com.thingnoy.thingnoy500v3.adapter.item.FoodProductItemGroup;
 import com.thingnoy.thingnoy500v3.api.dao.NameAndImageDao;
+import com.thingnoy.thingnoy500v3.api.request.favorite.AddFavoriteBody;
 import com.thingnoy.thingnoy500v3.api.result.foodMenu.fds.FoodMenuResultGroup;
+import com.thingnoy.thingnoy500v3.api.result.status.StatusResult;
 import com.thingnoy.thingnoy500v3.event.AddFoodToCartEvent;
 import com.thingnoy.thingnoy500v3.event.ClearAddedButtonStateAllEvent;
 import com.thingnoy.thingnoy500v3.event.ClearAddedButtonStateEvent;
 import com.thingnoy.thingnoy500v3.event.RemoveFoodFromCartEvent;
+import com.thingnoy.thingnoy500v3.util.GetPrettyPrintJson;
 import com.thingnoy.thingnoy500v3.util.ItemAnimation;
 
 import java.util.List;
 
 import static android.support.v7.widget.StaggeredGridLayoutManager.*;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class FoodMenuFragment extends Fragment {
     private final static String TAG = FoodMenuFragment.class.getSimpleName();
-//    public static final int REQ_ORDER = 1000;
+    //    public static final int REQ_ORDER = 1000;
     public static final String KEY_BEER_GROUP = "key_beer_group";
-//    public static final String KEY_FOOD_ITEM_IN_MENU = "key_food_item_in_menu";
+    //    public static final String KEY_FOOD_ITEM_IN_MENU = "key_food_item_in_menu";
     private final UdonFoodServiceManager serviceManager;
     private NameAndImageDao dao;
     private RecyclerView rcFood;
@@ -82,7 +81,7 @@ public class FoodMenuFragment extends Fragment {
         assert getArguments() != null;
         dao = getArguments().getParcelable("dao");
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             onRestoreInstanceState(savedInstanceState);
         }
 
@@ -233,7 +232,11 @@ public class FoodMenuFragment extends Fragment {
         return new FoodProductAdapter.OnClickFoodProductListener() {
             @Override
             public void onClickLike(FoodProductItem item, int position) {
-                showToast("onClickLike: " + position);
+//                showToast("onClickLike: " + position);
+                AddFavoriteBody body = new AddFavoriteBody();
+                body.setIdcustomer(1);//todo: id user
+                body.setIdfood(Integer.parseInt(item.getmIDFood()));
+                requestAddFavorite(body);
             }
 
             @Override
@@ -250,22 +253,22 @@ public class FoodMenuFragment extends Fragment {
             @Override
             public void onClickAddToCart(FoodProductItem item, int position) {
                 showToast("เพิ่มสินค้าลงในตะกร้าแล้ว");
-                Log.e(TAG,"onClickAddToCart !!");
+                Log.e(TAG, "onClickAddToCart !!");
                 addFoodItemToCart(item);
             }
 
             @Override
             public void onClickAdded(FoodProductItem item, int position) {
                 showToast("นำสินค้าออกจากตะกร้าแล้ว");
-                Log.e(TAG,"onClickAdded !!");
+                Log.e(TAG, "onClickAdded !!");
                 deleteFoodItemFromCart(item, position);
             }
         };
     }
 
-    /******************
+    /*
      * Presenter
-     ****************/
+     */
     public FoodProductItemGroup getFoodItemGroup() {
         return itemGroup;
     }
@@ -280,30 +283,30 @@ public class FoodMenuFragment extends Fragment {
     }
 
     public void addFoodItemToCart(FoodProductItem item) {
-        Log.e(TAG,"addFoodItemToCart>> post!!");
+        Log.e(TAG, "addFoodItemToCart>> post!!");
         RxBus.get().post(new AddFoodToCartEvent(item));
     }
 
     public void deleteFoodItemFromCart(FoodProductItem item, int position) {
-        Log.e(TAG,"deleteFoodItemFromCart>> post!!");
+        Log.e(TAG, "deleteFoodItemFromCart>> post!!");
         RxBus.get().post(new RemoveFoodFromCartEvent(item));
     }
 
     @Subscribe
     public void onClearAddedButtonStateEvent(ClearAddedButtonStateEvent event) {
-        Log.e(TAG,"@Subscribe>> onClearAddedButtonStateEvent!!");
+        Log.e(TAG, "@Subscribe>> onClearAddedButtonStateEvent!!");
         onClearAddedButtonStateEvent(event.getItem());
     }
 
     @Subscribe
     public void onClearAddedButtonStateAllEvent(ClearAddedButtonStateAllEvent event) {
-        Log.e(TAG,"@Subscribe>> onClearAddedButtonStateAllEvent!!");
+        Log.e(TAG, "@Subscribe>> onClearAddedButtonStateAllEvent!!");
         onClearAddedButtonAllStateEvent();
     }
 
-    /**************
+    /*
      * Function
-     **************/
+     */
 
     private void showToast(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
@@ -333,11 +336,11 @@ public class FoodMenuFragment extends Fragment {
 //        });
 //    }
 
-    private void requestFoodMenu(int id){
+    private void requestFoodMenu(int id) {
         serviceManager.requestFoodMenu(id, new UdonFoodServiceManager.UdonFoodManagerCallback<FoodMenuResultGroup>() {
             @Override
             public void onSuccess(FoodMenuResultGroup result) {
-                Log.e(TAG,new Gson().toJson(result));
+                Log.e(TAG, new Gson().toJson(result));
 
                 containerProgressbar.setVisibility(View.GONE);
                 isHasItem = true;
@@ -360,12 +363,27 @@ public class FoodMenuFragment extends Fragment {
         });
     }
 
+    private void requestAddFavorite(AddFavoriteBody body) {
+        serviceManager.requestAddFavorite(body, new UdonFoodServiceManager.UdonFoodManagerCallback<StatusResult>() {
+            @Override
+            public void onSuccess(StatusResult result) {
+                Log.e(TAG, "requestAddFavorite>> onSuccess: " + new GetPrettyPrintJson().getJson(result));
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e(TAG, "requestAddFavorite>> onFailure: " + t.getMessage());
+            }
+        });
+    }
+
+
     private FoodProductItemGroup convertFoodMenu(FoodMenuResultGroup result) {
         String normalMenuTitle = " เมนูอร่อย ";
         String recommendedMenuTitle = " เมนูแนะนำ ";
         FoodProductItemGroup foodMenuResultGroup2 = new FoodProductItemGroup();
         foodMenuResultGroup2.setFoods(
-                FoodMenuConverter.createSectionAndOrder(result,recommendedMenuTitle,normalMenuTitle));
+                FoodMenuConverter.createSectionAndOrder(result, recommendedMenuTitle, normalMenuTitle));
         return foodMenuResultGroup2;
     }
 
@@ -375,7 +393,7 @@ public class FoodMenuFragment extends Fragment {
 ////        List<BaseItem> orderFoodList = new ArrayList<>();
 ////       orderFoodList.addAll(FoodProductConverter.createSectionAndOrder(dao, recommendedMenuTitle, normalMenuTitle));
 //        FoodProductItemGroup foodProductItemGroup = new FoodProductItemGroup();
-//        foodProductItemGroup.setFoods(
+//        foodProductItemGroup.setFoodDetails(
 //                FoodProductConverter.createSectionandOrder(dao, recommendedMenuTitle, normalMenuTitle));
 //
 //        return foodProductItemGroup;

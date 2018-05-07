@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">FOODTRAVEL @ UDON</string>
+    <string name="app_name">Udon Thani Food</string>
+
+    <string name="app_name2">Udon Thani Food</string>
     <string name="open_drawer">OpenMenu</string>
     <string name="close_drawer">CloseMenu</string>
 
@@ -51,4 +53,21 @@
     <string name="no">ยกเลิก</string>
     <string name="delivery_fee">ค่าจัดส่ง</string>
     <string name="add_on">เพิ่มเติม</string>
+    <string name="go_to_location">ค้นหาตำแหน่งอัตโนมัติ</string>
+    <string name="NEXT">ต่อไป</string>
+    <string name="Order_Confirm">ยืนยันการสั่งอาหาร</string>
+    <string name="checkOut">ยืนยันการสั่งอาหาร</string>
+    <string name="Back">กลับ</string>
+    <string name="List_of_beer">รายการ</string>
+    <string name="login">เข้าสู่ระบบ</string>
+
+
+    <string name="facebook_app_id">1896716797285966</string>
+    <string name="fb_login_protocol_scheme">fb1896716797285966</string>
+    <string name="favorite_menu">เมนูที่ถูกใจ</string>
+    <string name="sorry_you_not_login">ขออภัยค่ะ คุณยังไม่ได้เข้าสู่ระบบ</string>
+    <string name="login_or_register">เข้าสู่ระบบ หรือ ลงทะเบียน</string>
+    <string name="point">แต้มสะสมของคุณ:</string>
+
+
 </resources>
