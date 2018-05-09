@@ -1,4 +1,4 @@
-package com.thingnoy.thingnoy500v3.ui.history.historydetail.adapter;
+package com.thingnoy.thingnoy500v3.ui.historydetail.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.item.BaseItem;
 import com.thingnoy.thingnoy500v3.api.result.history.FoodDetail;
-import com.thingnoy.thingnoy500v3.ui.history.historydetail.adapter.holder.HistoryDetailHolder;
+import com.thingnoy.thingnoy500v3.ui.historydetail.adapter.holder.HistoryDetailHolder;
 import com.thingnoy.thingnoy500v3.util.GetPrettyPrintJson;
 
 import java.util.ArrayList;

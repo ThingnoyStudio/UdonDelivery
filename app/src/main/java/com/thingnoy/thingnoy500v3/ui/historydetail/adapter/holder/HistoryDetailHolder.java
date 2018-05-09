@@ -1,4 +1,4 @@
-package com.thingnoy.thingnoy500v3.ui.history.historydetail.adapter.holder;
+package com.thingnoy.thingnoy500v3.ui.historydetail.adapter.holder;
 
 import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;

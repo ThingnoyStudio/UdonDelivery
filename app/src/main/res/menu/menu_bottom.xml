@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <item
-        android:id="@+id/item_nearby"
-        android:enabled="true"
-        android:icon="@drawable/ic_nearby"
-        android:title="@string/menu_nearby" />
+    <!--<item-->
+        <!--android:id="@+id/item_nearby"-->
+        <!--android:enabled="true"-->
+        <!--android:icon="@drawable/ic_nearby"-->
+        <!--android:title="@string/menu_nearby" />-->
 
     <item
         android:id="@+id/item_history"

@@ -1,4 +1,4 @@
-package com.thingnoy.thingnoy500v3.adapter.holder;
+package com.thingnoy.thingnoy500v3.ui.favorite.adapter.holder;
 
 import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
@@ -15,10 +15,10 @@ import com.like.LikeButton;
 import com.like.OnLikeListener;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.item.FoodProductItem;
-import com.thingnoy.thingnoy500v3.api.request.favorite.AddFavoriteBody;
 import com.thingnoy.thingnoy500v3.api.result.login.LoginResultGroup;
 import com.thingnoy.thingnoy500v3.manager.CacheManager;
 import com.thingnoy.thingnoy500v3.manager.http.bus.Contextor;
+import com.thingnoy.thingnoy500v3.ui.favorite.adapter.item.FavoriteFoodItem;
 import com.thingnoy.thingnoy500v3.util.StringUtils;
 
 import static com.thingnoy.thingnoy500v3.util.Constant.USERINFO;
@@ -27,7 +27,7 @@ import static com.thingnoy.thingnoy500v3.util.Constant.USERINFO;
  * Created by HBO on 23/2/2561.
  */
 
-public class FoodsProductHolder extends RecyclerView.ViewHolder {
+public class FavoriteHolder extends RecyclerView.ViewHolder {
     private LikeButton btnLike;
     private ImageView imgFood;
     private TextView tvFoodName;
@@ -38,7 +38,7 @@ public class FoodsProductHolder extends RecyclerView.ViewHolder {
     private Button btnAdded;
     private OnClickFoodListener listener;
 
-    public FoodsProductHolder(View itemView) {
+    public FavoriteHolder(View itemView) {
         super(itemView);
         imgFood = itemView.findViewById(R.id.img_food);
         tvFoodName = itemView.findViewById(R.id.tv_food_name);
@@ -62,10 +62,10 @@ public class FoodsProductHolder extends RecyclerView.ViewHolder {
             public void liked(LikeButton likeButton) {
                 LoginResultGroup userInfo = new CacheManager<LoginResultGroup>().loadCache(LoginResultGroup.class, USERINFO);
                 if (userInfo != null && userInfo.getData() != null) {
-                    listener.onClickLike(FoodsProductHolder.this, getAdapterPosition());
+                    listener.onClickLike(FavoriteHolder.this, getAdapterPosition());
                 } else {
 //                    showErrorDialog("คุณยังไม่ได้เข้าสู่ระบบ");
-                    listener.onClickLike(FoodsProductHolder.this, getAdapterPosition());
+                    listener.onClickLike(FavoriteHolder.this, getAdapterPosition());
                     btnLike.setLiked(false);
                 }
 
@@ -75,10 +75,10 @@ public class FoodsProductHolder extends RecyclerView.ViewHolder {
             public void unLiked(LikeButton likeButton) {
                 LoginResultGroup userInfo = new CacheManager<LoginResultGroup>().loadCache(LoginResultGroup.class, USERINFO);
                 if (userInfo != null && userInfo.getData() != null) {
-                    listener.onClickUnLike(FoodsProductHolder.this, getAdapterPosition());
+                    listener.onClickUnLike(FavoriteHolder.this, getAdapterPosition());
                 } else {
 //                    showErrorDialog("คุณยังไม่ได้เข้าสู่ระบบ");
-                    listener.onClickUnLike(FoodsProductHolder.this, getAdapterPosition());
+                    listener.onClickUnLike(FavoriteHolder.this, getAdapterPosition());
                     btnLike.setLiked(true);
                 }
 
@@ -86,29 +86,15 @@ public class FoodsProductHolder extends RecyclerView.ViewHolder {
         };
     }
 
-//    private View.OnClickListener onClickFavorite() {
-//        return new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (listener != null){
-////                    if (btnLike.isLiked()){
-////                        listener.onClickLike(FoodsProductHolder.this,getAdapterPosition());
-////                    }else {
-////                        listener.onClickUnLike(FoodsProductHolder.this,getAdapterPosition());
-////                    }
-//
-//                }
-//            }
-//        };
-//    }
-
     @SuppressLint("SetTextI18n")
-    public void onBind(FoodProductItem item) {
-        setFoodImg(item.getmFoodImg());
-        tvFoodName.setText(item.getmFoodName());
-        tvTypeName.setText(item.getmFoodTypeName());
-        tvIDFood.setText(item.getmIDFood());
-        tvFoodPrice.setText(StringUtils.getCommaPriceWithBaht(Contextor.getInstance().getContext(), item.getPrice()));
+    public void onBind(FavoriteFoodItem item) {
+        setFoodImg(item.getFoodImg());
+        tvFoodName.setText(item.getFoodName());
+        tvTypeName.setText(item.getFoodTypeName());
+        tvIDFood.setText(item.getIDFood());
+        tvFoodPrice.setText(StringUtils.getCommaPriceWithBaht(Contextor.getInstance().getContext(), Double.parseDouble(item.getFoodPrice())));
+
+        btnLike.setLiked(true);
 
         if (item.isAdded()) {
             btnAdded.setVisibility(View.VISIBLE);
@@ -138,7 +124,7 @@ public class FoodsProductHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onClickAdded(FoodsProductHolder.this, getAdapterPosition());
+                    listener.onClickAdded(FavoriteHolder.this, getAdapterPosition());
                 }
                 toggleButton();
             }
@@ -150,7 +136,7 @@ public class FoodsProductHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onClickAddToCart(FoodsProductHolder.this, getAdapterPosition());
+                    listener.onClickAddToCart(FavoriteHolder.this, getAdapterPosition());
                 }
                 toggleButton();
             }
@@ -162,7 +148,7 @@ public class FoodsProductHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onClickItem(FoodsProductHolder.this, getAdapterPosition());
+                    listener.onClickItem(FavoriteHolder.this, getAdapterPosition());
                 }
             }
         };
@@ -180,14 +166,14 @@ public class FoodsProductHolder extends RecyclerView.ViewHolder {
     }
 
     public interface OnClickFoodListener {
-        void onClickLike(FoodsProductHolder view, int position);
+        void onClickLike(FavoriteHolder view, int position);
 
-        void onClickUnLike(FoodsProductHolder view, int position);
+        void onClickUnLike(FavoriteHolder view, int position);
 
-        void onClickAddToCart(FoodsProductHolder view, int position);
+        void onClickAddToCart(FavoriteHolder view, int position);
 
-        void onClickAdded(FoodsProductHolder foodsProductHolder, int position);
+        void onClickAdded(FavoriteHolder view, int position);
 
-        void onClickItem(FoodsProductHolder foodsProductHolder, int position);
+        void onClickItem(FavoriteHolder view, int position);
     }
 }

@@ -343,7 +343,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/spacing_large"
-            app:backgroundTint="@color/overlay_light_30"
+            app:backgroundTint="@color/overlay_dark_30"
             app:elevation="0dp"
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_close" />

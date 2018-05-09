@@ -13,5 +13,9 @@ public class FoodProductType {
     public static final int TYPE_FOOD_ORDER_DETAIL = 5;
     public static final int TYPE_ADDRESS = 6;
 
+    public static final int TYPE_FAVORITE = 7;
+    public static final int TYPE_RESTAURANT = 8;
+    public static final int TYPE_DATA_FAVORITE = 9;
+
 
 }

@@ -33,7 +33,7 @@
     <string name="zero_baht">0฿</string>
     <string name="baht">฿</string>
     <string name="confirm_order">ยืนยันการสั่งอาหาร</string>
-    <string name="your_order_history_is_empty">Your order history is empty.</string>
+    <string name="your_order_history_is_empty">คุณยังไม่มีประวัติการสั่งซื้อ</string>
     <string name="close">Close</string>
     <string name="order_history_detail">Order history detail</string>
     <string name="success_order">We will deliver the beer to you as soon as possible.</string>
@@ -68,6 +68,7 @@
     <string name="sorry_you_not_login">ขออภัยค่ะ คุณยังไม่ได้เข้าสู่ระบบ</string>
     <string name="login_or_register">เข้าสู่ระบบ หรือ ลงทะเบียน</string>
     <string name="point">แต้มสะสมของคุณ:</string>
+    <string name="your_order_favorite_is_empty">คุณยังไม่มีรายการที่ถูกใจ</string>
 
 
 </resources>

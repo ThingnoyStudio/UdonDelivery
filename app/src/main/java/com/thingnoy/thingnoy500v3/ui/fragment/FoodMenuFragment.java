@@ -2,6 +2,8 @@ package com.thingnoy.thingnoy500v3.ui.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.cazaea.sweetalert.SweetAlertDialog;
 import com.google.gson.Gson;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -29,17 +32,21 @@ import com.thingnoy.thingnoy500v3.adapter.item.FoodProductItemGroup;
 import com.thingnoy.thingnoy500v3.api.dao.NameAndImageDao;
 import com.thingnoy.thingnoy500v3.api.request.favorite.AddFavoriteBody;
 import com.thingnoy.thingnoy500v3.api.result.foodMenu.fds.FoodMenuResultGroup;
+import com.thingnoy.thingnoy500v3.api.result.login.LoginResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.status.StatusResult;
 import com.thingnoy.thingnoy500v3.event.AddFoodToCartEvent;
 import com.thingnoy.thingnoy500v3.event.ClearAddedButtonStateAllEvent;
 import com.thingnoy.thingnoy500v3.event.ClearAddedButtonStateEvent;
 import com.thingnoy.thingnoy500v3.event.RemoveFoodFromCartEvent;
+import com.thingnoy.thingnoy500v3.manager.CacheManager;
+import com.thingnoy.thingnoy500v3.ui.login.LoginActivity;
 import com.thingnoy.thingnoy500v3.util.GetPrettyPrintJson;
 import com.thingnoy.thingnoy500v3.util.ItemAnimation;
 
 import java.util.List;
 
 import static android.support.v7.widget.StaggeredGridLayoutManager.*;
+import static com.thingnoy.thingnoy500v3.util.Constant.USERINFO;
 
 public class FoodMenuFragment extends Fragment {
     private final static String TAG = FoodMenuFragment.class.getSimpleName();
@@ -55,6 +62,7 @@ public class FoodMenuFragment extends Fragment {
     private boolean isHasItem;
     private CardView containerProgressbar;
     private FoodProductItemGroup itemGroup;
+    private SweetAlertDialog mDialog;
 
     public FoodMenuFragment() {
         super();
@@ -205,6 +213,25 @@ public class FoodMenuFragment extends Fragment {
 
     }
 
+    private void showErrorDialog(String content) {
+        mDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE);
+        mDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        mDialog.setTitleText("กรุณาทำการเข้าสู่ระบบ");
+        mDialog.setContentText("" + content);
+        mDialog.setConfirmText("ไปยังหน้า Login");
+        mDialog.setCancelText("ยกเลิก");
+        mDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                mDialog.dismissWithAnimation();
+                startActivity(new Intent(getContext(), LoginActivity.class));
+            }
+        });
+//        mDialog.setCancelable(false);
+
+        mDialog.show();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -233,15 +260,29 @@ public class FoodMenuFragment extends Fragment {
             @Override
             public void onClickLike(FoodProductItem item, int position) {
 //                showToast("onClickLike: " + position);
-                AddFavoriteBody body = new AddFavoriteBody();
-                body.setIdcustomer(1);//todo: id user
-                body.setIdfood(Integer.parseInt(item.getmIDFood()));
-                requestAddFavorite(body);
+                LoginResultGroup userInfo = new CacheManager<LoginResultGroup>().loadCache(LoginResultGroup.class, USERINFO);
+                if (userInfo != null && userInfo.getData() != null) {
+                    AddFavoriteBody body = new AddFavoriteBody();
+                    body.setIdcustomer(Integer.parseInt(userInfo.getData().get(0).getName().getIDCustomer()));
+                    body.setIdfood(Integer.parseInt(item.getmIDFood()));
+                    requestAddFavorite(body);
+                } else {
+                    showErrorDialog("คุณยังไม่ได้เข้าสู่ระบบ");
+                }
+
             }
 
             @Override
             public void onClickUnLike(FoodProductItem item, int position) {
-                showToast("onClickUnLike: " + position);
+//                showToast("เลิกถูกใจ: " + position);
+                LoginResultGroup userInfo = new CacheManager<LoginResultGroup>().loadCache(LoginResultGroup.class, USERINFO);
+                if (userInfo != null && userInfo.getData() != null) {
+                    int idUser = Integer.parseInt(userInfo.getData().get(0).getName().getIDCustomer());
+                    int idFood = Integer.parseInt(item.getmIDFood());
+                    requestDelFavorite(idFood, idUser);
+                } else {
+                    showErrorDialog("คุณยังไม่ได้เข้าสู่ระบบ");
+                }
             }
 
             @Override
@@ -373,6 +414,20 @@ public class FoodMenuFragment extends Fragment {
             @Override
             public void onFailure(Throwable t) {
                 Log.e(TAG, "requestAddFavorite>> onFailure: " + t.getMessage());
+            }
+        });
+    }
+
+    private void requestDelFavorite(int idFood, int idUser) {
+        serviceManager.requestDelFavorite(idFood, idUser, new UdonFoodServiceManager.UdonFoodManagerCallback<StatusResult>() {
+            @Override
+            public void onSuccess(StatusResult result) {
+                Log.e(TAG, "requestDelFavorite>> onSuccess: " + new GetPrettyPrintJson().getJson(result));
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e(TAG, "requestDelFavorite>> onFailure: " + t.getMessage());
             }
         });
     }

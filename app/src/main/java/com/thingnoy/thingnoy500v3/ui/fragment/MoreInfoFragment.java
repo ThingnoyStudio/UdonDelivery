@@ -478,8 +478,8 @@ public class MoreInfoFragment extends Fragment {
 
             if (listDeliveryPro.size() == 2) {
                 listDeliveryPro = new ArrayList<>();
-                listDeliveryPro.add("แต้มสะสมไม่เพียงพอ");
-                listDeliveryPro.add(" - - - ");
+                listDeliveryPro.add("แต้มไม่เพียงพอ");
+                listDeliveryPro.add("");
             }
 
             deliveryProAdapter = new ArrayAdapter<>(

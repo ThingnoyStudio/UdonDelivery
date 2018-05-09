@@ -189,7 +189,7 @@ public class ResMainListFragment extends Fragment implements ItemClickListener {
             nameAndImg.setResName(promotionGroup.getmData().get(position).getmResName());
             nameAndImg.setResImage(promotionGroup.getmData().get(position).getmResImg());
             nameAndImg.setDeliveryFee(false);
-            nameAndImg.setPromotionId(Integer.parseInt(promotionGroup.getmData().get(position).getmIDResPromotion()));//todo: set id pro
+            nameAndImg.setPromotionId(Integer.parseInt(promotionGroup.getmData().get(position).getmIDResPromotion()));
 
             FragmentListener listener = (FragmentListener) getActivity();//ส่งสัญญาณไปให้ Activity ทำงาน
             assert listener != null;

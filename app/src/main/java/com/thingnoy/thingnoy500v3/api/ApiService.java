@@ -6,6 +6,7 @@ import com.thingnoy.thingnoy500v3.api.request.login.LoginBody;
 import com.thingnoy.thingnoy500v3.api.request.register.RegisterBody;
 import com.thingnoy.thingnoy500v3.api.result.deliverypro.DeliveryProResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.derivery_time.DeliverTimeResultGroup;
+import com.thingnoy.thingnoy500v3.api.result.favorite.FavoriteResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.foodMenu.FoodMenuResultGroupO;
 import com.thingnoy.thingnoy500v3.api.request.AddReviewBody;
 import com.thingnoy.thingnoy500v3.api.result.foodMenu.fds.FoodMenuResultGroup;
@@ -25,6 +26,7 @@ import com.thingnoy.thingnoy500v3.api.result.userAddress.UserAddressResultGroup;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -33,8 +35,10 @@ import retrofit2.http.Query;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_ADD_FAVORITE;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_ADD_NEWORDER;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_ADD_USER;
+import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_DEL_FAVORITE;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_DELIVERY_PRO;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_DELIVERY_TIME;
+import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_FAVORITE;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_FOOD_MENU;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_FOOD_MENU2;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_HISTORY;
@@ -110,6 +114,13 @@ public interface ApiService {
 
     @GET(URL_GET_DELIVERY_PRO)
     Call<DeliveryProResultGroup> getDeliveryPro();
+
+    @DELETE(URL_DEL_FAVORITE)
+    Call<StatusResult> delFavorite(@Query("idf") int idFood,
+                                   @Query("idc") int idUser);
+
+    @GET(URL_GET_FAVORITE)
+    Call<FavoriteResultGroup> getFavorite(@Query("id") int idFood);
 
 
 }

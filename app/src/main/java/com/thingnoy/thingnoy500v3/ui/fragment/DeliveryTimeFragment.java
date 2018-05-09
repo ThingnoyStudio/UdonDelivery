@@ -90,13 +90,13 @@ public class DeliveryTimeFragment extends Fragment {
             listTime.add("ระบุเวลาจัดส่ง");
 
             for (int i = 0; i < deliveryTimes.size(); i++) {
-                listTime.add(deliveryTimes.get(i).getDeliveryTime()+" น.");
+                listTime.add(deliveryTimes.get(i).getDeliveryTime() + " น.");
             }
 
-             adapter = new ArrayAdapter<>(
+            adapter = new ArrayAdapter<>(
                     Contextor.getInstance().getContext(),
-                     android.R.layout.simple_spinner_item,
-                     listTime);
+                    android.R.layout.simple_spinner_item,
+                    listTime);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             spn_delivery_time.setAdapter(adapter);
@@ -131,16 +131,16 @@ public class DeliveryTimeFragment extends Fragment {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
 
-                if (position == 0){
+                if (position == 0) {
                     DataDeliveryTime deliveryTime = new DataDeliveryTime();
                     deliveryTime.setIDDeliveryTime(-1);
                     deliveryTime.setDeliveryTime("");
 
                     addDeliveryTimeToAddNewOrderBody(deliveryTime);
-                }else {
+                } else {
                     DataDeliveryTime deliveryTime = new DataDeliveryTime();
-                    deliveryTime.setIDDeliveryTime(dataDeliveryTimeList.get(position).getIDDeliveryTime());
-                    deliveryTime.setDeliveryTime(dataDeliveryTimeList.get(position).getDeliveryTime());
+                    deliveryTime.setIDDeliveryTime(dataDeliveryTimeList.get(position - 1).getIDDeliveryTime());
+                    deliveryTime.setDeliveryTime(dataDeliveryTimeList.get(position - 1).getDeliveryTime());
 
                     addDeliveryTimeToAddNewOrderBody(deliveryTime);
                 }

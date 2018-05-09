@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="4dp"
+    android:paddingEnd="16dp"
+    android:paddingStart="16dp"
+    android:paddingTop="4dp">
+
+    <FrameLayout
+        android:layout_gravity="center_vertical"
+        android:background="#201e1e"
+        android:layout_marginTop="3dp"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="2dp" />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_fav_restaurant_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ร้าน ส้มตำ"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textColor="#121111"
+            android:textSize="18sp" />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:layout_marginTop="3dp"
+        android:background="#201e1e"
+        android:layout_width="0dp"
+        android:layout_height="2dp" />
+
+
+</LinearLayout>

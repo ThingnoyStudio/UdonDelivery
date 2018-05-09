@@ -52,7 +52,7 @@ public class HistoryFragment extends Fragment {
 
     public HistoryFragment() {
         super();
-
+        serviceManager = UdonFoodServiceManager.getInstance();
     }
 
     @SuppressWarnings("unused")
@@ -124,7 +124,6 @@ public class HistoryFragment extends Fragment {
 
     private void init(Bundle savedInstanceState) {
         // Init Fragment level's variable(s) here
-        serviceManager = UdonFoodServiceManager.getInstance();
         historyAdapter = new HistoryAdapter();
         historyAdapter.setOnItemClickListener(onClickItemListener());
     }
@@ -163,33 +162,6 @@ public class HistoryFragment extends Fragment {
         btnGoToLogin.setOnClickListener(onClickLogin());
     }
 
-    private View.OnClickListener onClickLogin() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), LoginActivity.class));
-            }
-        };
-    }
-
-    private View.OnClickListener onClickTryAgain() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (userInfo.getData() != null) {
-                    if (userInfo.getData().size() <= 0) {
-                        //Not Login
-                        showContent(false);
-                    } else {
-                        requestHistory(Integer.parseInt(userInfo.getData().get(0).getName().getIDCustomer()));
-                        showContent(true);
-                    }
-                } else {
-                    showContent(false);
-                }
-            }
-        };
-    }
 
     private void updateEmptyView() {
 
@@ -200,26 +172,7 @@ public class HistoryFragment extends Fragment {
         userInfo = new CacheManager<LoginResultGroup>().loadCache(LoginResultGroup.class, "" + USERINFO);
     }
 
-    private SwipeRefreshLayout.OnRefreshListener onPullRefresh() {
-        return new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                setHistoryItemGroup(null);
 
-                if (userInfo.getData() != null) {
-                    if (userInfo.getData().size() <= 0) {
-                        //Not Login
-                        showContent(false);
-                    } else {
-                        requestHistory(Integer.parseInt(userInfo.getData().get(0).getName().getIDCustomer()));
-                        showContent(true);
-                    }
-                } else {
-                    showContent(false);
-                }
-            }
-        };
-    }
 
     @Override
     public void onStart() {
@@ -344,4 +297,53 @@ public class HistoryFragment extends Fragment {
         this.itemGroup = itemGroup;
     }
 
+
+    private View.OnClickListener onClickLogin() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), LoginActivity.class));
+            }
+        };
+    }
+
+    private View.OnClickListener onClickTryAgain() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (userInfo.getData() != null) {
+                    if (userInfo.getData().size() <= 0) {
+                        //Not Login
+                        showContent(false);
+                    } else {
+                        requestHistory(Integer.parseInt(userInfo.getData().get(0).getName().getIDCustomer()));
+                        showContent(true);
+                    }
+                } else {
+                    showContent(false);
+                }
+            }
+        };
+    }
+
+    private SwipeRefreshLayout.OnRefreshListener onPullRefresh() {
+        return new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                setHistoryItemGroup(null);
+
+                if (userInfo.getData() != null) {
+                    if (userInfo.getData().size() <= 0) {
+                        //Not Login
+                        showContent(false);
+                    } else {
+                        requestHistory(Integer.parseInt(userInfo.getData().get(0).getName().getIDCustomer()));
+                        showContent(true);
+                    }
+                } else {
+                    showContent(false);
+                }
+            }
+        };
+    }
 }

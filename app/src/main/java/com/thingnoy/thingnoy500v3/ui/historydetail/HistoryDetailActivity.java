@@ -1,4 +1,4 @@
-package com.thingnoy.thingnoy500v3.ui.history.historydetail;
+package com.thingnoy.thingnoy500v3.ui.historydetail;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.ui.history.adapter.item.HistoryItem;
-import com.thingnoy.thingnoy500v3.ui.history.historydetail.adapter.HistoryDetailAdapter;
+import com.thingnoy.thingnoy500v3.ui.historydetail.adapter.HistoryDetailAdapter;
 import com.thingnoy.thingnoy500v3.util.StringUtils;
 
 public class HistoryDetailActivity extends AppCompatActivity {

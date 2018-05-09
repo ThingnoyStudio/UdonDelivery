@@ -93,7 +93,7 @@ public class DialogOrderSuccessFragment extends DialogFragment implements Dialog
     private void setupView() {
         tvDate.setText(dao.getmOrderDate());
         tvTime.setVisibility(View.GONE);
-//        tvTime.setText(dao.getmOrderDate());// todo: time
+//        tvTime.setText(dao.getmOrderDate());//
         tvAddress.setText(dao.getAddress().getmAddressName());
         tvDeliveryTime.setText(""+dao.getmDeliveryTime());
         tvTotal.setText("" + dao.getmTotalPrice()+"฿");

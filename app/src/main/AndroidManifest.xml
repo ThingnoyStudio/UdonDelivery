@@ -60,7 +60,7 @@
             android:name=".ui.activity.MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".ui.activity.OrderingActivity" />
-        <activity android:name=".ui.history.historydetail.HistoryDetailActivity" />
+        <activity android:name=".ui.historydetail.HistoryDetailActivity" />
         <activity
             android:name=".ui.login.LoginActivity"
             android:windowSoftInputMode="adjustPan">

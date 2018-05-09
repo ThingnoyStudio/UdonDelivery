@@ -72,6 +72,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    style="@style/BeerTextView.DarkGray.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/default_padding_margin"
@@ -89,15 +90,15 @@
                     style="@style/BeerTextView.Red.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_body_1"
-                    android:text="22" />
+                    android:text="22"
+                    android:textSize="@dimen/text_body_1" />
 
                 <TextView
                     style="@style/BeerTextView.Red.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_body_1"
-                    android:text="แต้ม" />
+                    android:text="แต้ม"
+                    android:textSize="@dimen/text_body_1" />
             </LinearLayout>
 
             <LinearLayout
@@ -109,6 +110,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    style="@style/BeerTextView.DarkGray.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/default_padding_margin"
@@ -127,6 +129,7 @@
                     android:layout_marginEnd="@dimen/default_padding_margin"
                     android:layout_marginStart="14dp"
                     android:layout_weight="1"
+                    android:textColor="@color/grey_90"
                     app:ms_background_color="@color/orange_50" />
 
                 <TextView

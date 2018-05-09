@@ -26,9 +26,10 @@ import com.thingnoy.thingnoy500v3.adapter.CartAdapter;
 import com.thingnoy.thingnoy500v3.api.dao.NameAndImageDao;
 import com.thingnoy.thingnoy500v3.api.dao.PhotoItemCollectionDao;
 import com.thingnoy.thingnoy500v3.event.GoToOrderDetailActivityEvent;
+import com.thingnoy.thingnoy500v3.ui.favorite.FavoriteFragment;
 import com.thingnoy.thingnoy500v3.ui.fragment.ResMainListFragment;
 import com.thingnoy.thingnoy500v3.ui.history.HistoryFragment;
-import com.thingnoy.thingnoy500v3.ui.history.historydetail.HistoryDetailActivity;
+import com.thingnoy.thingnoy500v3.ui.historydetail.HistoryDetailActivity;
 import com.thingnoy.thingnoy500v3.ui.profile.ProfileFragment;
 import com.thingnoy.thingnoy500v3.util.BottomNavigationBehavior;
 
@@ -124,12 +125,12 @@ public class MainActivity extends AppCompatActivity implements ResMainListFragme
                 Fragment fragment;
                 switch (item.getItemId()) {
 
-                    case R.id.item_nearby:
-                        // do this event
-                        tvTitle.setText(R.string.menu_nearby);
-                        ivLogo.setImageResource(R.drawable.ic_nearby);
-//                        Toast.makeText(MainActivity.this, "nearby selected", Toast.LENGTH_SHORT).show();
-                        return true;
+//                    case R.id.item_nearby:
+//                        // do this event
+//                        tvTitle.setText(R.string.menu_nearby);
+//                        ivLogo.setImageResource(R.drawable.ic_nearby);
+////                        Toast.makeText(MainActivity.this, "nearby selected", Toast.LENGTH_SHORT).show();
+//                        return true;
 
                     case R.id.item_history:
                         // do this event
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements ResMainListFragme
                         // do this event
                         tvTitle.setText(R.string.menu_favorite);
                         ivLogo.setImageResource(R.drawable.ic_like);
+                        loadFragment(FavoriteFragment.newInstance());
 //                        Toast.makeText(MainActivity.this, "favorite selected", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.item_me:

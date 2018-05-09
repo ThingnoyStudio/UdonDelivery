@@ -9,6 +9,7 @@ import com.thingnoy.thingnoy500v3.api.request.login.LoginBody;
 import com.thingnoy.thingnoy500v3.api.request.register.RegisterBody;
 import com.thingnoy.thingnoy500v3.api.result.deliverypro.DeliveryProResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.derivery_time.DeliverTimeResultGroup;
+import com.thingnoy.thingnoy500v3.api.result.favorite.FavoriteResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.foodMenu.FoodMenuResultGroupO;
 import com.thingnoy.thingnoy500v3.api.result.foodMenu.fds.FoodMenuResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.history.HistoryResultGroup;
@@ -43,6 +44,7 @@ public class UdonFoodServiceManager {
     private Call<StatusResult> callAddFavorite;
     private Call<StatusResult> callAddUser;
     private Call<LoginResultGroup> callLogin;
+    private Call<StatusResult> callDelFavorite;
 
 
     private UdonFoodServiceManager() {
@@ -758,4 +760,99 @@ public class UdonFoodServiceManager {
     }
     //endregion
 
+    //region request Del Favorite
+    public void requestDelFavorite(int idFood, int idUser, final UdonFoodManagerCallback<StatusResult> callback) {
+        callDelFavorite = requestDelFavorite(idFood, idUser);
+        callDelFavorite.enqueue(new Callback<StatusResult>() {
+            @Override
+            public void onResponse(@NonNull Call<StatusResult> call, @NonNull Response<StatusResult> response) {
+                if (callback != null) {
+                    if (delFavoriteChecker(response)) {
+                        callback.onSuccess(response.body());
+                    } else {
+                        if (response.body() != null) {
+                            callback.onFailure(new Throwable(response.body().getData()));
+                        }
+                    }
+                }
+                callDelFavorite = null;
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<StatusResult> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    callback.onFailure(t);
+                }
+                callDelFavorite = null;
+            }
+        });
+    }
+
+    private Call<StatusResult> requestDelFavorite(int idFood, int idUser) {
+        return UdonService.newInstance(BASE_URL)
+                .getApi(api)
+                .delFavorite(idFood, idUser);
+    }
+
+    private boolean delFavoriteChecker(Response<StatusResult> response) {
+        if (response.isSuccessful()) {
+            StatusResult result = response.body();
+            assert result != null;
+            if (result.getStatus() != null) {
+                return result.getStatus();
+            }
+        }
+        return false;
+    }
+
+    public void cancelDelFavorite() {
+        if (callDelFavorite != null) {
+            callDelFavorite.cancel();
+        }
+    }
+    //endregion
+
+    //region request Get Favorite
+    public void requestGetFavorite(int id, final UdonFoodManagerCallback<FavoriteResultGroup> callback) {
+        requestGetFavoriteCall(id).enqueue(new Callback<FavoriteResultGroup>() {
+            @Override
+            public void onResponse(@NonNull Call<FavoriteResultGroup> call, @NonNull Response<FavoriteResultGroup> response) {
+                if (callback != null) {
+                    if (getFavoriteChecker(response)) {
+                        callback.onSuccess(response.body());
+                    } else {
+                        callback.onFailure(new Throwable("Response invalid."));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<FavoriteResultGroup> call, @NonNull Throwable t) {
+                if (!call.isCanceled()) {
+                    if (callback != null) {
+                        callback.onFailure(t);
+                    }
+                }
+            }
+        });
+
+    }
+
+    private Call<FavoriteResultGroup> requestGetFavoriteCall(int id) {
+        return UdonService.newInstance(BASE_URL)
+                .getApi(api)
+                .getFavorite(id);
+    }
+
+    private boolean getFavoriteChecker(Response<FavoriteResultGroup> response) {
+        if (response.isSuccessful()) {
+            FavoriteResultGroup result = response.body();
+            assert result != null;
+            if (result.getSuccess() != null)
+                return result.getSuccess();
+            return false;
+        }
+        return false;
+    }
+    //endregion
 }

@@ -20,7 +20,13 @@ public class UdonFoodURL {
     public static final String URL_ADD_USER = "apicustomer/insertcustomer2";
     public static final String URL_LOGIN = "apicustomer/customerlogin";
     public static final String URL_GET_NEW_RESTAURANT = "apirestaurant/listrestaurant2";
-public static final String URL_GET_DELIVERY_PRO = "apideliverypro/listdeliverypro";
+    public static final String URL_GET_DELIVERY_PRO = "apideliverypro/listdeliverypro";
+public static final String URL_DEL_FAVORITE = "apifavoritemenu/deletefavoritemenu";
+public static final String URL_GET_FAVORITE = "apifavoritemenu/listfavoritemenu";
+
+
+
+
 
 //    public static final String URL_DEL_FAVORITE = "apifavoritemenu/insertfavoritemenu";
 
