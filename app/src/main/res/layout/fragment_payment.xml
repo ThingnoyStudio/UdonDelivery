@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".ui.fragment.PaymentFragment">
+    tools:context=".ui.ordering.payment.PaymentFragment">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -95,11 +95,11 @@
                                     android:id="@+id/edt_total_price"
                                     style="@style/BeerTextView.Red.Small"
                                     android:layout_width="0dp"
-                                    android:textAlignment="textEnd"
-                                    android:text="0.0"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:enabled="false" />
+                                    android:enabled="false"
+                                    android:text="0.0"
+                                    android:textAlignment="textEnd" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -119,41 +119,42 @@
                                     android:text="จำนวนเงิน" />
 
                                 <!--<FrameLayout-->
-                                    <!--android:layout_width="0dp"-->
-                                    <!--android:layout_height="wrap_content"-->
-                                    <!--android:layout_weight="1">-->
+                                <!--android:layout_width="0dp"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_weight="1">-->
 
-                                    <!--<android.support.v7.widget.AppCompatEditText-->
-                                        <!--android:id="@+id/edt_cash"-->
-                                        <!--android:layout_width="0dp"-->
-                                        <!--android:layout_height="wrap_content"-->
-                                        <!--android:layout_weight="1"-->
-                                        <!--android:clickable="true"-->
-                                        <!--android:inputType="numberDecimal"-->
-                                        <!--android:focusable="true"-->
-                                        <!--android:maxLines="1" />-->
+                                <!--<android.support.v7.widget.AppCompatEditText-->
+                                <!--android:id="@+id/edt_cash"-->
+                                <!--android:layout_width="0dp"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_weight="1"-->
+                                <!--android:clickable="true"-->
+                                <!--android:inputType="numberDecimal"-->
+                                <!--android:focusable="true"-->
+                                <!--android:maxLines="1" />-->
                                 <android.support.v7.widget.AppCompatEditText
                                     android:id="@+id/c_edt_cash"
                                     android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:textAlignment="textEnd"
                                     android:text="0.0"
-                                    android:layout_height="wrap_content" />
+                                    android:inputType="number"
+                                    android:textAlignment="textEnd" />
 
-                                    <!--<ImageView-->
-                                        <!--android:id="@+id/iv_clear"-->
-                                        <!--android:layout_width="24dp"-->
-                                        <!--android:layout_height="24dp"-->
-                                        <!--android:layout_marginStart="2dp"-->
-                                        <!--android:layout_marginEnd="27dp"-->
-                                        <!--android:layout_gravity="end"-->
-                                        <!--android:src="@drawable/ic_clear" />-->
+                                <!--<ImageView-->
+                                <!--android:id="@+id/iv_clear"-->
+                                <!--android:layout_width="24dp"-->
+                                <!--android:layout_height="24dp"-->
+                                <!--android:layout_marginStart="2dp"-->
+                                <!--android:layout_marginEnd="27dp"-->
+                                <!--android:layout_gravity="end"-->
+                                <!--android:src="@drawable/ic_clear" />-->
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
+                                <TextView
+                                    android:layout_width="wrap_content"
 
-                                        android:layout_height="wrap_content"
-                                        android:text="บาท" />
+                                    android:layout_height="wrap_content"
+                                    android:text="บาท" />
 
                                 <!--</FrameLayout>-->
 
@@ -172,8 +173,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textAlignment="textEnd"
                                     android:text="*กรุณาป้อนระบุจำนวนเงินให้มากกว่าหรือเท่ากับ ยอดชำระ"
+                                    android:textAlignment="textEnd"
                                     android:textColor="@color/red"
                                     android:textSize="12sp" />
                             </LinearLayout>
@@ -192,11 +193,11 @@
                                 <android.support.v7.widget.AppCompatEditText
                                     android:id="@+id/edt_change"
                                     android:layout_width="0dp"
-                                    android:text="0.0"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:textAlignment="textEnd"
-                                    android:enabled="false" />
+                                    android:enabled="false"
+                                    android:text="0.0"
+                                    android:textAlignment="textEnd" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -205,7 +206,6 @@
                             </LinearLayout>
 
                         </android.support.v7.widget.LinearLayoutCompat>
-
 
 
                         <TextView
@@ -310,6 +310,7 @@
 
 
                     </LinearLayout>
+
                 </android.support.v7.widget.LinearLayoutCompat>
 
 
@@ -323,12 +324,13 @@
                 android:layout_marginRight="@dimen/default_padding_margin"
                 android:layout_marginTop="@dimen/default_padding_margin">
 
-                <LinearLayout
+                <android.support.v7.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <com.balysv.materialripple.MaterialRippleLayout
+                        android:id="@+id/mr_paypal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
@@ -339,7 +341,126 @@
                             android:src="@drawable/ic_paypal_cards" />
                     </com.balysv.materialripple.MaterialRippleLayout>
 
-                </LinearLayout>
+                    <android.support.v7.widget.LinearLayoutCompat
+                        android:id="@+id/lyt_paypal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/default_padding_margin"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="ยอดชำระ" />
+
+                            <android.support.v7.widget.AppCompatEditText
+                                android:id="@+id/edt_total_price_paypal"
+                                style="@style/BeerTextView.Red.Small"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:enabled="false"
+                                android:text="0.0"
+                                android:textAlignment="textEnd" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="บาท" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="ระบุจำนวนเงิน" />
+
+                            <!--<FrameLayout-->
+                            <!--android:layout_width="0dp"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_weight="1">-->
+
+                            <!--<android.support.v7.widget.AppCompatEditText-->
+                            <!--android:id="@+id/edt_cash"-->
+                            <!--android:layout_width="0dp"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_weight="1"-->
+                            <!--android:clickable="true"-->
+                            <!--android:inputType="numberDecimal"-->
+                            <!--android:focusable="true"-->
+                            <!--android:maxLines="1" />-->
+                            <android.support.v7.widget.AppCompatEditText
+                                android:id="@+id/edt_cash_paypal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="0.0"
+                                android:inputType="number"
+                                android:textAlignment="textEnd" />
+
+                            <!--<ImageView-->
+                            <!--android:id="@+id/iv_clear"-->
+                            <!--android:layout_width="24dp"-->
+                            <!--android:layout_height="24dp"-->
+                            <!--android:layout_marginStart="2dp"-->
+                            <!--android:layout_marginEnd="27dp"-->
+                            <!--android:layout_gravity="end"-->
+                            <!--android:src="@drawable/ic_clear" />-->
+
+                            <TextView
+                                android:layout_width="wrap_content"
+
+                                android:layout_height="wrap_content"
+                                android:text="บาท" />
+
+                            <!--</FrameLayout>-->
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/lyt_paypal_hint_cash_under_total_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            tools:visibility="visible">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="*กรุณาป้อนระบุจำนวนเงินให้มากกว่าหรือเท่ากับ ยอดชำระ"
+                                android:textAlignment="textEnd"
+                                android:textColor="@color/red"
+                                android:layout_marginBottom="@dimen/default_padding_margin"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/btn_check_out_with_paypal"
+                            style="@style/BeerButton.Active"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="ชำระเงิน"
+                            android:textStyle="bold" />
+
+                    </android.support.v7.widget.LinearLayoutCompat>
+
+                </android.support.v7.widget.LinearLayoutCompat>
             </android.support.v7.widget.CardView>
 
         </android.support.v7.widget.LinearLayoutCompat>

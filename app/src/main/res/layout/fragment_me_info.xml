@@ -50,7 +50,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:tint="@android:color/white"
-                app:srcCompat="@drawable/ic_more_vertical" />
+                app:srcCompat="@drawable/ic_dot_vertical" />
 
         </LinearLayout>
 

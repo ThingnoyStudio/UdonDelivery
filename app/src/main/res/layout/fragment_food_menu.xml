@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.thingnoy.thingnoy500v3.ui.fragment.FoodMenuFragment">
+    tools:context=".ui.moreinfo.foodmenu.FoodMenuFragment">
 
     <!--<Button-->
     <!--android:text="RecommendMenu"-->

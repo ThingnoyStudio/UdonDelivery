@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".ui.bottom.profile.ProfileFragment">
 
-    tools:context=".ui.profile.ProfileFragment">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout_profile"
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="?android:attr/colorPrimary"
             app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleEnabled="false">
@@ -54,6 +54,26 @@
         app:layout_anchor="@id/app_bar_layout_profile"
         app:layout_anchorGravity="bottom|center" />
 
+    <!--<android.support.v4.widget.SwipeRefreshLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:background="@color/grey_40"-->
+    <!--android:layout_marginBottom="@dimen/margin_large"-->
+    <!--android:paddingTop="24dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+
+    <!--<android.support.v4.widget.NestedScrollView-->
+    <!--android:layout_width="match_parent"-->
+
+    <!--android:layout_height="match_parent">-->
+
+    <!--<FrameLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--app:layout_anchor="@id/app_bar_layout_profile"-->
+
+    <!--app:layout_anchorGravity="bottom|center">-->
+
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nested_info"
         android:layout_width="match_parent"
@@ -61,14 +81,15 @@
         android:clipToPadding="false"
         android:scrollbars="none"
         android:scrollingCache="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:visibility="gone">
+
         <LinearLayout
-            android:layout_marginTop="70dp"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="70dp"
+            android:orientation="vertical">
 
             <include layout="@layout/view_go_to_login" />
 
@@ -83,7 +104,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:fillViewport="true"
         android:scrollbars="none"
         android:scrollingCache="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -94,8 +114,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:visibility="visible"
-            android:padding="@dimen/margin_large">
+            android:padding="@dimen/margin_large"
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -206,29 +226,94 @@
                 android:layout_marginTop="@dimen/default_padding_margin"
                 android:background="@color/grey_40" />
 
-            <TextView
-                android:id="@+id/tv_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginBottom="@dimen/default_padding_margin"
-                android:text="ที่อยู่:"
-                android:textColor="@color/grey_90"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                tools:visibility="visible" />
-
-            <android.support.v7.widget.LinearLayoutCompat
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginBottom="@dimen/default_padding_margin"
+                    android:text="ที่อยู่:"
+                    android:textColor="@color/grey_90"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    tools:visibility="visible" />
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/mr_add_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large">
+
+                    <android.support.v7.widget.LinearLayoutCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_active_selector"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="4dp">
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="16dp"
+                            android:src="@drawable/address" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:text="เพิ่มที่อยู่" />
+                    </android.support.v7.widget.LinearLayoutCompat>
+
+
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+
+            </LinearLayout>
+
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/grey_5">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rc_address"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </android.support.v7.widget.LinearLayoutCompat>
+                    android:layout_height="match_parent"
+                    tools:listitem="@layout/holder_address_with_del"
+                    tools:visibility="visible" />
+
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:id="@+id/container_empty_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_background_size"
+                        android:layout_height="@dimen/icon_background_size"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/default_padding_margin"
+                        android:src="@drawable/ic_empty_order_72dp" />
+
+                    <TextView
+                        style="@style/BeerTextView.DarkGray.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/address_is_empty" />
+                </android.support.v7.widget.LinearLayoutCompat>
+            </FrameLayout>
 
             <Button
                 android:id="@+id/btn_logout"
@@ -243,14 +328,16 @@
                 android:id="@+id/login_button"
                 style="@style/custom_facebook_button"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="@dimen/margin_large"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_large" />
 
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+    <!--</FrameLayout>-->
+    <!--</android.support.v4.widget.NestedScrollView>-->
 
-
+    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
 
 </android.support.design.widget.CoordinatorLayout>

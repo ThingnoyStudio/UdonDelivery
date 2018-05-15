@@ -7,7 +7,7 @@
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
     android:paddingTop="8dp"
-    tools:context="com.thingnoy.thingnoy500v3.ui.fragment.ResInfoFragment">
+    tools:context=".ui.moreinfo.resinfo.ResInfoFragment">
 
 
     <RelativeLayout

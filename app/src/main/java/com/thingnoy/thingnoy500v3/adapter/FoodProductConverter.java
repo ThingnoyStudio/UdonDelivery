@@ -4,9 +4,9 @@ import com.thingnoy.thingnoy500v3.api.result.foodMenu.FoodMenuResultGroupO;
 import com.thingnoy.thingnoy500v3.api.result.foodMenu.Normalmenu;
 import com.thingnoy.thingnoy500v3.api.result.foodMenu.RecommendedMenu;
 import com.thingnoy.thingnoy500v3.adapter.item.BaseItem;
-import com.thingnoy.thingnoy500v3.adapter.item.EmptyItem;
-import com.thingnoy.thingnoy500v3.adapter.item.FoodProductItem;
-import com.thingnoy.thingnoy500v3.adapter.item.SectionItem;
+import com.thingnoy.thingnoy500v3.ui.moreinfo.foodmenu.adapter.item.EmptyItem;
+import com.thingnoy.thingnoy500v3.ui.moreinfo.foodmenu.adapter.item.FoodProductItem;
+import com.thingnoy.thingnoy500v3.ui.moreinfo.foodmenu.adapter.item.SectionItem;
 
 import java.util.ArrayList;
 import java.util.List;

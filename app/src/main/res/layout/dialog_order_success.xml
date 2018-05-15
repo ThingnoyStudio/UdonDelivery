@@ -293,7 +293,7 @@
                         android:paddingTop="@dimen/default_padding_margin">
 
                         <ImageView
-                            android:id="@+id/card_logo"
+                            android:id="@+id/iv_payment_logo"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:scaleType="centerCrop"
@@ -343,7 +343,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/spacing_large"
-            app:backgroundTint="@color/overlay_dark_30"
+            app:backgroundTint="@color/colorPrimary"
             app:elevation="0dp"
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_close" />

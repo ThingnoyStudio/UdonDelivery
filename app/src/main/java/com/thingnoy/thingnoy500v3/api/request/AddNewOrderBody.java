@@ -3,7 +3,7 @@ package com.thingnoy.thingnoy500v3.api.request;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.thingnoy.thingnoy500v3.adapter.item.FoodProductItem;
+import com.thingnoy.thingnoy500v3.ui.moreinfo.foodmenu.adapter.item.FoodProductItem;
 import com.thingnoy.thingnoy500v3.util.DateUtil;
 
 import java.util.List;

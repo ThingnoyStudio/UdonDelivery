@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:fillViewport="true"
-    tools:context="com.thingnoy.thingnoy500v3.ui.register.RegisterActivity">
+    tools:context=".ui.authen.register.RegisterActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

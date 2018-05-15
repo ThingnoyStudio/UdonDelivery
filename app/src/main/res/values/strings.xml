@@ -26,7 +26,7 @@
     <string name="title_activity_maps">Map</string>
     <string name="or">or</string>
     <string name="Amount">จำนวน</string>
-    <string name="cart_is_empty">Cart is empty.</string>
+    <string name="cart_is_empty">ตะกร้าว่างเปล่า</string>
     <string name="add_to_order">เพิ่มลงตะกร้า</string>
     <string name="order_food">สั่งซื้อ</string>
     <string name="total">ยอดรวมสุทธิ:</string>
@@ -34,8 +34,8 @@
     <string name="baht">฿</string>
     <string name="confirm_order">ยืนยันการสั่งอาหาร</string>
     <string name="your_order_history_is_empty">คุณยังไม่มีประวัติการสั่งซื้อ</string>
-    <string name="close">Close</string>
-    <string name="order_history_detail">Order history detail</string>
+    <string name="close">ปิด</string>
+    <string name="order_history_detail">รายละเอียดการสั่งซื้อ</string>
     <string name="success_order">We will deliver the beer to you as soon as possible.</string>
     <string name="try_again">ลองใหม่อีกครั้ง</string>
     <string name="added">เพิ่มแล้ว</string>
@@ -69,6 +69,8 @@
     <string name="login_or_register">เข้าสู่ระบบ หรือ ลงทะเบียน</string>
     <string name="point">แต้มสะสมของคุณ:</string>
     <string name="your_order_favorite_is_empty">คุณยังไม่มีรายการที่ถูกใจ</string>
+    <string name="save">บันทึก</string>
+    <string name="address_is_empty">รายการที่อยู่ว่างเปล่า</string>
 
 
 </resources>

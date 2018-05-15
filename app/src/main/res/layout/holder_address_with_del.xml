@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/default_padding_margin"
+    android:orientation="horizontal"
+    android:background="@drawable/background_round_over_grey_light"
+    android:padding="@dimen/default_padding_margin">
+
+    <RadioButton
+        android:id="@+id/rad_addr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:gravity="center|start"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_addr_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="655 ซอย ประชาสามัคคี ต.หมากแข้ง "
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_addr_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="อ.เมือง จ.อุดรธานี 47000"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <android.support.v4.widget.Space
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <com.balysv.materialripple.MaterialRippleLayout
+        android:id="@+id/mr_del_address"
+        android:layout_width="wrap_content"
+        android:padding="4dp"
+        android:layout_marginTop="-5dp"
+        android:layout_marginEnd="-5dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|top">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:background="@drawable/ic_delete_selector" />
+    </com.balysv.materialripple.MaterialRippleLayout>
+
+
+</LinearLayout>

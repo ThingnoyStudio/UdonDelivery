@@ -24,14 +24,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.MainActivity">
+        <activity android:name=".ui.main.home.MainActivity">
             <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.MoreInfoActivity" />
+        <activity android:name=".ui.moreinfo.MoreInfoActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -57,12 +57,12 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ui.activity.MapsActivity"
+            android:name=".ui.ordering.map.MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".ui.activity.OrderingActivity" />
-        <activity android:name=".ui.historydetail.HistoryDetailActivity" />
+        <activity android:name=".ui.ordering.main.OrderingActivity" />
+        <activity android:name=".ui.bottom.historydetail.HistoryDetailActivity" />
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".ui.authen.login.LoginActivity"
             android:windowSoftInputMode="adjustPan">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
@@ -71,7 +71,7 @@
             <!--</intent-filter>-->
         </activity>
         <activity
-            android:name=".ui.register.RegisterActivity"
+            android:name=".ui.authen.register.RegisterActivity"
             android:windowSoftInputMode="adjustPan" />
 
 
@@ -95,6 +95,21 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider1896716797285966"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
+
+        <!--<activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"-->
+            <!--android:launchMode="singleTask">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<category android:name="android.intent.category.BROWSABLE" />-->
+                <!--<data android:scheme="com.thingnoy.thingnoy500v3.braintree" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
+
 
 
     </application>

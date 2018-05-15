@@ -78,8 +78,12 @@ dependencies {
     // request Permission
     implementation 'com.karumi:dexter:4.2.0'
 
-    // FaceBook login
+    // FaceBook
     implementation 'com.facebook.android:facebook-login:4.33.0'
+    implementation 'com.facebook.android:facebook-share:4.33.0'
 
+    // Paypal
+//    implementation 'com.braintreepayments.api:braintree:2.13.0'
+    implementation 'com.paypal.sdk:paypal-android-sdk:2.15.3'
 
 }

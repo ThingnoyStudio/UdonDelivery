@@ -23,6 +23,9 @@ public class UdonFoodURL {
     public static final String URL_GET_DELIVERY_PRO = "apideliverypro/listdeliverypro";
 public static final String URL_DEL_FAVORITE = "apifavoritemenu/deletefavoritemenu";
 public static final String URL_GET_FAVORITE = "apifavoritemenu/listfavoritemenu";
+public static final String URL_GET_LOCATE = "apilocation/listlocationbytype";
+public static final String URL_ADD_ADDRESS = "apiinsertcusaddress/insertcustomeraddress";
+public static final String URL_DEL_ADDRESS = "apiupdatecusaddress/deletecustomeraddress";
 
 
 

@@ -4,47 +4,53 @@
     android:id="@+id/swipe_favorite"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.favorite.FavoriteFragment">
+    tools:context=".ui.bottom.favorite.FavoriteFragment">
 
-    <FrameLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rc_favorite"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rc_favorite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
 
-        <android.support.v7.widget.LinearLayoutCompat
-            android:id="@+id/container_empty_favorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone"
-            tools:visibility="visible">
-
-            <ImageView
-                android:layout_width="@dimen/icon_background_size"
-                android:layout_height="@dimen/icon_background_size"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/default_padding_margin"
-                android:src="@drawable/ic_empty_order_72dp"/>
-
-            <TextView
-                android:id="@+id/tv_empty_cart"
-                style="@style/BeerTextView.DarkGray.Title"
+            <android.support.v7.widget.LinearLayoutCompat
+                android:id="@+id/container_empty_favorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/your_order_favorite_is_empty"/>
-        </android.support.v7.widget.LinearLayoutCompat>
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
 
-        <include layout="@layout/view_go_to_login" />
+                <ImageView
+                    android:layout_width="@dimen/icon_background_size"
+                    android:layout_height="@dimen/icon_background_size"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/default_padding_margin"
+                    android:src="@drawable/ic_empty_order_72dp" />
 
-        <include layout="@layout/view_service_unavailable" />
-    </FrameLayout>
+                <TextView
+                    android:id="@+id/tv_empty_cart"
+                    style="@style/BeerTextView.DarkGray.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/your_order_favorite_is_empty" />
+            </android.support.v7.widget.LinearLayoutCompat>
+
+            <include layout="@layout/view_go_to_login" />
+
+            <include layout="@layout/view_service_unavailable" />
+        </FrameLayout>
+    </android.support.v4.widget.NestedScrollView>
 
 
 </android.support.v4.widget.SwipeRefreshLayout>

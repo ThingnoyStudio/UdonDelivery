@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.historydetail.HistoryDetailActivity">
+    tools:context=".ui.bottom.historydetail.HistoryDetailActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

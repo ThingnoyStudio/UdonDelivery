@@ -7,7 +7,7 @@
     android:background="@color/blue_grey_600"
     android:fitsSystemWindows="false"
     android:orientation="vertical"
-    tools:context=".ui.activity.OrderingActivity">
+    tools:context=".ui.ordering.main.OrderingActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_ordering"

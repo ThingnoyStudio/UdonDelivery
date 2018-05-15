@@ -1,6 +1,7 @@
 package com.thingnoy.thingnoy500v3.api;
 
 import com.thingnoy.thingnoy500v3.api.request.AddNewOrderBody;
+import com.thingnoy.thingnoy500v3.api.request.add_address.AddAddressBody;
 import com.thingnoy.thingnoy500v3.api.request.favorite.AddFavoriteBody;
 import com.thingnoy.thingnoy500v3.api.request.login.LoginBody;
 import com.thingnoy.thingnoy500v3.api.request.register.RegisterBody;
@@ -11,6 +12,7 @@ import com.thingnoy.thingnoy500v3.api.result.foodMenu.FoodMenuResultGroupO;
 import com.thingnoy.thingnoy500v3.api.request.AddReviewBody;
 import com.thingnoy.thingnoy500v3.api.result.foodMenu.fds.FoodMenuResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.history.HistoryResultGroup;
+import com.thingnoy.thingnoy500v3.api.result.locate.LocateResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.login.LoginResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.new_restaurant.NewRestaurantResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.profile.ProfileResultGroup;
@@ -32,9 +34,11 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
+import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_ADD_ADDRESS;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_ADD_FAVORITE;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_ADD_NEWORDER;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_ADD_USER;
+import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_DEL_ADDRESS;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_DEL_FAVORITE;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_DELIVERY_PRO;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_DELIVERY_TIME;
@@ -42,6 +46,7 @@ import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_FAVORITE;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_FOOD_MENU;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_FOOD_MENU2;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_HISTORY;
+import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_LOCATE;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_NEW_RESTAURANT;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_PROFIlE;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_PROMOTION;
@@ -121,6 +126,15 @@ public interface ApiService {
 
     @GET(URL_GET_FAVORITE)
     Call<FavoriteResultGroup> getFavorite(@Query("id") int idFood);
+
+    @GET(URL_GET_LOCATE)
+    Call<LocateResultGroup> getLocate();
+
+    @POST(URL_ADD_ADDRESS)
+    Call<StatusResult> addAddress(@Body AddAddressBody body);
+
+    @DELETE(URL_DEL_ADDRESS)
+    Call<StatusResult> delAddress(@Query("id") int id);
 
 
 }

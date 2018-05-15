@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clipChildren="false"
     android:clickable="true"
+    android:clipChildren="false"
     app:cardCornerRadius="0dp"
     app:cardPreventCornerOverlap="false"
     app:cardUseCompatPadding="true">
@@ -14,38 +13,58 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <ImageView
-                android:clickable="false"
                 android:id="@+id/img_food"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:minHeight="@dimen/beer_product_height"
-                android:maxHeight="150dp"
                 android:adjustViewBounds="false"
+                android:clickable="false"
+                android:maxHeight="150dp"
+                android:minHeight="@dimen/beer_product_height"
                 android:padding="8dp"
                 android:scaleType="fitCenter"
-                tools:src="@drawable/ic_pic_loading"/>
+                tools:src="@drawable/ic_pic_loading" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="@dimen/default_padding_margin"
+                android:paddingEnd="@dimen/default_padding_margin"
                 android:paddingStart="@dimen/default_padding_margin"
-                android:paddingEnd="@dimen/default_padding_margin" >
-                <TextView
-                    android:id="@+id/tv_food_name"
-                    style="@style/BeerTextView.DarkGray.Title"
-                    android:layout_width="wrap_content"
-                    android:clickable="false"
+                android:paddingTop="@dimen/default_padding_margin">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/default_padding_margin"
-                    android:text="Hoegaarden"/>
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_food_name"
+                        style="@style/BeerTextView.DarkGray.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/default_padding_margin"
+                        android:clickable="false"
+                        android:text="Hoegaarden" />
+
+                    <android.support.v4.widget.Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/iv_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_dot_vertical" />
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -63,10 +82,10 @@
                             android:id="@+id/tv_food_volume"
                             style="@style/BeerTextView.Black.Body2"
                             android:layout_width="wrap_content"
-                            android:clickable="false"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/default_padding_margin_small"
-                            android:text="300 ml"/>
+                            android:clickable="false"
+                            android:text="300 ml" />
 
                         <TextView
                             android:id="@+id/tv_food_percent"
@@ -74,7 +93,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:clickable="false"
-                            android:text="5% alc/vol"/>
+                            android:text="5% alc/vol" />
 
                     </LinearLayout>
 
@@ -84,7 +103,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:clickable="false"
-                        android:text="@string/zero_baht"/>
+                        android:text="@string/zero_baht" />
 
                 </LinearLayout>
 
@@ -92,39 +111,38 @@
 
             <Button
                 android:id="@+id/btn_add_to_cart"
-                android:layout_margin="@dimen/default_padding_margin"
                 style="@style/BeerButton.Active"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/default_button_product_height"
-                android:text="@string/add_to_order"/>
+                android:layout_margin="@dimen/default_padding_margin"
+                android:text="@string/add_to_order" />
 
             <Button
                 android:id="@+id/btn_added"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:layout_margin="@dimen/default_padding_margin"
                 style="@style/BeerButton.Active.Boarder"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/default_button_product_height"
-                android:text="@string/added"/>
+                android:layout_margin="@dimen/default_padding_margin"
+                android:text="@string/added"
+                android:visibility="gone"
+                tools:visibility="visible" />
         </LinearLayout>
 
 
-            <com.like.LikeButton
-                android:id="@+id/btn_favorite_food"
-                android:layout_gravity="right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon_type="heart"
-                app:circle_start_color="@color/colorPrimary"
-                app:like_drawable="@drawable/ic_favorite_2_512"
-                app:unlike_drawable="@drawable/ic_favorite_4_512"
-                app:dots_primary_color="@color/colorAccent"
-                app:dots_secondary_color="@color/colorPrimary"
-                app:circle_end_color="@color/colorAccent"
-                app:icon_size="27dp"
-                app:anim_scale_factor="2"
-                />
+        <com.like.LikeButton
+            android:id="@+id/btn_favorite_food"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            app:anim_scale_factor="2"
+            app:circle_end_color="@color/colorAccent"
+            app:circle_start_color="@color/colorPrimary"
+            app:dots_primary_color="@color/colorAccent"
+            app:dots_secondary_color="@color/colorPrimary"
+            app:icon_size="27dp"
+            app:icon_type="heart"
+            app:like_drawable="@drawable/ic_favorite_2_512"
+            app:unlike_drawable="@drawable/ic_favorite_4_512" />
 
 
     </FrameLayout>
