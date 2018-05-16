@@ -387,7 +387,13 @@ public class LoginActivity extends AppCompatActivity {
 
                 //                Toast.makeText(LoginActivity.this, "login success", Toast.LENGTH_SHORT).show();
                 new CacheManager<LoginResultGroup>().saveCache(result, LoginResultGroup.class, "" + USERINFO);
-                goToMainActivity();
+
+                if (result.getData().get(0).getName().getLoginType().equals("พนักงานจัดส่ง")){
+                    goToMainEmployeeActivity();
+                }else {
+                    goToMainActivity();
+                }
+
             }
 
             @Override
@@ -399,6 +405,10 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e(TAG, "requestLogin>> onFailure: " + t.getMessage());
             }
         });
+
+    }
+
+    private void goToMainEmployeeActivity() {
 
     }
 

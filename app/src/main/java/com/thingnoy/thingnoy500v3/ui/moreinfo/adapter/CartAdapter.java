@@ -173,7 +173,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private void mAddItem(BaseItem item) {
         getPrivateItems().add(item);
         Log.e(TAG, "Added Item: " + new GetPrettyPrintJson().getJson(orderFoodItemList));
-        notifyItemInserted(getItemCount() - 1);
+        notifyItemInserted(getItemCount());
     }
 
     private List<BaseItem> getPrivateItems() {

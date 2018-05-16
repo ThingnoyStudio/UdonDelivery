@@ -49,15 +49,12 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void setItems(List<BaseItem> items) {
         this.items = items;
-
-        Log.e("fgg","setItems: "+new GetPrettyPrintJson().getJson(items));
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.e("favAdapter","viewtype : "+viewType);
         if (viewType == TYPE_RESTAURANT){
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.holder_fav_resturant,parent,false);
@@ -67,7 +64,6 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .inflate(R.layout.holder_food_product,parent,false);
             return new FavoriteHolder(view);
         }
-
 
         throw new NullPointerException("View Type " + viewType + " doesn't match with any existing order detail type");
     }
@@ -164,7 +160,6 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
     private void remove(int index) {
         getPrivateItems().remove(index);
-        Log.e(TAG, "remove Item: " + new GetPrettyPrintJson().getJson(items));
         notifyItemRemoved(index);
     }
 

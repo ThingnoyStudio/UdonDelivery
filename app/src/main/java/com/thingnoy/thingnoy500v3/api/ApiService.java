@@ -11,13 +11,13 @@ import com.thingnoy.thingnoy500v3.api.result.favorite.FavoriteResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.foodMenu.FoodMenuResultGroupO;
 import com.thingnoy.thingnoy500v3.api.request.AddReviewBody;
 import com.thingnoy.thingnoy500v3.api.result.foodMenu.fds.FoodMenuResultGroup;
+import com.thingnoy.thingnoy500v3.api.result.foodmenu__with_like.NewFoodMenuResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.history.HistoryResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.locate.LocateResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.login.LoginResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.new_restaurant.NewRestaurantResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.profile.ProfileResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.promotion.PromotionResultGroup;
-import com.thingnoy.thingnoy500v3.api.result.restaurant.RestaurantResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.review.AddReviewResult;
 import com.thingnoy.thingnoy500v3.api.result.review.ReviewResultGroup;
 import com.thingnoy.thingnoy500v3.api.dao.PhotoItemCollectionDao;
@@ -45,12 +45,12 @@ import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_DELIVERY_TIME;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_FAVORITE;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_FOOD_MENU;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_FOOD_MENU2;
+import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_FOOD_MENU_WITH_LIKE;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_HISTORY;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_LOCATE;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_NEW_RESTAURANT;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_PROFIlE;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_PROMOTION;
-import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_RESTAURANT;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_REVIEW;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_ADD_REVIEW;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_USER_ADDRESS;
@@ -135,6 +135,10 @@ public interface ApiService {
 
     @DELETE(URL_DEL_ADDRESS)
     Call<StatusResult> delAddress(@Query("id") int id);
+
+    @GET(URL_GET_FOOD_MENU_WITH_LIKE)
+    Call<NewFoodMenuResultGroup> getFoodMunuWithLike(@Query("idr") int idRestaurant,
+                                                     @Query("idc") int idUser);
 
 
 }

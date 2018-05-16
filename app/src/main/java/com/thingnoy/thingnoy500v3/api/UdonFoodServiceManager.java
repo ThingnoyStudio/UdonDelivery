@@ -1,7 +1,6 @@
 package com.thingnoy.thingnoy500v3.api;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.thingnoy.thingnoy500v3.api.request.AddNewOrderBody;
 import com.thingnoy.thingnoy500v3.api.request.add_address.AddAddressBody;
@@ -13,13 +12,13 @@ import com.thingnoy.thingnoy500v3.api.result.derivery_time.DeliverTimeResultGrou
 import com.thingnoy.thingnoy500v3.api.result.favorite.FavoriteResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.foodMenu.FoodMenuResultGroupO;
 import com.thingnoy.thingnoy500v3.api.result.foodMenu.fds.FoodMenuResultGroup;
+import com.thingnoy.thingnoy500v3.api.result.foodmenu__with_like.NewFoodMenuResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.history.HistoryResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.locate.LocateResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.login.LoginResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.new_restaurant.NewRestaurantResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.profile.ProfileResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.promotion.PromotionResultGroup;
-import com.thingnoy.thingnoy500v3.api.result.restaurant.RestaurantResultGroup;
 import com.thingnoy.thingnoy500v3.api.request.AddReviewBody;
 import com.thingnoy.thingnoy500v3.api.result.review.AddReviewResult;
 import com.thingnoy.thingnoy500v3.api.result.review.ReviewResultGroup;
@@ -1008,5 +1007,48 @@ public class UdonFoodServiceManager {
     }
     //endregion
 
+    //region request Get FoodMenu with Like
+    public void requestGetFoodMuenuWithLike(int idRestaurant, int idUser, final UdonFoodManagerCallback<NewFoodMenuResultGroup> callback) {
+        requestGetFoodMuenuWithLikeCall(idRestaurant, idUser).enqueue(new Callback<NewFoodMenuResultGroup>() {
+            @Override
+            public void onResponse(@NonNull Call<NewFoodMenuResultGroup> call, @NonNull Response<NewFoodMenuResultGroup> response) {
+                if (callback != null) {
+                    if (getFoodMuenuWithLikeChecker(response)) {
+                        callback.onSuccess(response.body());
+                    } else {
+                        callback.onFailure(new Throwable("Response invalid."));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<NewFoodMenuResultGroup> call, @NonNull Throwable t) {
+                if (!call.isCanceled()) {
+                    if (callback != null) {
+                        callback.onFailure(t);
+                    }
+                }
+            }
+        });
+
+    }
+
+    private Call<NewFoodMenuResultGroup> requestGetFoodMuenuWithLikeCall(int idRestaurant, int idUser) {
+        return UdonService.newInstance(BASE_URL)
+                .getApi(api)
+                .getFoodMunuWithLike(idRestaurant,idUser);
+    }
+
+    private boolean getFoodMuenuWithLikeChecker(Response<NewFoodMenuResultGroup> response) {
+        if (response.isSuccessful()) {
+            NewFoodMenuResultGroup result = response.body();
+            assert result != null;
+            if (result.getSuccess() != null)
+                return result.getSuccess();
+            return false;
+        }
+        return false;
+    }
+    //endregion
 
 }

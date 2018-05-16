@@ -6,11 +6,14 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 import com.thingnoy.thingnoy500v3.adapter.item.BaseItem;
+import com.thingnoy.thingnoy500v3.ui.moreinfo.foodmenu.adapter.item.DetailFoodItem;
+
+import java.util.List;
 
 import static com.thingnoy.thingnoy500v3.util.FoodProductType.TYPE_FAVORITE;
 
 @SuppressWarnings("unused")
-public class FavoriteFoodItem extends BaseItem implements Parcelable{
+public class FavoriteFoodItem  extends BaseItem implements Parcelable{
 
     @SerializedName("CustomerFName")
     private String mCustomerFName;
@@ -35,7 +38,13 @@ public class FavoriteFoodItem extends BaseItem implements Parcelable{
     @SerializedName("MenuTypeName")
     private String mMenuTypeName;
 
+
+
     private boolean isAdded = false;
+
+    private boolean isLike;
+    private List<DetailFoodItem> detailFoods;
+    private String idRestaurant;
 
     public FavoriteFoodItem() {
         super(TYPE_FAVORITE);
@@ -55,6 +64,9 @@ public class FavoriteFoodItem extends BaseItem implements Parcelable{
         mIDFoodType = in.readString();
         mMenuTypeName = in.readString();
         isAdded = in.readByte() != 0;
+        isLike = in.readByte() != 0;
+        detailFoods = in.createTypedArrayList(DetailFoodItem.CREATOR);
+        idRestaurant = in.readString();
     }
 
     @Override
@@ -71,6 +83,9 @@ public class FavoriteFoodItem extends BaseItem implements Parcelable{
         dest.writeString(mIDFoodType);
         dest.writeString(mMenuTypeName);
         dest.writeByte((byte) (isAdded ? 1 : 0));
+        dest.writeByte((byte) (isLike ? 1 : 0));
+        dest.writeTypedList(detailFoods);
+        dest.writeString(idRestaurant);
     }
 
     @Override
@@ -89,6 +104,30 @@ public class FavoriteFoodItem extends BaseItem implements Parcelable{
             return new FavoriteFoodItem[size];
         }
     };
+
+    public String getIdRestaurant() {
+        return idRestaurant;
+    }
+
+    public void setIdRestaurant(String idRestaurant) {
+        this.idRestaurant = idRestaurant;
+    }
+
+    public boolean isLike() {
+        return isLike;
+    }
+
+    public void setLike(boolean like) {
+        isLike = like;
+    }
+
+    public List<DetailFoodItem> getDetailFoods() {
+        return detailFoods;
+    }
+
+    public void setDetailFoods(List<DetailFoodItem> detailFoods) {
+        this.detailFoods = detailFoods;
+    }
 
     public boolean isAdded() {
         return isAdded;

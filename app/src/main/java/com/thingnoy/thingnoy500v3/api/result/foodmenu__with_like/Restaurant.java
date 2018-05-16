@@ -1,12 +1,10 @@
 
-package com.thingnoy.thingnoy500v3.api.result.favorite;
+package com.thingnoy.thingnoy500v3.api.result.foodmenu__with_like;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 @SuppressWarnings("unused")
-public class Res {
+public class Restaurant {
 
     @SerializedName("IDLocation")
     private String mIDLocation;
@@ -22,31 +20,27 @@ public class Res {
     private String mResLowPrice;
     @SerializedName("ResName")
     private String mResName;
-    @SerializedName("ResStatus")
-    private String mResStatus;
     @SerializedName("ResTel")
     private String mResTel;
     @SerializedName("ResTimeEnd")
     private String mResTimeEnd;
     @SerializedName("ResTimeStart")
     private String mResTimeStart;
-    @SerializedName("Respro")
-    private List<ResPro> mRespro;
 
     public String getIDLocation() {
         return mIDLocation;
     }
 
-    public void setIDLocation(String iDLocation) {
-        mIDLocation = iDLocation;
+    public void setIDLocation(String IDLocation) {
+        mIDLocation = IDLocation;
     }
 
     public String getIDRestaurant() {
         return mIDRestaurant;
     }
 
-    public void setIDRestaurant(String iDRestaurant) {
-        mIDRestaurant = iDRestaurant;
+    public void setIDRestaurant(String IDRestaurant) {
+        mIDRestaurant = IDRestaurant;
     }
 
     public String getLatlng() {
@@ -61,71 +55,56 @@ public class Res {
         return mResAddress;
     }
 
-    public void setResAddress(String resAddress) {
-        mResAddress = resAddress;
+    public void setResAddress(String ResAddress) {
+        mResAddress = ResAddress;
     }
 
     public String getResImg() {
         return mResImg;
     }
 
-    public void setResImg(String resImg) {
-        mResImg = resImg;
+    public void setResImg(String ResImg) {
+        mResImg = ResImg;
     }
 
     public String getResLowPrice() {
         return mResLowPrice;
     }
 
-    public void setResLowPrice(String resLowPrice) {
-        mResLowPrice = resLowPrice;
+    public void setResLowPrice(String ResLowPrice) {
+        mResLowPrice = ResLowPrice;
     }
 
     public String getResName() {
         return mResName;
     }
 
-    public void setResName(String resName) {
-        mResName = resName;
-    }
-
-    public String getResStatus() {
-        return mResStatus;
-    }
-
-    public void setResStatus(String resStatus) {
-        mResStatus = resStatus;
+    public void setResName(String ResName) {
+        mResName = ResName;
     }
 
     public String getResTel() {
         return mResTel;
     }
 
-    public void setResTel(String resTel) {
-        mResTel = resTel;
+    public void setResTel(String ResTel) {
+        mResTel = ResTel;
     }
 
     public String getResTimeEnd() {
         return mResTimeEnd;
     }
 
-    public void setResTimeEnd(String resTimeEnd) {
-        mResTimeEnd = resTimeEnd;
+    public void setResTimeEnd(String ResTimeEnd) {
+        mResTimeEnd = ResTimeEnd;
     }
 
     public String getResTimeStart() {
         return mResTimeStart;
     }
 
-    public void setResTimeStart(String resTimeStart) {
-        mResTimeStart = resTimeStart;
+    public void setResTimeStart(String ResTimeStart) {
+        mResTimeStart = ResTimeStart;
     }
 
-    public List<ResPro> getmRespro() {
-        return mRespro;
-    }
-
-    public void setmRespro(List<ResPro> mRespro) {
-        this.mRespro = mRespro;
-    }
 }

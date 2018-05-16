@@ -33,8 +33,6 @@ import com.cazaea.sweetalert.SweetAlertDialog;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.jaredrummler.materialspinner.MaterialSpinner;
-import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.Logger;
 import com.thekhaeng.slidingmenu.lib.SlidingMenu;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.ui.moreinfo.adapter.CartAdapter;
@@ -103,6 +101,7 @@ public class MoreInfoFragment extends Fragment {
     private MaterialSpinner spnDeliveryPro;
     private TextView tvPoint;
     private SweetAlertDialog mDialog;
+    private FoodProductItem foodFavoriteItem;
 
 
     public MoreInfoFragment() {
@@ -111,12 +110,13 @@ public class MoreInfoFragment extends Fragment {
     }
 
     @SuppressWarnings("unused")
-    public static MoreInfoFragment newInstance(NameAndImageDao dao) {//รับ dao
+    public static MoreInfoFragment newInstance(NameAndImageDao dao, FoodProductItem item) {//รับ dao
         MoreInfoFragment fragment = new MoreInfoFragment();
         Bundle args = new Bundle();
 
         //รับ dao
         args.putParcelable("dao", dao);
+        args.putParcelable("favoriteItem", item);
 
         fragment.setArguments(args);
         return fragment;
@@ -130,21 +130,34 @@ public class MoreInfoFragment extends Fragment {
         assert getArguments() != null;
         dao = getArguments().getParcelable("dao");
         Log.e(TAG, "NameAndImageDao: " + new GetPrettyPrintJson().getJson(dao));
-//        Toast.makeText(getActivity(),dao.getPromotionDao().get(0).getResPromotionEnd().toString(),Toast.LENGTH_SHORT).show();
 
-        if (savedInstanceState != null)
+
+        assert getArguments() != null;
+        foodFavoriteItem = getArguments().getParcelable("favoriteItem");
+
+        if (savedInstanceState != null) {
             onRestoreInstanceState(savedInstanceState);
+        }
+
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        RxBus.get().register(this);
         View rootView = inflater.inflate(R.layout.fragment_more_info, container, false);
         bindView(rootView, savedInstanceState);
         setupInstance();
         setupView();
         initInstances(rootView, savedInstanceState);
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
     }
 
     private void init(Bundle savedInstanceState) {
@@ -191,6 +204,7 @@ public class MoreInfoFragment extends Fragment {
         setupTabLayout();
         setupCart();
         updateAllCartView();
+
     }
 
     private void setupToolbar() {
@@ -219,6 +233,7 @@ public class MoreInfoFragment extends Fragment {
     @SuppressWarnings("UnusedParameters")
     private void initInstances(View rootView, Bundle savedInstanceState) {
         // Init 'View' instance(s) with rootView.findViewById here
+
     }
 
     private void setUpTabIcon() {
@@ -255,7 +270,10 @@ public class MoreInfoFragment extends Fragment {
             tvPoint.setText("0");
         }
 
-
+        if (foodFavoriteItem != null && foodFavoriteItem.isLike()) {
+            Log.e(TAG, "getFoodFavoriteItem : " + new GetPrettyPrintJson().getJson(foodFavoriteItem));
+            onAddFoodFavoriteToCart(foodFavoriteItem);
+        }
 //        int itemSpace = (int) getResources().getDimension( R.dimen.default_padding_margin );
         rcCart.setLayoutManager(new LinearLayoutManager(getActivity()));
 //        rcCart.addItemDecoration( new LinearLayoutMargin( itemSpace ) );
@@ -276,12 +294,12 @@ public class MoreInfoFragment extends Fragment {
         super.onPause();
         // save RecyclerView state
         mBundleRecyclerViewState = new Bundle();
-        Logger.addLogAdapter(new AndroidLogAdapter());
+
         List<BaseItem> items = cartAdapter.getItems();
         mBundleRecyclerViewState.putParcelableArrayList(KEY_FOOD_ITEM_IN_CART,
                 (ArrayList<? extends Parcelable>) items);
         Log.e(TAG, "onPause: ");
-        Logger.t(TAG).d(new GetPrettyPrintJson().getJson(items));
+        Log.e(TAG, "items" + new GetPrettyPrintJson().getJson(items));
     }
 
     @Override
@@ -289,27 +307,30 @@ public class MoreInfoFragment extends Fragment {
         super.onResume();
         // restore RecyclerView state
         if (mBundleRecyclerViewState != null) {
-            Logger.addLogAdapter(new AndroidLogAdapter());
             List<BaseItem> items = mBundleRecyclerViewState.getParcelableArrayList(KEY_FOOD_ITEM_IN_CART);
             cartAdapter.setItems(items);
             updateAllCartView();
             Log.e(TAG, "onResume: ");
-            Logger.t(TAG).d(new GetPrettyPrintJson().getJson(items));
+            Log.e(TAG, "items" + new GetPrettyPrintJson().getJson(items));
         }
-
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        RxBus.get().register(this);
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         RxBus.get().unregister(this);
+        clearOrder();
     }
 
     @Override
@@ -394,6 +415,29 @@ public class MoreInfoFragment extends Fragment {
         updateAllCartView();
     }
 
+    private void onAddFoodFavoriteToCart(FoodProductItem item) {
+//        item.clearAmount();
+//        cartAdapter.addItem(getNewFoodFromFavorite(item));
+//        updateAllCartView();
+
+        RxBus.get().post(new AddFoodToCartEvent(getNewFoodFromFavorite(item)));
+        Log.e(TAG, "onAddFoodFavoriteToCart Post>>> AddFoodToCartEvent : " + getNewFoodFromFavorite(item));
+
+        icCart.performClick();
+    }
+
+    private FoodProductItem getNewFoodFromFavorite(FoodProductItem item) {
+        FoodProductItem foodProductItem = new FoodProductItem();
+        foodProductItem.setmFoodName(item.getmFoodName());
+        foodProductItem.setLike(true);
+        foodProductItem.setmFoodImg(item.getmFoodImg());
+        foodProductItem.setPrice(item.getPrice());
+        foodProductItem.setmFoodTypeName(item.getmFoodTypeName());
+        foodProductItem.setmIDFood(item.getmIDFood());
+        foodProductItem.setDetailFoods(item.getDetailFoods());
+        return foodProductItem;
+    }
+
     private void clearOrder() {
         cartAdapter.removeAllItems();
         updateAllCartView();
@@ -429,6 +473,10 @@ public class MoreInfoFragment extends Fragment {
     }
 
     private void hindProductItemView() {
+        updateTotalPrice();
+
+        Log.e(TAG, "ddd: " + cartAdapter.getItemCount());
+
         spnDeliveryPro.setVisibility(View.INVISIBLE);
         containerEmpty.setVisibility(View.VISIBLE);
         btnConfirmOrder.setEnabled(false);
@@ -442,21 +490,6 @@ public class MoreInfoFragment extends Fragment {
 //                dao.isDeliveryFee() ? 50.0 : 0.00));
         mTotalPrice = cartAdapter.getTotalPrice() + Double.valueOf(tvDeliveryFee.getText().toString());
         tvTotalPrice.setText(StringUtils.getCommaPriceWithBaht(getActivity(), mTotalPrice));
-    }
-
-    private void requestDeliveryPro() {
-        serviceManager.requestDeliveryPro(new UdonFoodServiceManager.UdonFoodManagerCallback<DeliveryProResultGroup>() {
-            @Override
-            public void onSuccess(DeliveryProResultGroup result) {
-                datadeliveryProList = result.getData();
-                setupDataToSpinner(datadeliveryProList);
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-            }
-        });
     }
 
     private void setupDataToSpinner(List<DataDeliveryPro> datadeliveryProList) {
@@ -509,9 +542,37 @@ public class MoreInfoFragment extends Fragment {
         mDialog.show();
     }
 
+    @SuppressLint("SetTextI18n")
+    private void updateDeliveryFee(int position) {
+        if (position != 0) {
+            tvDeliveryFee.setText("" + datadeliveryProList.get(position - 1).getDeliveryProPrice());
+            dao.setPromotionId(Integer.parseInt("" + datadeliveryProList.get(position - 1).getIDDeliveryPro()));
+        } else {
+            tvDeliveryFee.setText(dao.isDeliveryFee() ? "50.0" : "0.0");
+            dao.setPromotionId(4);
+        }
+    }
+
+
     /*
      * Event Click
      */
+
+    private void requestDeliveryPro() {
+        serviceManager.requestDeliveryPro(new UdonFoodServiceManager.UdonFoodManagerCallback<DeliveryProResultGroup>() {
+            @Override
+            public void onSuccess(DeliveryProResultGroup result) {
+                datadeliveryProList = result.getData();
+                setupDataToSpinner(datadeliveryProList);
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+    }
 
     private MaterialSpinner.OnItemSelectedListener onDeliveryProSelectedListener() {
         return new MaterialSpinner.OnItemSelectedListener() {
@@ -520,17 +581,6 @@ public class MoreInfoFragment extends Fragment {
                 updateTotalPrice();
             }
         };
-    }
-
-    @SuppressLint("SetTextI18n")
-    private void updateDeliveryFee(int position) {
-        if (position != 0) {
-            tvDeliveryFee.setText("" + datadeliveryProList.get(position - 1).getDeliveryProPrice());
-            dao.setPromotionId(Integer.parseInt(""+datadeliveryProList.get(position - 1).getIDDeliveryPro()));
-        } else {
-            tvDeliveryFee.setText(dao.isDeliveryFee() ? "50.0" : "0.0");
-            dao.setPromotionId(4);
-        }
     }
 
     private CartAdapter.OnClickCartItemListener onClickCartItem() {
@@ -589,9 +639,6 @@ public class MoreInfoFragment extends Fragment {
      * Presenter
      */
 
-    //    public void goToMapActivityP(List<BaseItem> items) {
-//        goToOrdering(items);
-//    }
     public void clearAddedButtonStateEventP(FoodProductItem item) {
         Log.e(TAG, "clearAddedButtonStateEventP>> post!!");
         RxBus.get().post(new ClearAddedButtonStateEvent(item));
@@ -620,6 +667,7 @@ public class MoreInfoFragment extends Fragment {
         Log.e(TAG, "@Subscribe>> onRemoveFoodFromCartEvent!");
         onRemoveFoodFromCartEvent(event.getItem());
     }
+
 
     public void updateEmptyCartView() {
         if (hasItems()) {

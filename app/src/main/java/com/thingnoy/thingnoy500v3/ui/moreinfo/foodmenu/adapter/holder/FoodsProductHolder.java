@@ -118,6 +118,7 @@ public class FoodsProductHolder extends RecyclerView.ViewHolder {
     @SuppressLint("SetTextI18n")
     public void onBind(FoodProductItem item) {
         setFoodImg(item.getmFoodImg());
+        setupLikeButton(item);
         tvFoodName.setText(item.getmFoodName());
         tvTypeName.setText(item.getmFoodTypeName());
         tvIDFood.setText(item.getmIDFood());
@@ -129,6 +130,13 @@ public class FoodsProductHolder extends RecyclerView.ViewHolder {
         } else {
             btnAdded.setVisibility(View.GONE);
             btnAddToCart.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setupLikeButton(FoodProductItem item) {
+        LoginResultGroup userInfo = new CacheManager<LoginResultGroup>().loadCache(LoginResultGroup.class, USERINFO);
+        if (userInfo != null && userInfo.getData() != null) {
+            btnLike.setLiked(item.isLike());
         }
     }
 

@@ -71,6 +71,7 @@
     <string name="your_order_favorite_is_empty">คุณยังไม่มีรายการที่ถูกใจ</string>
     <string name="save">บันทึก</string>
     <string name="address_is_empty">รายการที่อยู่ว่างเปล่า</string>
+    <string name="your_emp_order_is_empty">รายการสั่งซื้อว่างเปล่า</string>
 
 
 </resources>

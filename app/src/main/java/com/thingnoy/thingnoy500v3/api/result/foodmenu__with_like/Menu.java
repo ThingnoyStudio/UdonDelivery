@@ -1,15 +1,14 @@
 
-package com.thingnoy.thingnoy500v3.api.result.favorite;
+package com.thingnoy.thingnoy500v3.api.result.foodmenu__with_like;
 
+import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
 @SuppressWarnings("unused")
-public class Favoritefood {
+public class Menu {
 
-    @SerializedName("CustomerFName")
-    private String mCustomerFName;
-    @SerializedName("CustomerLName")
-    private String mCustomerLName;
+    @SerializedName("detailFood")
+    private List<DetailFood> mDetailFood;
     @SerializedName("FoodImg")
     private String mFoodImg;
     @SerializedName("FoodName")
@@ -18,31 +17,23 @@ public class Favoritefood {
     private String mFoodPrice;
     @SerializedName("FoodTypeName")
     private String mFoodTypeName;
-    @SerializedName("IDCustomer")
-    private String mIDCustomer;
-    @SerializedName("IDFavoriteManu")
-    private String mIDFavoriteManu;
     @SerializedName("IDFood")
     private String mIDFood;
     @SerializedName("IDFoodType")
     private String mIDFoodType;
+    @SerializedName("IDRestaurant")
+    private String mIDRestaurant;
     @SerializedName("MenuTypeName")
     private String mMenuTypeName;
+    @SerializedName("StatusFoodFavorite")
+    private Boolean mStatusFoodFavorite;
 
-    public String getCustomerFName() {
-        return mCustomerFName;
+    public List<DetailFood> getDetailFood() {
+        return mDetailFood;
     }
 
-    public void setCustomerFName(String CustomerFName) {
-        mCustomerFName = CustomerFName;
-    }
-
-    public String getCustomerLName() {
-        return mCustomerLName;
-    }
-
-    public void setCustomerLName(String CustomerLName) {
-        mCustomerLName = CustomerLName;
+    public void setDetailFood(List<DetailFood> detailFood) {
+        mDetailFood = detailFood;
     }
 
     public String getFoodImg() {
@@ -77,22 +68,6 @@ public class Favoritefood {
         mFoodTypeName = FoodTypeName;
     }
 
-    public String getIDCustomer() {
-        return mIDCustomer;
-    }
-
-    public void setIDCustomer(String IDCustomer) {
-        mIDCustomer = IDCustomer;
-    }
-
-    public String getIDFavoriteManu() {
-        return mIDFavoriteManu;
-    }
-
-    public void setIDFavoriteManu(String IDFavoriteManu) {
-        mIDFavoriteManu = IDFavoriteManu;
-    }
-
     public String getIDFood() {
         return mIDFood;
     }
@@ -109,12 +84,28 @@ public class Favoritefood {
         mIDFoodType = IDFoodType;
     }
 
+    public String getIDRestaurant() {
+        return mIDRestaurant;
+    }
+
+    public void setIDRestaurant(String IDRestaurant) {
+        mIDRestaurant = IDRestaurant;
+    }
+
     public String getMenuTypeName() {
         return mMenuTypeName;
     }
 
     public void setMenuTypeName(String MenuTypeName) {
         mMenuTypeName = MenuTypeName;
+    }
+
+    public Boolean getStatusFoodFavorite() {
+        return mStatusFoodFavorite;
+    }
+
+    public void setStatusFoodFavorite(Boolean StatusFoodFavorite) {
+        mStatusFoodFavorite = StatusFoodFavorite;
     }
 
 }

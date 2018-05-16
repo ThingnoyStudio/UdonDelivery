@@ -1,22 +1,21 @@
 
-package com.thingnoy.thingnoy500v3.api.result.favorite;
+package com.thingnoy.thingnoy500v3.api.result.foodmenu__with_like;
 
-import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
 @SuppressWarnings("unused")
-public class FavoriteResultGroup {
+public class NewFoodMenuResultGroup {
 
     @SerializedName("data")
-    private List<DataFavorite> mData;
+    private Data mData;
     @SerializedName("success")
     private Boolean mSuccess;
 
-    public List<DataFavorite> getData() {
+    public Data getData() {
         return mData;
     }
 
-    public void setData(List<DataFavorite> data) {
+    public void setData(Data data) {
         mData = data;
     }
 

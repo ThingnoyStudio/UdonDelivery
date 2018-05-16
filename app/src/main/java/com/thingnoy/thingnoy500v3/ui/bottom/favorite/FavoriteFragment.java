@@ -18,19 +18,24 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.cazaea.sweetalert.SweetAlertDialog;
+import com.hwangjr.rxbus.RxBus;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.adapter.item.BaseItem;
 import com.thingnoy.thingnoy500v3.api.UdonFoodServiceManager;
+import com.thingnoy.thingnoy500v3.api.dao.NameAndImageDao;
 import com.thingnoy.thingnoy500v3.api.result.favorite.DataFavorite;
 import com.thingnoy.thingnoy500v3.api.result.favorite.FavoriteResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.login.LoginResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.status.StatusResult;
+import com.thingnoy.thingnoy500v3.event.event_main.AddFoodFavoriteToCartEvent;
 import com.thingnoy.thingnoy500v3.manager.CacheManager;
 import com.thingnoy.thingnoy500v3.ui.bottom.favorite.adapter.FavoriteAdapter;
 import com.thingnoy.thingnoy500v3.ui.bottom.favorite.adapter.FavoriteConverter;
 import com.thingnoy.thingnoy500v3.ui.bottom.favorite.adapter.item.FavoriteFoodItem;
 import com.thingnoy.thingnoy500v3.ui.bottom.favorite.adapter.item.FavoriteGroup;
 import com.thingnoy.thingnoy500v3.ui.authen.login.LoginActivity;
+import com.thingnoy.thingnoy500v3.ui.moreinfo.MoreInfoActivity;
+import com.thingnoy.thingnoy500v3.ui.moreinfo.foodmenu.adapter.item.FoodProductItem;
 import com.thingnoy.thingnoy500v3.util.GetPrettyPrintJson;
 
 import java.util.List;
@@ -55,6 +60,7 @@ public class FavoriteFragment extends Fragment {
     private FavoriteGroup itemGroup;
     private FavoriteAdapter favoriteAdapter;
     private SweetAlertDialog mDialog;
+    private FavoriteResultGroup rawResult;
 
 
     public FavoriteFragment() {
@@ -85,7 +91,7 @@ public class FavoriteFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_favorite, container, false);
         initInstances(rootView, savedInstanceState);
-//        RxBus.get().register(this);
+        RxBus.get().register(this);
         return rootView;
     }
 
@@ -122,6 +128,7 @@ public class FavoriteFragment extends Fragment {
         if (isShow) {
 //            rcFavorite.setVisibility(View.VISIBLE);
             containerGotoLogin.setVisibility(View.GONE);
+            containerServiceUnavailable.setVisibility(View.GONE);
         } else {
 //            rcFavorite.setVisibility(View.GONE);
             containerGotoLogin.setVisibility(View.VISIBLE);
@@ -190,11 +197,32 @@ public class FavoriteFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Log.e(TAG,"onResume");
+        if (userInfo.getData() != null) {
+            if (userInfo.getData().size() <= 0) {
+                //Not Login
+                showContent(false);
+            } else {
+                requestGetFavorite(Integer.parseInt(userInfo.getData().get(0).getName().getIDCustomer()));
+                showContent(true);
+            }
+        } else {
+            showContent(false);
+        }
+
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RxBus.get().unregister(this);
     }
 
     @Override
@@ -229,10 +257,10 @@ public class FavoriteFragment extends Fragment {
     private void updateEmptyView() {
         containerServiceUnavailable.setVisibility(View.GONE);
         if (favoriteAdapter.hasItems()) {
-            if (favoriteAdapter.getItemCount() == 1){
+            if (favoriteAdapter.getItemCount() == 1) {
                 rcFavorite.setVisibility(View.GONE);
                 containerEmpty.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 rcFavorite.setVisibility(View.VISIBLE);
                 containerEmpty.setVisibility(View.GONE);
             }
@@ -267,6 +295,68 @@ public class FavoriteFragment extends Fragment {
         updateEmptyView();
     }
 
+    private void goToMoreInfoActivity(FavoriteFoodItem item) {
+        NameAndImageDao dao = new NameAndImageDao();
+
+        int restaurantPosition = 0;
+        for (int i = 0; i < rawResult.getData().size(); i++) {
+            if (item.getIdRestaurant().equals(rawResult.getData().get(i).getRes().getIDRestaurant())) {
+                restaurantPosition = i;
+            }
+        }
+
+        Log.e(TAG, "position: " + restaurantPosition);
+        if (rawResult.getData().get(restaurantPosition).getRes().getmRespro() != null) {
+            dao.setDeliveryFee(false);
+            dao.setPromotionId(Integer.parseInt(
+                    rawResult.getData().get(restaurantPosition).getRes().getmRespro()
+                            .get(0).getmIDResPromotion()));
+        } else {
+            dao.setDeliveryFee(true);
+        }
+        dao.setResId(Integer.parseInt(rawResult.getData().get(restaurantPosition).getRes().getIDRestaurant()));
+        dao.setResName(rawResult.getData().get(restaurantPosition).getRes().getResName());
+        dao.setResImage(rawResult.getData().get(restaurantPosition).getRes().getResImg());
+
+        Intent intent = new Intent(getContext(),
+                MoreInfoActivity.class);
+        intent.putExtra("dao", dao);
+        intent.putExtra("favoriteItem", getFood(item));
+        Log.e(TAG,"goToMoreInfoActivity>> dao: "+new GetPrettyPrintJson().getJson(dao));
+        Log.e(TAG, "goToMoreInfoActivity>> item: " + new GetPrettyPrintJson().getJson(getFood(item)));
+        startActivity(intent);
+    }
+
+
+    private FoodProductItem getFood(FavoriteFoodItem item) {
+        FoodProductItem foodProductItem = new FoodProductItem();
+        foodProductItem.setmFoodName(item.getFoodName());
+        foodProductItem.setLike(true);
+        foodProductItem.setmFoodImg(item.getFoodImg());
+        foodProductItem.setPrice(Double.parseDouble(item.getFoodPrice()));
+        foodProductItem.setmFoodTypeName(item.getFoodTypeName());
+        foodProductItem.setmIDFood(item.getIDFood());
+        foodProductItem.setDetailFoods(item.getDetailFoods());
+        return foodProductItem;
+//        Log.e(TAG, "onAddFoodToCart>> Post: " + new GetPrettyPrintJson().getJson(foodProductItem));
+
+//        RxBus.get().post(new AddFoodFavoriteToCartEvent(foodProductItem));
+    }
+
+    private FavoriteGroup convertFavorite(List<DataFavorite> data) {
+        FavoriteGroup favoriteGroup = new FavoriteGroup();
+        favoriteGroup.setFavorite(FavoriteConverter.createFavoriteList(data));
+        return favoriteGroup;
+    }
+
+    private void setFavoriteToAdapter(FavoriteGroup itemGroup) {
+        setFavoriteItemToAdapter(itemGroup.getFavorite());
+    }
+
+    private void setFavoriteItemToAdapter(List<BaseItem> favorite) {
+        favoriteAdapter.setItems(favorite);
+        updateEmptyView();
+    }
 
 
     /*
@@ -279,13 +369,12 @@ public class FavoriteFragment extends Fragment {
             public void onSuccess(FavoriteResultGroup result) {
                 dismissSwipeLayout();
                 if (result.getData() != null) {
-
+//                    Log.e(TAG, "requestGetFavorite: " + new GetPrettyPrintJson().getJson(result));
+                    rawResult = result;
                     itemGroup = convertFavorite(result.getData());
                     setFavoriteToAdapter(itemGroup);
                 }
                 updateEmptyView();
-
-                Log.e(TAG, "requestGetFavorite>> onSuccess: " + new GetPrettyPrintJson().getJson(result));
             }
 
             @Override
@@ -294,15 +383,6 @@ public class FavoriteFragment extends Fragment {
                 showServiceUnavailableView();
             }
         });
-    }
-
-    private void setFavoriteToAdapter(FavoriteGroup itemGroup) {
-        setFavoriteItemToAdapter(itemGroup.getFavorite());
-    }
-
-    private void setFavoriteItemToAdapter(List<BaseItem> favorite) {
-        favoriteAdapter.setItems(favorite);
-        updateEmptyView();
     }
 
     private void requestDelFavorite(int idFood, int idUser) {
@@ -318,12 +398,6 @@ public class FavoriteFragment extends Fragment {
                 Log.e(TAG, "requestDelFavorite>> onFailure: " + t.getMessage());
             }
         });
-    }
-
-    private FavoriteGroup convertFavorite(List<DataFavorite> data) {
-        FavoriteGroup favoriteGroup = new FavoriteGroup();
-        favoriteGroup.setFavorite(FavoriteConverter.createFavoriteList(data));
-        return favoriteGroup;
     }
 
     private View.OnClickListener onClickLogin() {
@@ -403,7 +477,7 @@ public class FavoriteFragment extends Fragment {
 
             @Override
             public void onClickAddToCart(FavoriteFoodItem item, int position) {
-
+                goToMoreInfoActivity(item);
             }
 
             @Override
@@ -412,6 +486,4 @@ public class FavoriteFragment extends Fragment {
             }
         };
     }
-
-
 }

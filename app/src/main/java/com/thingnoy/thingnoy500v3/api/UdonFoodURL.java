@@ -26,6 +26,7 @@ public static final String URL_GET_FAVORITE = "apifavoritemenu/listfavoritemenu"
 public static final String URL_GET_LOCATE = "apilocation/listlocationbytype";
 public static final String URL_ADD_ADDRESS = "apiinsertcusaddress/insertcustomeraddress";
 public static final String URL_DEL_ADDRESS = "apiupdatecusaddress/deletecustomeraddress";
+public static final String URL_GET_FOOD_MENU_WITH_LIKE = "apitestfood22/listfoodforres";
 
 
 

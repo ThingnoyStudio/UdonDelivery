@@ -21,11 +21,12 @@ public class FoodProductItem extends BaseItem implements Parcelable {
     private String mIDFood;
     private List<DetailFoodItem> detailFoods;
     private String reason;
-    private DetailFoodItem addOn ;
+    private DetailFoodItem addOn;
 
     private double price;
     private int amount = 1;
     private boolean isAdded = false;
+    private boolean isLike;
     //endregion
 
     // constructor
@@ -45,23 +46,7 @@ public class FoodProductItem extends BaseItem implements Parcelable {
         price = in.readDouble();
         amount = in.readInt();
         isAdded = in.readByte() != 0;
-    }
-
-    public static final Creator<FoodProductItem> CREATOR = new Creator<FoodProductItem>() {
-        @Override
-        public FoodProductItem createFromParcel(Parcel in) {
-            return new FoodProductItem(in);
-        }
-
-        @Override
-        public FoodProductItem[] newArray(int size) {
-            return new FoodProductItem[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
+        isLike = in.readByte() != 0;
     }
 
     @Override
@@ -76,10 +61,37 @@ public class FoodProductItem extends BaseItem implements Parcelable {
         dest.writeDouble(price);
         dest.writeInt(amount);
         dest.writeByte((byte) (isAdded ? 1 : 0));
+        dest.writeByte((byte) (isLike ? 1 : 0));
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<FoodProductItem> CREATOR = new Creator<FoodProductItem>() {
+        @Override
+        public FoodProductItem createFromParcel(Parcel in) {
+            return new FoodProductItem(in);
+        }
+
+        @Override
+        public FoodProductItem[] newArray(int size) {
+            return new FoodProductItem[size];
+        }
+    };
     //endregion
 
     //region Getter & Setter
+
+    public boolean isLike() {
+        return isLike;
+    }
+
+    public void setLike(boolean like) {
+        isLike = like;
+    }
+
     public DetailFoodItem getAddOn() {
         return addOn;
     }
@@ -175,20 +187,4 @@ public class FoodProductItem extends BaseItem implements Parcelable {
     }
     //endregion
 
-
-    @Override
-    public String toString() {
-        return "FoodProductItem{" +
-                "mFoodImg='" + mFoodImg + '\'' +
-                ", mFoodName='" + mFoodName + '\'' +
-                ", mFoodTypeName='" + mFoodTypeName + '\'' +
-                ", mIDFood='" + mIDFood + '\'' +
-                ", detailFoods=" + detailFoods +
-                ", reason='" + reason + '\'' +
-                ", addOn=" + addOn +
-                ", price=" + price +
-                ", amount=" + amount +
-                ", isAdded=" + isAdded +
-                '}';
-    }
 }

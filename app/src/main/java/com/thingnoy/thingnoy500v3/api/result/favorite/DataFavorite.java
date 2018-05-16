@@ -7,24 +7,24 @@ import com.google.gson.annotations.SerializedName;
 @SuppressWarnings("unused")
 public class DataFavorite {
 
-    @SerializedName("favoritefood")
-    private List<Favoritefood> mFavoritefood;
+    @SerializedName("food")
+    private List<Food> mFood;
     @SerializedName("res")
-    private List<Res> mRes;
+    private Res mRes;
 
-    public List<Favoritefood> getFavoritefood() {
-        return mFavoritefood;
+    public List<Food> getFood() {
+        return mFood;
     }
 
-    public void setFavoritefood(List<Favoritefood> favoritefood) {
-        mFavoritefood = favoritefood;
+    public void setFood(List<Food> food) {
+        mFood = food;
     }
 
-    public List<Res> getRes() {
+    public Res getRes() {
         return mRes;
     }
 
-    public void setRes(List<Res> res) {
+    public void setRes(Res res) {
         mRes = res;
     }
 

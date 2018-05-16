@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
+    <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!--
@@ -26,9 +26,9 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ui.main.home.MainActivity">
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.moreinfo.MoreInfoActivity" />
@@ -64,16 +64,17 @@
         <activity
             android:name=".ui.authen.login.LoginActivity"
             android:windowSoftInputMode="adjustPan">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".ui.authen.register.RegisterActivity"
             android:windowSoftInputMode="adjustPan" />
-
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -96,22 +97,22 @@
             </intent-filter>
         </activity>
 
-        <provider android:authorities="com.facebook.app.FacebookContentProvider1896716797285966"
+        <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
+            android:authorities="com.facebook.app.FacebookContentProvider1896716797285966"
+            android:exported="true" />
 
-        <!--<activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"-->
-            <!--android:launchMode="singleTask">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.VIEW" />-->
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-                <!--<category android:name="android.intent.category.BROWSABLE" />-->
-                <!--<data android:scheme="com.thingnoy.thingnoy500v3.braintree" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
+        <!-- <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity" -->
+        <!-- android:launchMode="singleTask"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.VIEW" /> -->
+        <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+        <!-- <category android:name="android.intent.category.BROWSABLE" /> -->
+        <!-- <data android:scheme="com.thingnoy.thingnoy500v3.braintree" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
 
-
-
+        <activity android:name=".ui.employee.MainEmpActivity"></activity>
     </application>
 
 </manifest>
