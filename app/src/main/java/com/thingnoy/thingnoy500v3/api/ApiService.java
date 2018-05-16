@@ -4,9 +4,11 @@ import com.thingnoy.thingnoy500v3.api.request.AddNewOrderBody;
 import com.thingnoy.thingnoy500v3.api.request.add_address.AddAddressBody;
 import com.thingnoy.thingnoy500v3.api.request.favorite.AddFavoriteBody;
 import com.thingnoy.thingnoy500v3.api.request.login.LoginBody;
+import com.thingnoy.thingnoy500v3.api.request.orderstate.OrderStateBody;
 import com.thingnoy.thingnoy500v3.api.request.register.RegisterBody;
 import com.thingnoy.thingnoy500v3.api.result.deliverypro.DeliveryProResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.derivery_time.DeliverTimeResultGroup;
+import com.thingnoy.thingnoy500v3.api.result.emporder.OrderResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.favorite.FavoriteResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.foodMenu.FoodMenuResultGroupO;
 import com.thingnoy.thingnoy500v3.api.request.AddReviewBody;
@@ -42,6 +44,7 @@ import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_DEL_ADDRESS;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_DEL_FAVORITE;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_DELIVERY_PRO;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_DELIVERY_TIME;
+import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_EMP_ORDER;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_FAVORITE;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_FOOD_MENU;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_FOOD_MENU2;
@@ -55,6 +58,7 @@ import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_REVIEW;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_ADD_REVIEW;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_GET_USER_ADDRESS;
 import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_LOGIN;
+import static com.thingnoy.thingnoy500v3.api.UdonFoodURL.URL_POS_ORDER_STATE;
 
 /**
  * Created by HBO on 16/9/2560.
@@ -140,5 +144,9 @@ public interface ApiService {
     Call<NewFoodMenuResultGroup> getFoodMunuWithLike(@Query("idr") int idRestaurant,
                                                      @Query("idc") int idUser);
 
+    @GET(URL_GET_EMP_ORDER)
+    Call<OrderResultGroup> getEmpOrder(@Query("id") int idEmployee);
 
+    @POST(URL_POS_ORDER_STATE)
+    Call<StatusResult> addOrderState(@Body OrderStateBody body);
 }

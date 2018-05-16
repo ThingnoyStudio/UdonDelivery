@@ -36,6 +36,7 @@ import com.thingnoy.thingnoy500v3.api.request.register.RegisterBody;
 import com.thingnoy.thingnoy500v3.api.result.login.LoginResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.status.StatusResult;
 import com.thingnoy.thingnoy500v3.manager.CacheManager;
+import com.thingnoy.thingnoy500v3.ui.employee.MainEmpActivity;
 import com.thingnoy.thingnoy500v3.ui.main.home.MainActivity;
 import com.thingnoy.thingnoy500v3.ui.authen.register.RegisterActivity;
 import com.thingnoy.thingnoy500v3.util.DownloadImage;
@@ -190,7 +191,6 @@ public class LoginActivity extends AppCompatActivity {
     };
 
 
-
     private void showProgressDialog(boolean isShow) {
         if (isShow) {
             mDialog = new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.PROGRESS_TYPE);
@@ -252,7 +252,6 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this,
                 MainActivity.class);
         startActivity(intent);
-
     }
 
     private boolean validate(String emailStr, String password) {
@@ -388,9 +387,11 @@ public class LoginActivity extends AppCompatActivity {
                 //                Toast.makeText(LoginActivity.this, "login success", Toast.LENGTH_SHORT).show();
                 new CacheManager<LoginResultGroup>().saveCache(result, LoginResultGroup.class, "" + USERINFO);
 
-                if (result.getData().get(0).getName().getLoginType().equals("พนักงานจัดส่ง")){
+                if (result.getData().get(0).getName().getLoginType().equals("พนักงานจัดส่ง")) {
+                    Log.e(TAG, "login by messenger " + result.getData().get(0).getName().getLoginType());
                     goToMainEmployeeActivity();
-                }else {
+                } else {
+                    Log.e(TAG, "login by messenger");
                     goToMainActivity();
                 }
 
@@ -409,7 +410,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goToMainEmployeeActivity() {
-
+        Intent intent = new Intent(LoginActivity.this,
+                MainEmpActivity.class);
+        startActivity(intent);
     }
 
     private View.OnClickListener clickLogin() {

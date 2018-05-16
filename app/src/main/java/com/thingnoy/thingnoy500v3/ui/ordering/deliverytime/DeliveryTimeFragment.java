@@ -81,28 +81,7 @@ public class DeliveryTimeFragment extends Fragment {
 //        setDeliveryTimeToSpinner(dataDeliveryTimeList);
     }
 
-    private void setDeliveryTimeToSpinner(List<DataDeliveryTime> deliveryTimes) {
 
-        if (deliveryTimes != null && deliveryTimes.size() > 0) {
-            listTime = new ArrayList<>();
-            listTime.add("ระบุเวลาจัดส่ง");
-
-            for (int i = 0; i < deliveryTimes.size(); i++) {
-                listTime.add(deliveryTimes.get(i).getDeliveryTime() + " น.");
-            }
-
-            adapter = new ArrayAdapter<>(
-                    Contextor.getInstance().getContext(),
-                    android.R.layout.simple_spinner_item,
-                    listTime);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-            spn_delivery_time.setAdapter(adapter);
-
-//            Log.e(TAG, "listTime: " + new GetPrettyPrintJson().getJson(listTime));
-
-        }
-    }
 
     private void initialize() {
         requestDeliveryTime();
@@ -124,28 +103,7 @@ public class DeliveryTimeFragment extends Fragment {
         spn_delivery_time.setOnItemSelectedListener(onDeliveryTimeSelected());
     }
 
-    private MaterialSpinner.OnItemSelectedListener onDeliveryTimeSelected() {
-        return new MaterialSpinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
 
-                if (position == 0) {
-                    DataDeliveryTime deliveryTime = new DataDeliveryTime();
-                    deliveryTime.setIDDeliveryTime(-1);
-                    deliveryTime.setDeliveryTime("");
-
-                    addDeliveryTimeToAddNewOrderBody(deliveryTime);
-                } else {
-                    DataDeliveryTime deliveryTime = new DataDeliveryTime();
-                    deliveryTime.setIDDeliveryTime(dataDeliveryTimeList.get(position - 1).getIDDeliveryTime());
-                    deliveryTime.setDeliveryTime(dataDeliveryTimeList.get(position - 1).getDeliveryTime());
-
-                    addDeliveryTimeToAddNewOrderBody(deliveryTime);
-                }
-
-            }
-        };
-    }
 
 
     @Override
@@ -183,6 +141,31 @@ public class DeliveryTimeFragment extends Fragment {
         // Restore Instance State here
     }
 
+    private void setDeliveryTimeToSpinner(List<DataDeliveryTime> deliveryTimes) {
+
+        if (deliveryTimes != null && deliveryTimes.size() > 0) {
+            listTime = new ArrayList<>();
+            listTime.add("ระบุเวลาจัดส่ง");
+
+            for (int i = 0; i < deliveryTimes.size(); i++) {
+                listTime.add(deliveryTimes.get(i).getDeliveryTime() + " น.");
+            }
+
+            adapter = new ArrayAdapter<>(
+                    Contextor.getInstance().getContext(),
+                    android.R.layout.simple_spinner_item,
+                    listTime);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            spn_delivery_time.setAdapter(adapter);
+
+//            Log.e(TAG, "listTime: " + new GetPrettyPrintJson().getJson(listTime));
+
+        }
+    }
+
+
+
     private void requestDeliveryTime() {
         manager.requestDeliveryTime(new UdonFoodServiceManager.UdonFoodManagerCallback<DeliverTimeResultGroup>() {
             @Override
@@ -201,6 +184,28 @@ public class DeliveryTimeFragment extends Fragment {
         });
     }
 
+    private MaterialSpinner.OnItemSelectedListener onDeliveryTimeSelected() {
+        return new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+
+                if (position == 0) {
+                    DataDeliveryTime deliveryTime = new DataDeliveryTime();
+                    deliveryTime.setIDDeliveryTime(-1);
+                    deliveryTime.setDeliveryTime("");
+
+                    addDeliveryTimeToAddNewOrderBody(deliveryTime);
+                } else {
+                    DataDeliveryTime deliveryTime = new DataDeliveryTime();
+                    deliveryTime.setIDDeliveryTime(dataDeliveryTimeList.get(position - 1).getIDDeliveryTime());
+                    deliveryTime.setDeliveryTime(dataDeliveryTimeList.get(position - 1).getDeliveryTime());
+
+                    addDeliveryTimeToAddNewOrderBody(deliveryTime);
+                }
+
+            }
+        };
+    }
 
     private void addDeliveryTimeToAddNewOrderBody(DataDeliveryTime item) {
         RxBus.get().post(new SelectDeliveryTimeEvent(item));

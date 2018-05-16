@@ -69,14 +69,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/default_padding_margin_small"
-                tools:text="Arrogant Bastard Ale" />
+                tools:text="เพิ่ม พิเศษ" />
 
             <TextView
                 android:id="@+id/tv_order_reason"
                 style="@style/BeerTextView.DarkGray.Body3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Arrogant Bastard Ale" />
+                android:text="ไม่เอาผัก" />
 
         </LinearLayout>
     </LinearLayout>

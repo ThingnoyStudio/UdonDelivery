@@ -20,7 +20,11 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.thingnoy.thingnoy500v3.R;
 import com.thingnoy.thingnoy500v3.api.dao.NameAndImageDao;
+import com.thingnoy.thingnoy500v3.api.result.login.LoginResultGroup;
 import com.thingnoy.thingnoy500v3.event.event_main.GoToOrderDetailActivityEvent;
+import com.thingnoy.thingnoy500v3.manager.CacheManager;
+import com.thingnoy.thingnoy500v3.ui.authen.login.LoginActivity;
+import com.thingnoy.thingnoy500v3.ui.employee.MainEmpActivity;
 import com.thingnoy.thingnoy500v3.ui.main.restaurant.ResMainListFragment;
 import com.thingnoy.thingnoy500v3.ui.moreinfo.MoreInfoActivity;
 import com.thingnoy.thingnoy500v3.ui.bottom.favorite.FavoriteFragment;
@@ -29,11 +33,12 @@ import com.thingnoy.thingnoy500v3.ui.bottom.historydetail.HistoryDetailActivity;
 import com.thingnoy.thingnoy500v3.ui.bottom.profile.ProfileFragment;
 import com.thingnoy.thingnoy500v3.util.BottomNavigationBehavior;
 
-public class MainActivity extends AppCompatActivity implements ResMainListFragment.FragmentListener{
+import static com.thingnoy.thingnoy500v3.util.Constant.USERINFO;
+
+public class MainActivity extends AppCompatActivity implements ResMainListFragment.FragmentListener {
 //        implements MainFragment.FragmentListener
 
     public static final String EXTRA_HISTORY_ITEM = "extra_item";
-
 
 
     Toolbar toolbar;
@@ -61,17 +66,12 @@ public class MainActivity extends AppCompatActivity implements ResMainListFragme
 
         if (savedInstanceState == null) {
             // Add the fragment on initial activity setup
-            resMainListFragment = ResMainListFragment.newInstance();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.contentContainer, resMainListFragment)
-                    .commit();
+//            resMainListFragment = ResMainListFragment.newInstance();
+//            getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .replace(R.id.contentContainer, resMainListFragment)
+//                    .commit();
         }
-//        else {
-//            // Or set the fragment from restored state info
-//            resMainListFragment = (ResMainListFragment) getSupportFragmentManager()
-//                    .findFragmentById(R.id.contentContainer);
-//        }
 
     }
 
@@ -83,12 +83,6 @@ public class MainActivity extends AppCompatActivity implements ResMainListFragme
     }
 
     private void setupView() {
-//        cartAdapter = new CartAdapter();
-//        List<BaseItem> items = Hawk.get(KEY_FOOD_ITEM_IN_CART);
-//        if (items != null){
-//            cartAdapter.setItems(items);
-//            updateAllCartView();
-//        }
 
     }
 
@@ -104,17 +98,31 @@ public class MainActivity extends AppCompatActivity implements ResMainListFragme
     private void setupBottomNav() {
         CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) bottomNavigationView.getLayoutParams();
         layoutParams.setBehavior(new BottomNavigationBehavior());
-        bottomNavigationView.setSelectedItemId(R.id.item_home);
+
+        LoginResultGroup userInfo = new CacheManager<LoginResultGroup>().loadCache(LoginResultGroup.class, USERINFO);
+        if (userInfo != null && userInfo.getData() != null) {
+            if (userInfo.getData().get(0).getName().getLoginType().equals("พนักงานจัดส่ง")) {
+                goToMainEmpActivity();
+            } else {
+                bottomNavigationView.setSelectedItemId(R.id.item_home);
+            }
+        } else {
+            bottomNavigationView.setSelectedItemId(R.id.item_home);
+        }
+
+    }
+
+    private void goToMainEmpActivity() {
+        Intent intent = new Intent(MainActivity.this,
+                MainEmpActivity.class);
+        startActivity(intent);
     }
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener onBottomNavClick() {
         return new BottomNavigationView.OnNavigationItemSelectedListener() {
-            Fragment fragment;
-
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment fragment;
                 switch (item.getItemId()) {
 
 //                    case R.id.item_nearby:
@@ -129,28 +137,24 @@ public class MainActivity extends AppCompatActivity implements ResMainListFragme
                         tvTitle.setText(R.string.history);
                         ivLogo.setImageResource(R.drawable.ic_history_thick);
                         loadFragment(HistoryFragment.newInstance());
-//                        Toast.makeText(MainActivity.this, "history selected", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.item_home:
                         // do this event
                         tvTitle.setText(R.string.app_name2);
                         ivLogo.setImageResource(R.drawable.ic_home);
                         loadFragment(ResMainListFragment.newInstance());
-//                        Toast.makeText(MainActivity.this, "home selected", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.item_favorite:
                         // do this event
                         tvTitle.setText(R.string.menu_favorite);
                         ivLogo.setImageResource(R.drawable.ic_like);
                         loadFragment(FavoriteFragment.newInstance());
-//                        Toast.makeText(MainActivity.this, "favorite selected", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.item_me:
                         // do this event
                         tvTitle.setText("ข้อมูลโปรไฟล์");
                         ivLogo.setImageResource(R.drawable.ic_user);
                         loadFragment(ProfileFragment.newInstance());
-//                        Toast.makeText(MainActivity.this, "me selected", Toast.LENGTH_SHORT).show();
                         return true;
 
                 }

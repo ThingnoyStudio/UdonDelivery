@@ -60,6 +60,7 @@ public class HistoryDetailActivity extends AppCompatActivity {
         rcOrder.setHasFixedSize(true);
         rcOrder.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
         rcOrder.setAdapter(historyDetailAdapter);
+
         btnClose.setOnClickListener( onClickBack() );
         btnBack.setOnClickListener( onClickBack() );
 

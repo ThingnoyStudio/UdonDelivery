@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <!--<item-->
+        <!--android:id="@+id/item_nearby"-->
+        <!--android:enabled="true"-->
+        <!--android:icon="@drawable/ic_nearby"-->
+        <!--android:title="@string/menu_nearby" />-->
+
+    <item
+        android:id="@+id/item_history"
+        android:enabled="true"
+        android:icon="@drawable/ic_history_thick"
+        android:title="รายการนำส่ง" />
+
+    <!--<item-->
+        <!--android:id="@+id/item_home"-->
+        <!--android:enabled="true"-->
+        <!--android:icon="@drawable/ic_home"-->
+        <!--android:title="@string/menu_home" />-->
+
+    <!--<item-->
+        <!--android:id="@+id/item_favorite"-->
+        <!--android:enabled="true"-->
+        <!--android:icon="@drawable/ic_like"-->
+        <!--android:title="@string/menu_favorite" />-->
+    <item
+        android:id="@+id/item_me"
+        android:enabled="true"
+        android:icon="@drawable/ic_user"
+        android:title="@string/menu_me" />
+
+</menu>

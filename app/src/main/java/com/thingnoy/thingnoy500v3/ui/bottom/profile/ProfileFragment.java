@@ -101,6 +101,8 @@ public class ProfileFragment extends Fragment {
     private MaterialSpinner spnMainLocate, spnSubLocate;
     private SweetAlertDialog mDialog;
     private View containerEmpty;
+    private View containerAddrHeader;
+    private View containerAddrList;
 
 
     public ProfileFragment() {
@@ -211,6 +213,7 @@ public class ProfileFragment extends Fragment {
 
         setupView();
         updateEmptyView();
+        updateAddressAndFaceButton();
     }
 
     private void bindView(View rootView) {
@@ -232,6 +235,9 @@ public class ProfileFragment extends Fragment {
 
         btnLogout = rootView.findViewById(R.id.btn_logout);
         btnFaceLogout = rootView.findViewById(R.id.login_button);
+
+        containerAddrHeader = rootView.findViewById(R.id.container_address_header);
+        containerAddrList = rootView.findViewById(R.id.container_address_list);
     }
 
     private void setupAppbar() {
@@ -278,6 +284,30 @@ public class ProfileFragment extends Fragment {
 
         mrAddAddress.setOnClickListener(onClickAddAddress());
 
+    }
+
+    private void updateAddressAndFaceButton() {
+        if (userInfo.getData() != null) {
+            if (userInfo.getData().size() <= 0) {
+
+            } else {
+                if (userInfo.getData().get(0).getName().getLoginType().equals("พนักงานจัดส่ง")){
+                    containerAddrHeader.setVisibility(View.GONE);
+                    containerAddrList.setVisibility(View.GONE);
+                    btnFaceLogout.setVisibility(View.GONE);
+                    tvPoint.setVisibility(View.GONE);
+                    containerEmpty.setVisibility(View.GONE);
+                }else {
+                    tvPoint.setVisibility(View.VISIBLE);
+                    containerAddrHeader.setVisibility(View.VISIBLE);
+                    containerAddrList.setVisibility(View.VISIBLE);
+                    btnFaceLogout.setVisibility(View.VISIBLE);
+                }
+
+            }
+        } else {
+
+        }
     }
 
 

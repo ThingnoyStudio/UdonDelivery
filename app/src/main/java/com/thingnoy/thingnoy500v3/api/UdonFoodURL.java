@@ -21,15 +21,14 @@ public class UdonFoodURL {
     public static final String URL_LOGIN = "apicustomer/customerlogin";
     public static final String URL_GET_NEW_RESTAURANT = "apirestaurant/listrestaurant2";
     public static final String URL_GET_DELIVERY_PRO = "apideliverypro/listdeliverypro";
-public static final String URL_DEL_FAVORITE = "apifavoritemenu/deletefavoritemenu";
-public static final String URL_GET_FAVORITE = "apifavoritemenu/listfavoritemenu";
-public static final String URL_GET_LOCATE = "apilocation/listlocationbytype";
-public static final String URL_ADD_ADDRESS = "apiinsertcusaddress/insertcustomeraddress";
-public static final String URL_DEL_ADDRESS = "apiupdatecusaddress/deletecustomeraddress";
-public static final String URL_GET_FOOD_MENU_WITH_LIKE = "apitestfood22/listfoodforres";
-
-
-
+    public static final String URL_DEL_FAVORITE = "apifavoritemenu/deletefavoritemenu";
+    public static final String URL_GET_FAVORITE = "apifavoritemenu/listfavoritemenu";
+    public static final String URL_GET_LOCATE = "apilocation/listlocationbytype";
+    public static final String URL_ADD_ADDRESS = "apiinsertcusaddress/insertcustomeraddress";
+    public static final String URL_DEL_ADDRESS = "apiupdatecusaddress/deletecustomeraddress";
+    public static final String URL_GET_FOOD_MENU_WITH_LIKE = "apitestfood22/listfoodforres";
+public static final String URL_GET_EMP_ORDER = "apiemproyee/empvieworder";
+public static final String URL_POS_ORDER_STATE = "apiemproyee/empupdateorder";
 
 
 //    public static final String URL_DEL_FAVORITE = "apifavoritemenu/insertfavoritemenu";

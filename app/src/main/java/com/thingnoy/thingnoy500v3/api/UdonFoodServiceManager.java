@@ -6,9 +6,11 @@ import com.thingnoy.thingnoy500v3.api.request.AddNewOrderBody;
 import com.thingnoy.thingnoy500v3.api.request.add_address.AddAddressBody;
 import com.thingnoy.thingnoy500v3.api.request.favorite.AddFavoriteBody;
 import com.thingnoy.thingnoy500v3.api.request.login.LoginBody;
+import com.thingnoy.thingnoy500v3.api.request.orderstate.OrderStateBody;
 import com.thingnoy.thingnoy500v3.api.request.register.RegisterBody;
 import com.thingnoy.thingnoy500v3.api.result.deliverypro.DeliveryProResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.derivery_time.DeliverTimeResultGroup;
+import com.thingnoy.thingnoy500v3.api.result.emporder.OrderResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.favorite.FavoriteResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.foodMenu.FoodMenuResultGroupO;
 import com.thingnoy.thingnoy500v3.api.result.foodMenu.fds.FoodMenuResultGroup;
@@ -48,6 +50,7 @@ public class UdonFoodServiceManager {
     private Call<StatusResult> callDelFavorite;
     private Call<StatusResult> callAddAddress;
     private Call<StatusResult> callDelAddress;
+private Call<StatusResult> callAddOrderState;
 
 
     private UdonFoodServiceManager() {
@@ -1048,6 +1051,101 @@ public class UdonFoodServiceManager {
             return false;
         }
         return false;
+    }
+    //endregion
+
+    //region request Get Order
+    public void requestGetOrder(int idEmployee, final UdonFoodManagerCallback<OrderResultGroup> callback) {
+        requestGetOrderCall(idEmployee).enqueue(new Callback<OrderResultGroup>() {
+            @Override
+            public void onResponse(@NonNull Call<OrderResultGroup> call, @NonNull Response<OrderResultGroup> response) {
+                if (callback != null) {
+                    if (getOrderChecker(response)) {
+                        callback.onSuccess(response.body());
+                    } else {
+                        callback.onFailure(new Throwable("Response invalid."));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<OrderResultGroup> call, @NonNull Throwable t) {
+                if (!call.isCanceled()) {
+                    if (callback != null) {
+                        callback.onFailure(t);
+                    }
+                }
+            }
+        });
+    }
+
+    private Call<OrderResultGroup> requestGetOrderCall(int idEmployee) {
+        return UdonService.newInstance(BASE_URL)
+                .getApi(api)
+                .getEmpOrder(idEmployee);
+    }
+
+    private boolean getOrderChecker(Response<OrderResultGroup> response) {
+        if (response.isSuccessful()) {
+            OrderResultGroup result = response.body();
+            assert result != null;
+            if (result.getSuccess() != null)
+                return result.getSuccess();
+            return false;
+        }
+        return false;
+    }
+    //endregion
+
+    //region request Add Order State
+    public void requestAddOrderState(OrderStateBody body, final UdonFoodManagerCallback<StatusResult> callback) {
+        callAddOrderState = requestAddOrderState(body);
+        callAddOrderState.enqueue(new Callback<StatusResult>() {
+            @Override
+            public void onResponse(@NonNull Call<StatusResult> call, @NonNull Response<StatusResult> response) {
+                if (callback != null) {
+                    if (addOrderStateChecker(response)) {
+                        callback.onSuccess(response.body());
+                    } else {
+                        if (response.body() != null) {
+                            callback.onFailure(new Throwable(response.body().getData()));
+                        }
+                    }
+                }
+                callAddOrderState = null;
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<StatusResult> call, @NonNull Throwable t) {
+                if (callback != null) {
+                    callback.onFailure(t);
+                }
+                callAddOrderState = null;
+            }
+        });
+    }
+
+    private Call<StatusResult> requestAddOrderState(OrderStateBody body) {
+        return UdonService.newInstance(BASE_URL)
+                .getApi(api)
+                .addOrderState(body);
+    }
+
+    private boolean addOrderStateChecker(Response<StatusResult> response) {
+        if (response.isSuccessful()) {
+            StatusResult result = response.body();
+            assert result != null;
+            if (result.getStatus() != null) {
+                return result.getStatus();
+            }
+        }
+        return false;
+    }
+
+    public void cancelAddOrderState() {
+        if (callAddOrderState != null) {
+            callAddOrderState.cancel();
+        }
     }
     //endregion
 

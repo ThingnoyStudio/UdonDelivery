@@ -9,8 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,39 +20,35 @@ import android.widget.Button;
 import com.cazaea.sweetalert.SweetAlertDialog;
 import com.hwangjr.rxbus.RxBus;
 import com.thingnoy.thingnoy500v3.R;
-import com.thingnoy.thingnoy500v3.adapter.item.BaseItem;
 import com.thingnoy.thingnoy500v3.api.UdonFoodServiceManager;
-import com.thingnoy.thingnoy500v3.api.dao.NameAndImageDao;
-import com.thingnoy.thingnoy500v3.api.result.favorite.DataFavorite;
-import com.thingnoy.thingnoy500v3.api.result.favorite.FavoriteResultGroup;
+import com.thingnoy.thingnoy500v3.api.result.emporder.OrderResultGroup;
 import com.thingnoy.thingnoy500v3.api.result.login.LoginResultGroup;
-import com.thingnoy.thingnoy500v3.api.result.status.StatusResult;
+import com.thingnoy.thingnoy500v3.event.event_main.GoToEmpOrderDetailEvent;
 import com.thingnoy.thingnoy500v3.manager.CacheManager;
 import com.thingnoy.thingnoy500v3.ui.authen.login.LoginActivity;
-import com.thingnoy.thingnoy500v3.ui.bottom.favorite.adapter.FavoriteAdapter;
-import com.thingnoy.thingnoy500v3.ui.bottom.favorite.adapter.FavoriteConverter;
-import com.thingnoy.thingnoy500v3.ui.bottom.favorite.adapter.item.FavoriteFoodItem;
-import com.thingnoy.thingnoy500v3.ui.bottom.favorite.adapter.item.FavoriteGroup;
-import com.thingnoy.thingnoy500v3.ui.moreinfo.MoreInfoActivity;
-import com.thingnoy.thingnoy500v3.ui.moreinfo.foodmenu.adapter.item.FoodProductItem;
+import com.thingnoy.thingnoy500v3.ui.employee.order.adapter.OrderAdapter;
+import com.thingnoy.thingnoy500v3.ui.employee.order.adapter.OrderConverter;
+import com.thingnoy.thingnoy500v3.ui.employee.order.adapter.item.OrderItem;
+import com.thingnoy.thingnoy500v3.ui.employee.order.adapter.item.OrderItemGroup;
 import com.thingnoy.thingnoy500v3.util.GetPrettyPrintJson;
 
-import java.util.List;
-
-import static android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL;
 import static com.thingnoy.thingnoy500v3.util.Constant.USERINFO;
 
 
 public class OrderFragment extends Fragment {
     private static final String TAG = OrderFragment.class.getSimpleName();
+    private static final String KEY_EMP_ORDER_GROUP = "key_emp_order_group";
 
     private UdonFoodServiceManager serviceManager;
     private View containerServiceUnavailable;
     private LoginResultGroup userInfo;
-    private FavoriteGroup itemGroup;
+    private OrderItemGroup itemGroup;
     private SweetAlertDialog mDialog;
     private RecyclerView rcOrder;
     private View containerEmpty;
+    private Button btnTryAgain;
+    private OrderAdapter orderAdapter;
+    private SwipeRefreshLayout swipeContainer;
 
 
     public OrderFragment() {
@@ -82,7 +78,7 @@ public class OrderFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         RxBus.get().register(this);
-        View rootView = inflater.inflate(R.layout.fragment_favorite, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_emp_order, container, false);
         initInstances(rootView, savedInstanceState);
         return rootView;
     }
@@ -98,46 +94,58 @@ public class OrderFragment extends Fragment {
     }
 
     private void restoreView(Bundle savedInstanceState) {
-        serFavoriteToAdapter(itemGroup);
+        setDataToAdapter(itemGroup);
     }
 
     private void initialize() {
         if (userInfo.getData() != null) {
             if (userInfo.getData().size() <= 0) {
                 //Not Login
-                showContent(false);
+//                showContent(false);
             } else {
-                requestGetFavorite(Integer.parseInt(userInfo.getData().get(0).getName().getIDCustomer()));
-                showContent(true);
+                requestGetOrder(Integer.parseInt(userInfo.getData().get(0).getName().getIDCustomer()));
+//                showContent(true);
             }
         } else {
-            showContent(false);
+//            showContent(false);
         }
     }
 
     private void init(Bundle savedInstanceState) {
         // Init Fragment level's variable(s) here
+        orderAdapter = new OrderAdapter();
+        orderAdapter.setOnItemClickListener(onClickItemListener());
     }
+
 
     private void initInstances(View rootView, Bundle savedInstanceState) {
         // Init 'View' instance(s) with rootView.findViewById here
 
         bindView(rootView);
-
         setupView();
     }
 
     private void bindView(View rootView) {
         rcOrder = rootView.findViewById(R.id.rc_emp_order);
 
+        swipeContainer = rootView.findViewById(R.id.swipe_emp_order);
+        btnTryAgain = rootView.findViewById(R.id.btn_try_again);
         containerEmpty = rootView.findViewById(R.id.container_empty_emp_order);
         containerServiceUnavailable = rootView.findViewById(R.id.container_service_unavailable);
     }
 
     private void setupView() {
         loadUserInfoFromCache();
+        btnTryAgain.setOnClickListener(onClickTryAgain());
+        swipeContainer.setOnRefreshListener(onPullToRefresh());
 
+        rcOrder.setHasFixedSize(true);
+        rcOrder.setItemAnimator(new DefaultItemAnimator());
+        rcOrder.setLayoutManager(new LinearLayoutManager(getContext(),
+                LinearLayoutManager.VERTICAL, false));
+        rcOrder.setAdapter(orderAdapter);
     }
+
 
     private void loadUserInfoFromCache() {
         userInfo = new LoginResultGroup();
@@ -152,17 +160,17 @@ public class OrderFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.e(TAG,"onResume");
+        Log.e(TAG, "onResume");
         if (userInfo.getData() != null) {
             if (userInfo.getData().size() <= 0) {
                 //Not Login
-                showContent(false);
+//                showContent(false);
             } else {
-                requestGetFavorite(Integer.parseInt(userInfo.getData().get(0).getName().getIDCustomer()));
-                showContent(true);
+                requestGetOrder(Integer.parseInt(userInfo.getData().get(0).getName().getIDCustomer()));
+//                showContent(true);
             }
         } else {
-            showContent(false);
+//            showContent(false);
         }
 
 
@@ -171,26 +179,27 @@ public class OrderFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-
+        RxBus.get().unregister(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        RxBus.get().unregister(this);
+
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         // Save Instance State here
-        outState.putParcelable(KEY_FAVORITE_GROUP, itemGroup);
+        outState.putParcelable(KEY_EMP_ORDER_GROUP, itemGroup);
     }
 
     @SuppressWarnings("UnusedParameters")
     private void onRestoreInstanceState(Bundle savedInstanceState) {
         // Restore Instance State here
-        this.itemGroup = ((FavoriteGroup) savedInstanceState.getParcelable(KEY_FAVORITE_GROUP));
+        this.itemGroup = ((OrderItemGroup) savedInstanceState.getParcelable(
+                KEY_EMP_ORDER_GROUP));
     }
 
     public void showServiceUnavailableView() {
@@ -228,21 +237,41 @@ public class OrderFragment extends Fragment {
         mDialog.show();
     }
 
+    private void goToOrderDetail(OrderItem item) {
+        RxBus.get().post(new GoToEmpOrderDetailEvent(item));
+    }
+
+    private void updateEmptyView() {
+        containerServiceUnavailable.setVisibility(View.GONE);
+        if (orderAdapter.hasItems()) {
+            rcOrder.setVisibility(View.VISIBLE);
+            containerEmpty.setVisibility(View.GONE);
+        } else {
+            rcOrder.setVisibility(View.VISIBLE);
+            containerEmpty.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setDataToAdapter(OrderItemGroup group) {
+        orderAdapter.setItems(group.getBaseItems());
+        updateEmptyView();
+    }
+
 
     /*
      * Event & Request
      */
 
-    public void requestGetFavorite(int id) {
-        serviceManager.requestGetFavorite(id, new UdonFoodServiceManager.UdonFoodManagerCallback<FavoriteResultGroup>() {
+    public void requestGetOrder(int idEmployee) {
+        serviceManager.requestGetOrder(idEmployee, new UdonFoodServiceManager.UdonFoodManagerCallback<OrderResultGroup>() {
             @Override
-            public void onSuccess(FavoriteResultGroup result) {
+            public void onSuccess(OrderResultGroup result) {
                 dismissSwipeLayout();
                 if (result.getData() != null) {
-//                    Log.e(TAG, "requestGetFavorite: " + new GetPrettyPrintJson().getJson(result));
-                    rawResult = result;
-                    itemGroup = convertFavorite(result.getData());
-                    setFavoriteToAdapter(itemGroup);
+                    OrderItemGroup newGroup = OrderConverter
+                            .createItemFromResult(result);
+                    itemGroup = newGroup;
+                    setDataToAdapter(itemGroup);
                 }
                 updateEmptyView();
             }
@@ -255,4 +284,41 @@ public class OrderFragment extends Fragment {
         });
     }
 
+    private View.OnClickListener onClickTryAgain() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (userInfo.getData() != null) {
+                    if (userInfo.getData().size() <= 0) {
+                        //Not Login
+//                        showContent(false);
+                    } else {
+                        requestGetOrder(Integer.parseInt(userInfo.getData().get(0).getName().getIDCustomer()));
+//                        showContent(true);
+                    }
+                } else {
+//                    showContent(false);
+                }
+            }
+        };
+    }
+
+    private OrderAdapter.onClickEmpOrderListener onClickItemListener() {
+        return new OrderAdapter.onClickEmpOrderListener() {
+            @Override
+            public void onClickItem(OrderItem item, int position) {
+                Log.e(TAG,"onClickItemListener>> item: "+new GetPrettyPrintJson().getJson(item));
+                goToOrderDetail(item);
+            }
+        };
+    }
+
+    private SwipeRefreshLayout.OnRefreshListener onPullToRefresh() {
+        return new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestGetOrder(Integer.parseInt(userInfo.getData().get(0).getName().getIDCustomer()));
+            }
+        };
+    }
 }

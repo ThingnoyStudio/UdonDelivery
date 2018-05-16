@@ -74,7 +74,7 @@ public class HistoryFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
         initInstances(rootView, savedInstanceState);
@@ -113,10 +113,10 @@ public class HistoryFragment extends Fragment {
     }
 
     private void showContent(boolean isShow) {
-        if (isShow){
+        if (isShow) {
             rcHistory.setVisibility(View.VISIBLE);
             containerGotoLogin.setVisibility(View.GONE);
-        }else {
+        } else {
             rcHistory.setVisibility(View.GONE);
             containerGotoLogin.setVisibility(View.VISIBLE);
         }
@@ -173,7 +173,6 @@ public class HistoryFragment extends Fragment {
     }
 
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -190,7 +189,8 @@ public class HistoryFragment extends Fragment {
         super.onSaveInstanceState(outState);
         // Save Instance State here
 
-        outState.putParcelable(KEY_HISTORY_GROUP, getHistoryItemGroup());
+        outState.putParcelable(KEY_HISTORY_GROUP,
+                getHistoryItemGroup());
     }
 
     @SuppressWarnings("UnusedParameters")
@@ -198,7 +198,8 @@ public class HistoryFragment extends Fragment {
         // Restore Instance State here
 
         setHistoryItemGroup(
-                (HistoryItemGroup) savedInstanceState.getParcelable(KEY_HISTORY_GROUP));
+                (HistoryItemGroup) savedInstanceState.getParcelable(
+                        KEY_HISTORY_GROUP));
     }
 
     public void dismissSwipeLayout() {
@@ -235,35 +236,36 @@ public class HistoryFragment extends Fragment {
         }
     }
 
-
-    /*
-     * Event & Subscribe
-     */
-    private HistoryAdapter.onClickHistoryListener onClickItemListener() {
-        return new HistoryAdapter.onClickHistoryListener() {
-            @Override
-            public void onClickItem(HistoryItem item, int position) {
-                Log.e(TAG, "onHistoryClick : " + position);
-                goToOrderDetailActivity(item);
-            }
-        };
-    }
-
-    /*
-     * Presenter
-     */
-
     public void goToOrderDetailActivity(HistoryItem item) {
         RxBus.get().post(new GoToOrderDetailActivityEvent(item));
     }
 
+    public void setHistoryToAdapter(HistoryItemGroup group) {
+        setHistoryItemToAdapter(group.getBaseItems());
+    }
+
+    public HistoryItemGroup getHistoryItemGroup() {
+        return itemGroup;
+    }
+
+    public void setHistoryItemGroup(HistoryItemGroup itemGroup) {
+        this.itemGroup = itemGroup;
+    }
+
+
+
+
+    /*
+     * Event & Subscribe
+     */
 
     public void requestHistory(int id) {
         serviceManager.requestHistory(id, new UdonFoodServiceManager.UdonFoodManagerCallback<HistoryResultGroup>() {
             @Override
             public void onSuccess(HistoryResultGroup result) {
                 dismissSwipeLayout();
-                HistoryItemGroup newGroup = HistoryConverter.createHistoryItemFromResult(result);
+                HistoryItemGroup newGroup = HistoryConverter
+                        .createHistoryItemFromResult(result);
                 addOldHistoryToNewHistoryGroupIfAvailable(newGroup);
                 itemGroup = newGroup;
                 setHistoryToAdapter(itemGroup);
@@ -284,19 +286,15 @@ public class HistoryFragment extends Fragment {
         });
     }
 
-
-    public void setHistoryToAdapter(HistoryItemGroup group) {
-        setHistoryItemToAdapter(group.getBaseItems());
+    private HistoryAdapter.onClickHistoryListener onClickItemListener() {
+        return new HistoryAdapter.onClickHistoryListener() {
+            @Override
+            public void onClickItem(HistoryItem item, int position) {
+                Log.e(TAG, "onHistoryClick : " + position);
+                goToOrderDetailActivity(item);
+            }
+        };
     }
-
-    public HistoryItemGroup getHistoryItemGroup() {
-        return itemGroup;
-    }
-
-    public void setHistoryItemGroup(HistoryItemGroup itemGroup) {
-        this.itemGroup = itemGroup;
-    }
-
 
     private View.OnClickListener onClickLogin() {
         return new View.OnClickListener() {

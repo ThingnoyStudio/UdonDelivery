@@ -99,7 +99,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="11dp"
                 android:background="@android:color/transparent"
-                android:tint="#bfb1b1"
+                android:tint="#746f6f"
                 app:srcCompat="@drawable/ic_arrow_drop" />
 
         </LinearLayout>

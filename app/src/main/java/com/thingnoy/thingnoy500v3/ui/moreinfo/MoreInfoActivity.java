@@ -25,8 +25,6 @@ public class MoreInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more_info);
 
-//        initInstance();
-
         NameAndImageDao dao = getIntent().getParcelableExtra("dao");
         FoodProductItem item = getIntent().getParcelableExtra("favoriteItem");
 

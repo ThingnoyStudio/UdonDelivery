@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.bottom.profile.ProfileFragment">
 
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout_profile"
         android:layout_width="match_parent"
@@ -53,26 +52,6 @@
         app:civ_circle_background_color="@color/white"
         app:layout_anchor="@id/app_bar_layout_profile"
         app:layout_anchorGravity="bottom|center" />
-
-    <!--<android.support.v4.widget.SwipeRefreshLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:background="@color/grey_40"-->
-    <!--android:layout_marginBottom="@dimen/margin_large"-->
-    <!--android:paddingTop="24dp"-->
-    <!--android:layout_height="match_parent"-->
-    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
-
-    <!--<android.support.v4.widget.NestedScrollView-->
-    <!--android:layout_width="match_parent"-->
-
-    <!--android:layout_height="match_parent">-->
-
-    <!--<FrameLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--app:layout_anchor="@id/app_bar_layout_profile"-->
-
-    <!--app:layout_anchorGravity="bottom|center">-->
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nested_info"
@@ -227,6 +206,7 @@
                 android:background="@color/grey_40" />
 
             <LinearLayout
+                android:id="@+id/container_address_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -276,8 +256,8 @@
 
             </LinearLayout>
 
-
             <FrameLayout
+                android:id="@+id/container_address_list"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -334,10 +314,5 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
-    <!--</FrameLayout>-->
-    <!--</android.support.v4.widget.NestedScrollView>-->
-
-    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
-
 
 </android.support.design.widget.CoordinatorLayout>
