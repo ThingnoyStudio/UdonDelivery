@@ -62,12 +62,13 @@
         android:scrollingCache="true"
         android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:visibility="gone">
+        tools:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="70dp"
+            android:background="@color/white"
             android:orientation="vertical">
 
             <include layout="@layout/view_go_to_login" />
@@ -86,7 +87,7 @@
         android:scrollbars="none"
         android:scrollingCache="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -107,8 +108,7 @@
                     android:id="@+id/tv_profile_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:text="Martha Harris"
+                    android:text="---- ----"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                     android:textColor="@color/grey_90" />
 
@@ -116,6 +116,7 @@
                     android:id="@+id/mr_edit_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:layout_marginLeft="4dp">
 
                     <ImageView
@@ -135,7 +136,7 @@
                 android:layout_marginRight="@dimen/spacing_large"
                 android:layout_marginTop="@dimen/spacing_large"
                 android:gravity="center"
-                android:text="แต้มสะสม : 13 แต้ม"
+                android:text="แต้มสะสม : 0 แต้ม"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                 android:textColor="@color/grey_90" />
 
@@ -186,7 +187,7 @@
                             android:id="@+id/tv_phone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0989898988"
+                            android:text="0000000000"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:textColor="@color/grey_60" />
 

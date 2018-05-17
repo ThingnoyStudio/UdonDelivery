@@ -71,6 +71,11 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
+        if (items == null) {
+            return 0;
+        } else if (items.size() <= 0) {
+            return 0;
+        }
         return items.size();
     }
 
@@ -105,6 +110,7 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void removeItem(DataUserAddress item) {
         mRemoveItem(item);
     }
+
     private void mRemoveItem(DataUserAddress item) {
         for (int i = 0; i < getItems().size(); i++) {
 //            if (getItem(i) instanceof RestaurantItem){
@@ -117,11 +123,22 @@ public class AddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         }
     }
+
     private void remove(int index) {
         getPrivateItems().remove(index);
         notifyItemRemoved(index);
     }
+
     public boolean hasItems() {
         return getItemCount() > 0;
+    }
+
+    public void addItem(DataUserAddress item) {
+        mAddItem(item);
+    }
+
+    private void mAddItem(DataUserAddress item) {
+        getPrivateItems().add(item);
+        notifyItemInserted(getItemCount());
     }
 }

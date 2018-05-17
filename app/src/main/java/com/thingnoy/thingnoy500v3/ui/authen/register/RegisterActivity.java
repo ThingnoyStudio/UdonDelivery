@@ -218,7 +218,7 @@ public class RegisterActivity extends AppCompatActivity {
         mDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
         mDialog.setTitleText("ลงทะเบียนสำเร็จ");
         mDialog.setContentText("ลงทะเบียนผู้ใช้งานสำเร็จ");
-        mDialog.setConfirmText("ไปหน้า เข้าสู่ระบบ");
+        mDialog.setConfirmText("เข้าสู่ระบบทันที");
         mDialog.setCancelable(false);
         mDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
             @Override

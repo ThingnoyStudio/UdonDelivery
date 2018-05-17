@@ -23,7 +23,6 @@ import com.thingnoy.thingnoy500v3.api.dao.NameAndImageDao;
 import com.thingnoy.thingnoy500v3.api.result.login.LoginResultGroup;
 import com.thingnoy.thingnoy500v3.event.event_main.GoToOrderDetailActivityEvent;
 import com.thingnoy.thingnoy500v3.manager.CacheManager;
-import com.thingnoy.thingnoy500v3.ui.authen.login.LoginActivity;
 import com.thingnoy.thingnoy500v3.ui.employee.MainEmpActivity;
 import com.thingnoy.thingnoy500v3.ui.main.restaurant.ResMainListFragment;
 import com.thingnoy.thingnoy500v3.ui.moreinfo.MoreInfoActivity;
@@ -155,6 +154,8 @@ public class MainActivity extends AppCompatActivity implements ResMainListFragme
                         tvTitle.setText("ข้อมูลโปรไฟล์");
                         ivLogo.setImageResource(R.drawable.ic_user);
                         loadFragment(ProfileFragment.newInstance());
+//                        loadFragment(NewProfileFragment.newInstance());
+
                         return true;
 
                 }

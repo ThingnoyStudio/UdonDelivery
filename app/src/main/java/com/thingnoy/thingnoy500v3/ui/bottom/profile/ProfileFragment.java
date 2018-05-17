@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,7 +24,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
@@ -85,29 +85,39 @@ public class ProfileFragment extends Fragment {
     private AppBarLayout.OnOffsetChangedListener mListener;
     private Button btnLogout;
     private LoginResultGroup userInfo;
-//    private TextView tvAddress;
+    //    private TextView tvAddress;
     private LoginButton btnFaceLogout;
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
     private AccessToken accessToken;
     private ProfileTracker profileTracker;
     private Profile profile;
-    private View mScrollView;
+    private View nested_content;
     private View nested_no_acount;
     private Button btnGoToLogin;
     private View containerGotoLogin;
     private MaterialRippleLayout mrAddAddress;
     private LocateResultGroup locateResultGroup;
-    private MaterialSpinner spnMainLocate, spnSubLocate;
+    private MaterialSpinner spnSubLocate;
+    private MaterialSpinner spnMainLocate;
     private SweetAlertDialog mDialog;
     private View containerEmpty;
     private View containerAddrHeader;
     private View containerAddrList;
+//    private View containerProgressbar;
 
 
     public ProfileFragment() {
         super();
         serviceManager = UdonFoodServiceManager.getInstance();
+    }
+
+    private void loadFragment(Fragment fragment) {
+        // load fragment
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.contentContainer, fragment);
+//        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @SuppressWarnings("unused")
@@ -156,43 +166,26 @@ public class ProfileFragment extends Fragment {
     }
 
     private void restoreView(Bundle savedInstanceState) {
+        Log.e(TAG, "restoreView");
         setAddressToAdapter(dataUserList);
-
-//        if (userInfo.getData() != null) {
-//            if (userInfo.getData().size() <= 0) {
-//                //Not Login
-//                showContent(false);
-//            } else {
-//                LoginBody body = new LoginBody();
-//                body.setUsername(userInfo.getData().get(0).getName().getCUsername());
-//                body.setPass(userInfo.getData().get(0).getName().getCPasswords());
-//                requestLogin(body);
-//
-//                showContent(true);
-//                setupUserInfoView();
-//            }
-//        } else {
-//            showContent(false);
-//        }
     }
 
     private void initialize() {
-//        requestProfile(1);/
-
+        Log.e(TAG, "initialize");
         if (userInfo.getData() != null) {
             if (userInfo.getData().size() <= 0) {
                 //Not Login
                 showContent(false);
+                Log.e(TAG, "initialize>> showContent: false");
             } else {
+                Log.e(TAG, "initialize>> showContent: true");
                 LoginBody body = new LoginBody();
                 body.setUsername(userInfo.getData().get(0).getName().getCUsername());
                 body.setPass(userInfo.getData().get(0).getName().getCPasswords());
                 requestLogin(body);
-
-                showContent(true);
-                setupUserInfoView();
             }
         } else {
+            Log.e(TAG, "initialize>> showContent: false");
             showContent(false);
         }
 
@@ -210,10 +203,11 @@ public class ProfileFragment extends Fragment {
     private void initInstances(View rootView, Bundle savedInstanceState) {
         // Init 'View' instance(s) with rootView.findViewById here
         bindView(rootView);
-
+        loadUserInfoFromCache();
         setupView();
         updateEmptyView();
         updateAddressAndFaceButton();
+        setupUserInfoView();
     }
 
     private void bindView(View rootView) {
@@ -231,13 +225,14 @@ public class ProfileFragment extends Fragment {
         containerEmpty = rootView.findViewById(R.id.container_empty_address);
         image = rootView.findViewById(R.id.cv_profile);
 
-        mScrollView = rootView.findViewById(R.id.nested_content);
+        nested_content = rootView.findViewById(R.id.nested_content);
 
         btnLogout = rootView.findViewById(R.id.btn_logout);
         btnFaceLogout = rootView.findViewById(R.id.login_button);
 
         containerAddrHeader = rootView.findViewById(R.id.container_address_header);
         containerAddrList = rootView.findViewById(R.id.container_address_list);
+//        containerProgressbar = rootView.findViewById(R.id.container_progressbar);
     }
 
     private void setupAppbar() {
@@ -269,9 +264,6 @@ public class ProfileFragment extends Fragment {
 
     private void setupView() {
 
-        loadUserInfoFromCache();
-
-//        rcAddress.setHasFixedSize(true);
         rcAddress.setLayoutManager(new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false));
         rcAddress.setAdapter(addressAdapter);
@@ -284,6 +276,43 @@ public class ProfileFragment extends Fragment {
 
         mrAddAddress.setOnClickListener(onClickAddAddress());
 
+//        loadUserInfoFromCache();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e(TAG, "onResume");
+        profile = Profile.getCurrentProfile();
+        accessToken = AccessToken.getCurrentAccessToken();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        profileTracker.stopTracking();
+        accessTokenTracker.stopTracking();
+        serviceManager.cancelLogin();
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Save Instance State here
+
+    }
+
+    @SuppressWarnings("UnusedParameters")
+    private void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Restore Instance State here
+
     }
 
     private void updateAddressAndFaceButton() {
@@ -291,13 +320,13 @@ public class ProfileFragment extends Fragment {
             if (userInfo.getData().size() <= 0) {
 
             } else {
-                if (userInfo.getData().get(0).getName().getLoginType().equals("พนักงานจัดส่ง")){
+                if (userInfo.getData().get(0).getName().getLoginType().equals("พนักงานจัดส่ง")) {
                     containerAddrHeader.setVisibility(View.GONE);
                     containerAddrList.setVisibility(View.GONE);
                     btnFaceLogout.setVisibility(View.GONE);
                     tvPoint.setVisibility(View.GONE);
                     containerEmpty.setVisibility(View.GONE);
-                }else {
+                } else {
                     tvPoint.setVisibility(View.VISIBLE);
                     containerAddrHeader.setVisibility(View.VISIBLE);
                     containerAddrList.setVisibility(View.VISIBLE);
@@ -309,7 +338,6 @@ public class ProfileFragment extends Fragment {
 
         }
     }
-
 
     private void loadUserInfoFromCache() {
         userInfo = new LoginResultGroup();
@@ -325,8 +353,6 @@ public class ProfileFragment extends Fragment {
                 body.setPass(userInfo.getData().get(0).getName().getCPasswords());
                 requestLogin(body);
 
-                showContent(true);
-                setupUserInfoView();
             }
         } else {
             showContent(false);
@@ -337,7 +363,7 @@ public class ProfileFragment extends Fragment {
         final Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
         dialog.setContentView(R.layout.dialog_address);
-        dialog.setCancelable(true);
+        dialog.setCancelable(false);
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(dialog.getWindow().getAttributes());
@@ -347,16 +373,7 @@ public class ProfileFragment extends Fragment {
         spnMainLocate = dialog.findViewById(R.id.spn_main_locate);
         spnSubLocate = dialog.findViewById(R.id.spn_sub_locate);
 
-//        final Button spn_to_date = (Button) dialog.findViewById(R.id.spn_to_date);
-//        final Button spn_to_time = (Button) dialog.findViewById(R.id.spn_to_time);
-//        final TextView tv_email = (TextView) dialog.findViewById(R.id.tv_email);
         final EditText edtHomeNo = (EditText) dialog.findViewById(R.id.edt_home_no);
-//        final EditText et_location = (EditText) dialog.findViewById(R.id.et_location);
-//        final AppCompatCheckBox cb_allday = (AppCompatCheckBox) dialog.findViewById(R.id.cb_allday);
-//        final AppCompatSpinner spn_timezone = (AppCompatSpinner) dialog.findViewById(R.id.spn_timezone);
-
-
-//        String[] timezones = getResources().getStringArray(R.array.timezone);
 
         setDataToMainLocateSpinner(getDataForMainSpinner());
 //        spn_timezone.setSelection(0);
@@ -370,24 +387,26 @@ public class ProfileFragment extends Fragment {
         ((Button) dialog.findViewById(R.id.bt_save)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddressEvent event = new AddressEvent();
-                event.homeNo = edtHomeNo.getText().toString();
-                event.locateName = getIdLocateFromSubSpinner();
-//                event.name = et_name.getText().toString();
-//                event.location = et_location.getText().toString();
-//                event.from = spn_from_date.getText().toString() + " (" + spn_from_time.getText().toString() + ")";
-//                event.to = spn_to_date.getText().toString() + " (" + spn_to_time.getText().toString() + ")";
-//                event.is_allday = cb_allday.isChecked();
-//                event.timezone = spn_timezone.getSelectedItem().toString();
-//                displayDataResult(event);
+                if (spnSubLocate.getSelectedIndex() != 0) {
+                    AddressEvent event = new AddressEvent();
+                    event.homeNo = edtHomeNo.getText().toString();
+                    event.locateName = spnSubLocate.getText().toString();
+                    event.locateId = getIdLocateFromSubSpinner();
 
-                if (event.homeNo == null || event.homeNo.equals("")) {
-                    Toast.makeText(getContext(), "กรุณาป้อนบ้านเลขที่", Toast.LENGTH_SHORT).show();
-                } else if (event.locateName == null || event.locateName.equals("")) {
-                    Toast.makeText(getContext(), "กรุณาเลือกที่อยู่", Toast.LENGTH_SHORT).show();
+                    if (event.homeNo == null || event.homeNo.equals("")) {
+                        new ShowToast().shortToast("กรุณาป้อนบ้านเลขที่");
+
+                    } else if (event.locateId == null || event.locateId.equals("")) {
+                        new ShowToast().shortToast("กรุณาเลือกที่อยู่");
+
+                    } else {
+                        Log.e(TAG, "event: " + new GetPrettyPrintJson().getJson(event));
+                        addNewAddress(event);
+                        dialog.dismiss();
+                    }
+
                 } else {
-                    addNewAddress(event);
-                    dialog.dismiss();
+                    new ShowToast().shortToast("กรุณาเลือกที่อยู่");
                 }
 
             }
@@ -401,8 +420,19 @@ public class ProfileFragment extends Fragment {
         AddAddressBody body = new AddAddressBody();
         body.setCustomerAddNo(Integer.parseInt(event.homeNo));
         body.setIDCustomer(Integer.parseInt(userInfo.getData().get(0).getName().getIDCustomer()));
-        body.setIDLocation(Integer.parseInt(event.locateName));
-        requestAddAddress(body);
+        body.setIDLocation(Integer.parseInt(event.locateId));
+
+        DataUserAddress userAddress = null;
+        try {
+            userAddress = new DataUserAddress();
+            userAddress.setCustomerAddRoad(event.locateName);
+            userAddress.setCustomerAddNo(event.homeNo);
+
+            requestAddAddress(body, userAddress);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private String getIdLocateFromSubSpinner() {
@@ -498,14 +528,17 @@ public class ProfileFragment extends Fragment {
     }
 
     private void showProgressDialog(boolean isShow, String title) {
-//        SweetAlertDialog mDialog = null;
         if (isShow) {
+//            if (mDialog.isShowing()) {
+//                mDialog.dismissWithAnimation();
+//            } else {
+            Log.e(TAG, "showProgressDialog: true");
             mDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE);
             mDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
             mDialog.setTitleText(title);
             mDialog.setContentText("กรุณารอสักครู่...");
 //        mDialog.setConfirmText("ตกลง");
-            mDialog.setCancelable(false);
+            mDialog.setCancelable(true);
 //        mDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
 //            @Override
 //            public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -514,23 +547,29 @@ public class ProfileFragment extends Fragment {
 //            }
 //        });
 
-            mDialog.show();
+//                mDialog.show();
+//            }
+
         } else {
-            mDialog.dismissWithAnimation();
+            Log.e(TAG, "showProgressDialog: false");
+//            if (mDialog.isShowing()){
+//                mDialog.dismissWithAnimation();
+//            }
         }
 
     }
 
     private void showContent(boolean isShow) {
         if (isShow) {
-            Log.e(TAG, "isShow: " + true);
-            mScrollView.setVisibility(View.VISIBLE);
+//            Log.e(TAG, "isShow: " + true);
+            nested_content.setVisibility(View.VISIBLE);
             nested_no_acount.setVisibility(View.GONE);
             containerGotoLogin.setVisibility(View.GONE);
+            updateEmptyView();
         } else {
-            Log.e(TAG, "isShow: " + false);
+//            Log.e(TAG, "isShow: " + false);
             clearUserInfo();
-            mScrollView.setVisibility(View.GONE);
+            nested_content.setVisibility(View.GONE);
             nested_no_acount.setVisibility(View.VISIBLE);
             containerGotoLogin.setVisibility(View.VISIBLE);
 //            image.setImageResource(0);
@@ -541,13 +580,11 @@ public class ProfileFragment extends Fragment {
 
     private void goToLogin() {
         showContent(false);
-//        Intent i = new Intent(getContext(), LoginActivity.class);
-//        startActivity(i);
+
     }
 
     private void setupUserInfoView() {
-
-        if (userInfo != null) {
+        if (userInfo != null && userInfo.getData() != null && userInfo.getData().size() > 0) {
             setupViewContentFromCache(userInfo);
 
             if (userInfo.getData().get(0).getAddress() != null) {
@@ -562,80 +599,34 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    private void clearUserInfo() {
-        new CacheManager<String>().clearCache("" + USERINFO);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        profile = Profile.getCurrentProfile();
-        accessToken = AccessToken.getCurrentAccessToken();
-//        if (userInfo.getData().size() <= 0) {
-//            showContent(false);
-//        } else {
-//            showContent(true);
-//            setupUserInfoView();
-//        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        profileTracker.stopTracking();
-        accessTokenTracker.stopTracking();
-    }
-
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        // Save Instance State here
-
-    }
-
-    @SuppressWarnings("UnusedParameters")
-    private void onRestoreInstanceState(Bundle savedInstanceState) {
-        // Restore Instance State here
-
-    }
-
     public void showServiceUnavailableView() {
         containerServiceUnavailable.setVisibility(View.VISIBLE);
     }
 
     @SuppressLint("SetTextI18n")
-    private void setupViewContent(ProfileResultGroup result) {
-        if (result != null) {
-            loadImageProfile(result.getData().get(0).getName().getCustomerImage());
-            tvName.setText(result.getData().get(0).getName().getCustomerFName() + " " + result.getData().get(0).getName().getCustomerLName());
-            tvPhone.setText(result.getData().get(0).getName().getCustomerPhone());
-            tvPoint.setText("แต้มสะสม : " + result.getData().get(0).getName().getCustomerPoint() + " แต้ม");
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
     private void setupViewContentFromCache(LoginResultGroup result) {
         if (result != null) {
-            loadImageProfile(result.getData().get(0).getName().getCustomerImage());
-            tvName.setText(result.getData().get(0).getName().getCustomerFName() + " " + result.getData().get(0).getName().getCustomerLName());
-            tvPhone.setText(result.getData().get(0).getName().getCustomerPhone());
-            tvPoint.setText("แต้มสะสม : " + result.getData().get(0).getName().getCustomerPoint() + " แต้ม");
+            try {
+                loadImageProfile(result.getData().get(0).getName().getCustomerImage());
+                tvName.setText(result.getData().get(0).getName().getCustomerFName() + " " + result.getData().get(0).getName().getCustomerLName());
+                tvPhone.setText(result.getData().get(0).getName().getCustomerPhone());
+                tvPoint.setText("แต้มสะสม : " + result.getData().get(0).getName().getCustomerPoint() + " แต้ม");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void loadImageProfile(String url) {
-        Glide.with(ProfileFragment.this)// โหลดรูป
-                .load(url)// โหลดจาก url นี้
-                .apply(new RequestOptions()
-                        .placeholder(R.drawable.ic_pic_loading)// กรณี กำลังโหลด
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)) //เก็บลงแคช ทุกชนาด
-                .into(image);// โหลดเข้า imageView ตัวนี้
+        if (getActivity() != null) {
+            Glide.with(ProfileFragment.this)// โหลดรูป
+                    .load(url)// โหลดจาก url นี้
+                    .apply(new RequestOptions()
+                            .placeholder(R.drawable.ic_pic_loading)// กรณี กำลังโหลด
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)) //เก็บลงแคช ทุกชนาด
+                    .into(image);// โหลดเข้า imageView ตัวนี้
+        }
+
     }
 
     private void setAddressToAdapter(List<DataUserAddress> dataUserList) {
@@ -654,12 +645,36 @@ public class ProfileFragment extends Fragment {
         return addressAdapter.hasItems();
     }
 
+    private void onRemoveAddress(DataUserAddress item) {
+        addressAdapter.removeItem(item);
+        updateEmptyView();
+    }
+
+    private void onAddAddress(DataUserAddress userAddr) {
+        addressAdapter.addItem(userAddr);
+        updateEmptyView();
+    }
+
+    private void clearUserInfo() {
+        new CacheManager<String>().clearCache("" + USERINFO);
+    }
+
+    private void loadUserFromCache() {
+        userInfo = new LoginResultGroup();
+        userInfo = new CacheManager<LoginResultGroup>().loadCache(LoginResultGroup.class, "" + USERINFO);
+    }
+
+    private void saveUserToCache(LoginResultGroup result) {
+        new CacheManager<LoginResultGroup>().saveCache(result, LoginResultGroup.class, "" + USERINFO);
+    }
+
 
     /*
      * Event & Subscribe
      */
 
     private void requestLocate() {
+        showProgressDialog(true, "กำลังโหลดรายการที่อยู่");
         serviceManager.requestGetLocate(new UdonFoodServiceManager.UdonFoodManagerCallback<LocateResultGroup>() {
             @Override
             public void onSuccess(LocateResultGroup result) {
@@ -667,21 +682,24 @@ public class ProfileFragment extends Fragment {
 
                 showCustomDialog();
 
-                showProgressDialog(false, "slkjf");
+                showProgressDialog(false, "");
 
             }
 
             @Override
             public void onFailure(Throwable t) {
-
+                showProgressDialog(false, "");
             }
         });
     }
 
-    private void requestAddAddress(AddAddressBody body) {
+    private void requestAddAddress(final AddAddressBody body, final DataUserAddress userAddr) {
         serviceManager.requestAddAddress(body, new UdonFoodServiceManager.UdonFoodManagerCallback<StatusResult>() {
             @Override
             public void onSuccess(StatusResult result) {
+
+                onAddAddress(userAddr);
+
                 Log.e(TAG, "requestAddAddress>> onSuccess: " + new GetPrettyPrintJson().getJson(result));
             }
 
@@ -708,19 +726,27 @@ public class ProfileFragment extends Fragment {
     }
 
     private void requestLogin(LoginBody body) {
+//        showProgressDialog(true, "กำลังโหลดข้อมูล");
         serviceManager.requestLogin(body, new UdonFoodServiceManager.UdonFoodManagerCallback<LoginResultGroup>() {
             @Override
             public void onSuccess(LoginResultGroup result) {
+//                showProgressDialog(false, "");
+
+
                 Log.e(TAG, "requestLogin>> onSuccess: " + new GetPrettyPrintJson().getJson(result));
 
-                new CacheManager<LoginResultGroup>().saveCache(result, LoginResultGroup.class, "" + USERINFO);
-                userInfo = new LoginResultGroup();
-                userInfo = result;
+                clearUserInfo();
+                saveUserToCache(result);
+                loadUserFromCache();
+
+                showContent(true);
+                setupUserInfoView();
 
             }
 
             @Override
             public void onFailure(Throwable t) {
+//                showProgressDialog(false, "");
                 Log.e(TAG, "requestLogin>> onFailure: " + t.getMessage());
                 showServiceUnavailableView();
             }
@@ -732,7 +758,6 @@ public class ProfileFragment extends Fragment {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressDialog(true, "กำลังโหลดรายการที่อยู่");
                 requestLocate();
 
             }
@@ -749,14 +774,9 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClickDeleteAddress(DataUserAddress item, int position) {
                 requestDelAddress(item.getmIDCustomerAddress(), item);
-                new ShowToast().shortToast("del: no= " + item.getCustomerAddNo() + "addr= " + item.getCustomerAddRoad());
+//                new ShowToast().shortToast("del: no= " + item.getCustomerAddNo() + "addr= " + item.getCustomerAddRoad());
             }
         };
-    }
-
-    private void onRemoveAddress(DataUserAddress item) {
-        addressAdapter.removeItem(item);
-        updateEmptyView();
     }
 
     private MaterialSpinner.OnItemSelectedListener onSelectMainLocate() {
@@ -767,15 +787,15 @@ public class ProfileFragment extends Fragment {
                     spnSubLocate.setVisibility(View.VISIBLE);
                     int mPosition = position - 1;
                     if (mPosition == 0) {
-                        Log.e(TAG, "position: " + mPosition);
+                        Log.e(TAG, "onSelectMainLocate>> position: " + mPosition);
                         setDataToSubLocateSpinner(getAlley());
 
                     } else if (mPosition == 1) {
-                        Log.e(TAG, "position: " + mPosition);
+                        Log.e(TAG, "onSelectMainLocate>> position: " + mPosition);
                         setDataToSubLocateSpinner(getRoad());
 
                     } else if (mPosition == 2) {
-                        Log.e(TAG, "position: " + mPosition);
+                        Log.e(TAG, "onSelectMainLocate>> position: " + mPosition);
                         setDataToSubLocateSpinner(getVillage());
 
                     }
@@ -798,9 +818,9 @@ public class ProfileFragment extends Fragment {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showContent(false);
-                goToLogin();
-
+//                goToLogin();
+                clearUserInfo();
+                loadFragment(NoAccountFragment.newInstance());
             }
         };
     }

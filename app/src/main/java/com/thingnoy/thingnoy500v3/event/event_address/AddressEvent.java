@@ -5,4 +5,5 @@ import java.io.Serializable;
 public class AddressEvent implements Serializable {
     public String homeNo;
     public String locateName;
+    public String locateId;
 }

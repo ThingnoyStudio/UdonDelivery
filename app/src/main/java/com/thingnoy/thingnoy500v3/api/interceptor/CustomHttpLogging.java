@@ -42,6 +42,7 @@ public class CustomHttpLogging implements HttpLoggingInterceptor.Logger {
 //            Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
 //            Logger.json(prettyPrintJson);
 //            Log.d(logName, prettyPrintJson);
+
             System.out.println(prettyPrintJson);
 
         } catch (JsonSyntaxException m) {

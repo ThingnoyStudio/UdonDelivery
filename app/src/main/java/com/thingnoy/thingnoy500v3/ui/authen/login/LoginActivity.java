@@ -252,6 +252,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this,
                 MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private boolean validate(String emailStr, String password) {
@@ -381,7 +382,10 @@ public class LoginActivity extends AppCompatActivity {
         serviceManager.requestLogin(body, new UdonFoodServiceManager.UdonFoodManagerCallback<LoginResultGroup>() {
             @Override
             public void onSuccess(LoginResultGroup result) {
-                showSuccessDialog();
+                if (mDialog != null){
+                    showSuccessDialog();
+                }
+
                 Log.e(TAG, "requestLogin>> onSuccess: " + new GetPrettyPrintJson().getJson(result));
 
                 //                Toast.makeText(LoginActivity.this, "login success", Toast.LENGTH_SHORT).show();
@@ -413,6 +417,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this,
                 MainEmpActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private View.OnClickListener clickLogin() {

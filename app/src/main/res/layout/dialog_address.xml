@@ -86,12 +86,21 @@
 
             <com.jaredrummler.materialspinner.MaterialSpinner
                 android:id="@+id/spn_main_locate"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_body_1" />
 
+            <!--<android.support.v7.widget.AppCompatSpinner-->
+            <!--android:id="@+id/spn_main_locate"-->
+            <!--style="@style/spinner_style"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:spinnerMode="dialog" />-->
+
             <com.jaredrummler.materialspinner.MaterialSpinner
                 android:id="@+id/spn_sub_locate"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_body_1"
